@@ -1,0 +1,15 @@
+{
+  "name": "Rails Dev",
+  "dockerComposeFile": ["../docker-compose.yml"],
+  "service": "web",
+  "workspaceFolder": "/app",
+  "postCreateCommand": "bundle install && rails db:create",
+  "customizations": {
+    "vscode": {
+      "extensions": ["Shopify.ruby-lsp", "misogi.ruby-rubocop"]
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {}
+  }
+}
