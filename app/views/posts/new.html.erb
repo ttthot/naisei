@@ -1,10 +1,9 @@
 <%# `local: true` オプションは、フォーム送信がJavaScript（AJAX）ではなく、標準的なHTTPリクエスト（同期リクエスト）を介して処理されることを保証します。
     これは、フォーム送信でJavaScriptに依存したくない場合や、よりシンプルな実装を好む場合に便利です。 %>
 <%= form_with(model: @post, local: true, html:{class: "form-container"}) do |form| %>
-    <div class ="form-input">
-        <%= form.label :title %>
-        <%= form.text_field :title %>
-    </div>
+    <div class="ramdom-topic">
+            <p><%= @random_topic.title %></p>
+            <%= form.hidden_field :topic_id, value: @random_topic.id %>
     <div class="form-input">
         <%= form.label :content %>
         <%= form.text_area :content %>
