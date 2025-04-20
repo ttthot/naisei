@@ -6,7 +6,17 @@
   "postCreateCommand": "bundle install && rails db:create",
   "customizations": {
     "vscode": {
-      "extensions": ["Shopify.ruby-lsp", "misogi.ruby-rubocop"]
+      "extensions": [
+        "Shopify.ruby-lsp",
+        "misogi.ruby-rubocop",
+        "ms-azuretools.vscode-docker",
+        "KoichiSasada.vscode-rdbg"
+      ],
+      "settings": {
+        // "ruby.rubocop.executePath": "/app/bin/",
+        "ruby.rubocop.useBundler": true,  // Bundle経由で実行するよう変更
+        "extensions.verifySignature": false
+      }
     }
   },
   "features": {

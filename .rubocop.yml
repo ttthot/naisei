@@ -1,0 +1,6 @@
+AllCops:
+  NewCops: enable
+
+Layout/IndentationWidth:
+  Width: 2
+  AutoCorrect: true
