@@ -10,6 +10,7 @@
 # ルートパス（"/"）はデフォルトではコメントアウトされています。
 # デフォルトのランディングページを定義するには、`root` の行をアンコメントして修正してください。
 Rails.application.routes.draw do
+  get 'sessions/new'
   get 'users/index'
   get 'users/show'
   get 'users/new'
