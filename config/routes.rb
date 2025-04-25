@@ -10,6 +10,10 @@
 # ルートパス（"/"）はデフォルトではコメントアウトされています。
 # デフォルトのランディングページを定義するには、`root` の行をアンコメントして修正してください。
 Rails.application.routes.draw do
+  get 'users/index'
+  get 'users/show'
+  get 'users/new'
+  get 'users/create'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -22,4 +26,5 @@ Rails.application.routes.draw do
   # localhost:3000/posts
   # localhost:3000/posts/new
   resources :posts, only: [:index, :new, :create] 
+  resources :users, only: [:index, :show, :new, :create]
 end

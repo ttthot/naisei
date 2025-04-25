@@ -2,12 +2,15 @@
     これは、フォーム送信でJavaScriptに依存したくない場合や、よりシンプルな実装を好む場合に便利です。 %>
 <%= form_with(model: @post, local: true, html:{class: "form-container"}) do |form| %>
     <div class="ramdom-topic">
-            <p><%= @random_topic.title %></p>
-            <%= form.hidden_field :topic_id, value: @random_topic.id %>
+        <p><%= @random_topic.title %></p>
+        <%= form.hidden_field :topic_id, value: @random_topic.id %>
+    </div>
+    
     <div class="form-input">
         <%= form.label :content %>
         <%= form.text_area :content %>
     </div>
+    
     <div class="button-container">
         <%= form.submit "投稿", class: "link-button" %>
     </div>
