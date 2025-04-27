@@ -9,4 +9,4 @@
     },
     "rubyLsp.formatter": "rubocop",
     "rubyLsp.testTimeout": 60
-  }
+}

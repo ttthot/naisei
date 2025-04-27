@@ -1,0 +1,29 @@
+<%# ページごとにタイトルを動的に設定するためのRailsのヘルパーメソッドです。 %>
+<% provide(:title, 'Sign up') %>
+
+<h1>Sign up</h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%# /users にPOSTリクエストを送信するためのフォームを作成します。 %>
+    <%# @userはUsersControllerのnewアクションで作成されたインスタンス変数です。 %>
+    <%= form_with(model: @user) do |f| %>
+    <%# @userが新しいレコード（newまたはbuildで作成されたオブジェクト）である場合、Railsはフォームの送信方法をPOSTとして設定 %>
+    <%# Userモデルのname属性を設定する、ラベル付きテキストフィールド要素を作成するのに必要なHTMLを作成します。 %>
+      <%= render 'shared/error_messages' %>
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+
+      <%= f.label :email %>
+      <%= f.email_field :email %>
+
+      <%= f.label :password %>
+      <%= f.password_field :password %>
+
+       <%= f.label :password_confirmation, "Confirmation" %>
+      <%= f.password_field :password_confirmation %>
+
+      <%= f.submit "Create my account", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>

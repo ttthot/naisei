@@ -2,12 +2,19 @@
     これは、フォーム送信でJavaScriptに依存したくない場合や、よりシンプルな実装を好む場合に便利です。 %>
 <%= form_with(model: @post, local: true, html:{class: "form-container"}) do |form| %>
     <div class="ramdom-topic">
-            <p><%= @random_topic.title %></p>
-            <%= form.hidden_field :topic_id, value: @random_topic.id %>
+        <p><%= @random_topic.title %></p>
+        <%# This hidden_field helper generates a hidden input field in the form. 
+            It is used to include the :topic_id parameter with a value of @random_topic.id 
+            without displaying the field to the user. Hidden fields are useful for passing 
+            data that should not be modified by the user but is required for form submission. %>
+        <%= form.hidden_field :topic_id, value: @random_topic.id %>
+    </div>
+    
     <div class="form-input">
         <%= form.label :content %>
         <%= form.text_area :content %>
     </div>
+    
     <div class="button-container">
         <%= form.submit "投稿", class: "link-button" %>
     </div>

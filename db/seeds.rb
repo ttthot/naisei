@@ -19,4 +19,9 @@ Topic.create!([
   { title: "あなたにとって大切な価値観は何ですか？" },
   { title: "理想の自分に近づくために何ができますか？" }
 ])
-
+# ユーザーが存在しない場合のみ作成
+User.find_or_create_by!(email: "admin@example.com") do |user|
+  user.id = 1
+  user.name = "管理者ユーザー"
+  user.password = "password123"
+end
