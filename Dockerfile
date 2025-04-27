@@ -45,10 +45,15 @@ RUN apt-get update -qq && \
       build-essential \
       curl \
       default-mysql-client \
+      git \  
       libvips \
       nodejs \
       yarn && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+# Gitのページャー設定を変更
+RUN git config --global pager.branch false && \
+    git config --global core.pager ''
 
 # ビルド成果物をコピー
 COPY --from=build /usr/local/bundle /usr/local/bundle

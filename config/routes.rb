@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # このファイルは、Railsアプリケーションのルーティング設定を定義しています。
 # ルートは、受信したHTTPリクエストをどのコントローラーアクションにマッピングするかを決定します。
 
@@ -18,13 +20,13 @@ Rails.application.routes.draw do
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
+  get 'up' => 'rails/health#show', as: :rails_health_check
 
   # Defines the root path route ("/")
   # root "posts#index"
 
   # localhost:3000/posts
   # localhost:3000/posts/new
-  resources :posts, only: [:index, :new, :create] 
-  resources :users, only: [:index, :show, :new, :create]
+  resources :posts, only: %i[index new create]
+  resources :users, only: %i[index show new create]
 end
