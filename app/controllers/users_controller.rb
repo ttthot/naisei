@@ -16,9 +16,12 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-
+    # rubyはfalseかnil以外の値はtrueとみなす
     if @user.save
-      # redirect_to user_path(@user)に変換され/users/1にリダイレクトされる
+      # redirect_to user_path(@user)に変換され
+      # redirect_to user_path(@user.id)に変換される
+      # redirect_to user_path(1)
+      # /users/1にリダイレクトされる
       # これはRailsのルーティングによるもので、resources :usersが定義されているため
       redirect_to @user, notice: 'ユーザーを作成しました'
     else
