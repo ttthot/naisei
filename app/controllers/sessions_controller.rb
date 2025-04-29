@@ -28,4 +28,13 @@ class SessionsController < ApplicationController
       render 'new', status: :unprocessable_entity
     end
   end
+
+  # delete '/logout'のルーティングに対応するアクション
+  def destroy
+    # session.delete(:user_id)はsession[:user_id] = nilと同じ
+    # session.delete(:user_id)はsession[:user_id]を削除する
+    log_out
+    # root_pathとは    # localhost:3000/にリダイレクトされる
+    redirect_to root_url, notice: 'ログアウトしました'
+  end
 end

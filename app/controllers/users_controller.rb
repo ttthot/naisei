@@ -18,6 +18,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     # rubyはfalseかnil以外の値はtrueとみなす
     if @user.save
+      log_in(@user)
       # redirect_to user_path(@user)に変換され
       # redirect_to user_path(@user.id)に変換される
       # redirect_to user_path(1)
