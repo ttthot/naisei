@@ -18,6 +18,7 @@ services:
       - "3000:3000"
     volumes:
       - .:/app
+      - ~/.gitconfig:/root/.gitconfig:ro
     environment:
       DB_HOST: db
       DB_USERNAME: root
