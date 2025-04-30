@@ -14,12 +14,23 @@
   <body>    
     <% if flash.any? %>
       <% flash.each do |message_type, message| %>
-        <div class="flash-message <%= message_type %>">
-          <%= message %>
-        </div>
+        <% if message_type == "notice" %>
+          <div class="flash flash-notice">
+            <%= message %>
+          </div>
+        <% elsif message_type == "alert" %>
+          <div class="flash flash-alert">
+            <%= message %>
+          </div>
+        <% else %>
+          <div class="flash flash-other">
+            <%= message %>
+          </div>
+        <% end %>
       <% end %>
     <% end %>
     <%= yield %>
+    
     <%= debug(params) if Rails.env.development? %>
 
   </body>
