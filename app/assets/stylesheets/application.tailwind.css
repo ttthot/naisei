@@ -14,29 +14,4 @@
   .flash-message.alert {
     @apply bg-red-100 text-red-800 border border-red-200;
   }
-  
-  .link-button {
-    @apply inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors cursor-pointer;
-  }
-  
-  .link-delete-button {
-    @apply inline-block bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition-colors cursor-pointer ml-2 border border-red-600;
-  }
-  
-  .edit-delete-wrapper {
-    @apply flex mt-2;
-  }
-  
-  .form-container {
-    @apply flex flex-col items-center bg-white p-6 rounded-lg shadow-md max-w-lg mx-auto mt-10;
-  }
-  
-  .form-input {
-    @apply mb-4 w-full;
-  }
-  
-  .form-input input,
-  .form-input textarea {
-    @apply w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-300 focus:border-blue-300 outline-none;
-  }
 }
