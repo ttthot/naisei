@@ -3,7 +3,7 @@
   "dockerComposeFile": ["../docker-compose.yml"],
   "service": "web",
   "workspaceFolder": "/app",
-  "postCreateCommand": "bundle install && rails db:create && git config --global core.pager ''",
+  // 最初のpostCreateCommandを削除
   "customizations": {
     "vscode": {
       "extensions": [
@@ -13,8 +13,7 @@
         "KoichiSasada.vscode-rdbg"
       ],
       "settings": {
-        // "ruby.rubocop.executePath": "/app/bin/",
-        "ruby.rubocop.useBundler": true,  // Bundle経由で実行するよう変更
+        "ruby.rubocop.useBundler": true,
         "extensions.verifySignature": false,
         "terminal.integrated.shellIntegration.enabled": true,
         "terminal.integrated.suggest.enabled": true,
@@ -28,10 +27,8 @@
   "features": {
     "ghcr.io/devcontainers/features/git:1": {}
   },
-  // gitの設定をdevcontainer.jsonに記載することで、コンテナ起動時に自動で設定されるようにする
- "mounts": [
-  "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/tmp/.gitconfig,type=bind,consistency=cached"
-],
-"postCreateCommand": "bundle install && (rails db:create || true) && cp /tmp/.gitconfig ~/.gitconfig && git config --global core.pager ''",
-
+  "mounts": [
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/tmp/.gitconfig,type=bind,consistency=cached"
+  ],
+  "postCreateCommand": "bundle install && (rails db:create || true) && cp /tmp/.gitconfig ~/.gitconfig && git config --global core.pager ''"
 }
