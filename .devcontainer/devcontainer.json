@@ -27,5 +27,11 @@
   },
   "features": {
     "ghcr.io/devcontainers/features/git:1": {}
-  }
+  },
+  // gitの設定をdevcontainer.jsonに記載することで、コンテナ起動時に自動で設定されるようにする
+ "mounts": [
+  "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/tmp/.gitconfig,type=bind,consistency=cached"
+],
+"postCreateCommand": "bundle install && (rails db:create || true) && cp /tmp/.gitconfig ~/.gitconfig && git config --global core.pager ''",
+
 }
