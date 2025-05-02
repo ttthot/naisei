@@ -1,5 +1,22 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Tailwind CSS v4の新しいインポート構文 */
+@import "tailwindcss";
 
-/* カスタムスタイルをここに追加 */
+/* DaisyUIのプラグイン設定 */
+@plugin "daisyui" {
+  themes: ["light", "dark", "cupcake"];
+  darkTheme: "dark";
+  base: true;
+  styled: true;
+  utils: true;
+  logs: true;
+}
+
+/* テーマ設定 */
+@theme {
+  /* カスタムカラーやフォントの設定 */
+  --primary-color: #3b82f6;
+  --color-custom-blue: #1fb6ff;
+  --font-family: "Inter", sans-serif;
+}
+
+/* カスタムスタイルはここに追加 */

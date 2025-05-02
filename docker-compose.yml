@@ -26,7 +26,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0"
+    command: bash -c "rm -f tmp/pids/server.pid && bin/dev"
+    tty: true  # ウォッチャープロセスのために必要
 
 volumes:
   mysql_data:

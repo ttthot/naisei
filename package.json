@@ -4,13 +4,15 @@
     "@hotwired/turbo-rails": "^8.0.13",
     "@tailwindcss/cli": "^4.1.5",
     "daisyui": "^5.0.35",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^4.1.5"
   },
   "scripts": {
-    "build:css": "npx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify",
+    "build:css": "npx tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css",
+    "watch:css": "npx tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --watch",
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.5",
     "esbuild": "^0.25.3"
   }
 }
