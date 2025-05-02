@@ -1,3 +1,5 @@
-/* Tailwind CSS v4 configuration */
-@import "tailwindcss";
-@plugin "daisyui";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* カスタムスタイルをここに追加 */
