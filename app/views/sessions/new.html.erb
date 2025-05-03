@@ -1,33 +1,44 @@
 <% provide(:title, "Log in") %>
 <h1>Log in</h1>
 
-<div class="grid grid-cols-1 gap-4">
-  <div class="max-w-md mx-auto">
-    <%= form_with(url: login_path, scope: :session) do |f| %>
+<div class="max-w-md mx-auto">
+  <%= form_with(url: login_path, scope: :session) do |f| %>
 
-      <%= f.label :email %>
-      <%= f.email_field :email, class: 'input input-bordered w-full' %>
+    <%= f.label :email %>
+    <%= f.email_field :email, class: 'input input-bordered w-full' %>
 
-      <%= f.label :password %>
-      <%= f.password_field :password, class: 'input input-bordered w-full' %>
+    <%= f.label :password %>
+    <%= f.password_field :password, class: 'input input-bordered w-full' %>
 
-      <%= f.submit "Log in", class: "btn btn-primary mt-4" %>
-    <% end %>
+    <%= f.submit "Log in", class: "btn btn-primary mt-4" %>
+  <% end %>
 
-    <p>New user? <%= link_to "Sign up now!", signup_path %></p>
+  <p>New user? <%= link_to "Sign up now!", signup_path %></p>
+  <button class="btn">Button</button>
+  <button class="btn btn-primary">Button</button>
+<button class="btn btn-xs">Xsmall</button>
+<button class="btn btn-sm">Small</button>
+<button class="btn">Medium</button>
+<button class="btn btn-lg">Large</button>
+<button class="btn btn-xl">Xlarge</button>
+<button class="btn btn-neutral">Neutral</button>
+<button class="btn btn-primary">Primary</button>
+<button class="btn btn-secondary">Secondary</button>
+<button class="btn btn-accent">Accent</button>
+<button class="btn btn-info">Info</button>
+<button class="btn btn-success">Success</button>
+<button class="btn btn-warning">Warning</button>
+<button class="btn btn-error">Error</button>
+<button class="btn" onclick="my_modal_2.showModal()">open modal</button>
+<dialog id="my_modal_2" class="modal">
+  <div class="modal-box">
+    <h3 class="text-lg font-bold">Hello!</h3>
+    <p class="py-4">Press ESC key or click outside to close</p>
   </div>
-  
-  <div class="max-w-md mx-auto">
-    <h2 class="text-lg font-bold mb-2">DaisyUI確認用</h2>
-    <button class="btn btn-primary">daisyUI Button</button>
-    
-    <div class="card bg-base-100 shadow-xl mt-4">
-      <div class="card-body">
-        <h2 class="card-title">daisyUI Card!</h2>
-        <p>If this card is styled correctly, daisyUI is working.</p>
-      </div>
-    </div>
-  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>
 </div>
 
 

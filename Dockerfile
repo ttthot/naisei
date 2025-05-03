@@ -6,8 +6,8 @@
 FROM ruby:3.4.2-slim AS base
 WORKDIR /app
 
-# 必要なパッケージと Node.js/Yarn をセットアップ
-# → cssbundling-rails や daisyUI のビルドに npx/yarn が必要
+# 必要なパッケージと Node.js をセットアップ
+# → cssbundling-rails や daisyUI のビルドに npx が必要
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
     build-essential \
@@ -21,8 +21,7 @@ RUN apt-get update -qq && \
     # NodeSource から Node.js v18 をインストール
     curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install --no-install-recommends -y nodejs && \
-    # npm v8（npx）と併せて最新 yarn をグローバルインストール
-    npm install -g yarn && \
+    # yarn のインストール部分を削除
     # キャッシュを削除
     rm -rf /var/lib/apt/lists/*
 

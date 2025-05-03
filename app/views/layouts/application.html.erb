@@ -1,18 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="lemonade" lang="ja">  
   <head>
     <title>App</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
 
     <%= javascript_importmap_tags %>
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
 
-  <body>    
+  <body class="bg-base-100 text-base-content">
+    <!-- テーマ確認用のコンポーネント -->
+    <div class="p-4 flex flex-col gap-4">
+      <!-- カード -->
+      <div class="card w-96 bg-primary text-primary-content">
+        <div class="card-body">
+          <h2 class="card-title">Lightカード</h2>
+          <p>これはlightテーマのカードです</p>
+        </div>
+      </div>
+      
+      <!-- アラート -->
+      <div class="alert alert-info">
+        <span>Lightテーマが適用されています</span>
+      </div>
+    </div>
+    
     <% if flash.any? %>
       <% flash.each do |message_type, message| %>
         <% if message_type == "notice" %>

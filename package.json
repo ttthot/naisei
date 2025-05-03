@@ -2,17 +2,19 @@
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.13",
+    "@parcel/watcher": "^2.5.1",
     "@tailwindcss/cli": "^4.1.5",
     "daisyui": "^5.0.35",
     "tailwindcss": "^4.1.5"
   },
   "scripts": {
-    "build:css": "npx tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css",
-    "watch:css": "npx tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --watch",
+    "build:css": "npx tailwindcss -i ./app/assets/tailwind/application.css -o ./app/assets/builds/application.css",
+    "watch:css": "npx tailwindcss -i ./app/assets/tailwind/application.css -o ./app/assets/builds/application.css --watch",
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.5",
-    "esbuild": "^0.25.3"
+    "esbuild": "^0.25.3",
+    "prettier": "^3.5.3"
   }
 }
