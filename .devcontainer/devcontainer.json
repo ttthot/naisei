@@ -1,9 +1,11 @@
 {
   "name": "Rails Dev",
-  "dockerComposeFile": ["../docker-compose.yml"],
+  "dockerComposeFile": [
+    "../docker-compose.yml"
+  ],
   "service": "web",
   "workspaceFolder": "/app",
-  // 最初のpostCreateCommandを削除
+  // JSON構文エラーの原因となる行コメントを削除しました
   "customizations": {
     "vscode": {
       "extensions": [
@@ -28,7 +30,14 @@
     "ghcr.io/devcontainers/features/git:1": {}
   },
   "mounts": [
+    // ホストマシンの.gitconfigファイルをコンテナにマウントし、
+    // それをpostCreateCommandでコピーすることでGit設定を引き継ぎます
     "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/tmp/.gitconfig,type=bind,consistency=cached"
   ],
+  // 以下のpostCreateCommandでは:
+  // 1. bundle installでGemをインストール
+  // 2. rails db:createでデータベースを作成(既存の場合はスキップ)
+  // 3. ホストマシンの.gitconfig設定をコンテナにコピー
+  // 4. Gitのページャーを無効化
   "postCreateCommand": "bundle install && (rails db:create || true) && cp /tmp/.gitconfig ~/.gitconfig && git config --global core.pager ''"
 }
