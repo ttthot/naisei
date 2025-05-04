@@ -15,21 +15,7 @@
   </head>
 
   <body class="bg-base-100 text-base-content">
-    <!-- テーマ確認用のコンポーネント -->
-    <div class="p-4 flex flex-col gap-4">
-      <!-- カード -->
-      <div class="card w-96 bg-primary text-primary-content">
-        <div class="card-body">
-          <h2 class="card-title">Lightカード</h2>
-          <p>これはlightテーマのカードです</p>
-        </div>
-      </div>
-      
-      <!-- アラート -->
-      <div class="alert alert-info">
-        <span>Lightテーマが適用されています</span>
-      </div>
-    </div>
+
     
     <% if flash.any? %>
       <% flash.each do |message_type, message| %>
