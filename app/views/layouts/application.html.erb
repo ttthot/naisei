@@ -12,6 +12,13 @@
 
     <%= javascript_importmap_tags %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+    <style>
+      @font-face {
+        font-family: 'Avenir';
+        src: local('Avenir');
+        /* 必要に応じてCDNやアセットからのパスを追加 */
+      }
+    </style>
   </head>
 
   <body class="bg-base-100 text-base-content">

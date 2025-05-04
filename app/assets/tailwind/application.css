@@ -12,3 +12,6 @@
     dark --prefersdark;
 }
 /* カスタムスタイルはここに追加 */
+:root {
+  font-family: '游明朝体', 'Avenir', sans-serif;
+}
