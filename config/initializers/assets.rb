@@ -1,5 +1,5 @@
 # CSS や JavaScript などのファイルを管理するシステムです。デフォルトでは、Rails は決まった場所（stylesheets など）のファイルしか探しません。
-Rails.application.config.assets.version = '1.0'
+Rails.application.config.assets.version = "1.0"
 
 # Add additional assets to the asset load path.
 # Rails.application.config.assets.paths << Emoji.images_path

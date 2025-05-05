@@ -24,19 +24,18 @@ class UsersController < ApplicationController
       # redirect_to user_path(1)
       # /users/1にリダイレクトされる
       # これはRailsのルーティングによるもので、resources :usersが定義されているため
-      redirect_to @user, notice: 'ユーザーを作成しました'
+      redirect_to @user, notice: "ユーザーを作成しました"
     else
       # バリデーションエラーが発生した場合、新規作成フォームを再表示する
-      render 'new', status: :unprocessable_entity
+      render "new", status: :unprocessable_entity
     end
   end
   # privateメソッドは、クラス内でのみ使用できる
   # つまり、クラスの外からはアクセスできない
 
   private
-
-  def user_params
-    params.require(:user).permit(:name, :email, :password,
-                                 :password_confirmation)
-  end
+    def user_params
+      params.require(:user).permit(:name, :email, :password,
+                                   :password_confirmation)
+    end
 end

@@ -20,14 +20,14 @@ class SessionsController < ApplicationController
 
       # new_post_pathは通常/posts/newに対応します。
       # redirect_toは、HTTPレスポンスに302ステータスコードを設定し、Locationヘッダーにリダイレクト先のURLを指定します。
-      redirect_to new_post_path, notice: 'ログインしました'
+      redirect_to new_post_path, notice: "ログインしました"
       # 今回はモデルを定義しないため、errorsは使いえない
     else
       # nowを使う
       # flashは次のリクエストが来るまで表示される
       # flash.nowは現在のリクエストにのみ表示される
-      flash.now[:danger] = 'メールアドレスまたはパスワードが無効です'
-      render 'new', status: :unprocessable_entity
+      flash.now[:danger] = "メールアドレスまたはパスワードが無効です"
+      render "new", status: :unprocessable_entity
     end
   end
 
@@ -37,6 +37,6 @@ class SessionsController < ApplicationController
     # session.delete(:user_id)はsession[:user_id]を削除する
     log_out
     # root_pathとは    # localhost:3000/にリダイレクトされる
-    redirect_to root_url, notice: 'ログアウトしました'
+    redirect_to root_url, notice: "ログアウトしました"
   end
 end

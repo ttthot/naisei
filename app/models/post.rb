@@ -18,11 +18,11 @@ class Post < ApplicationRecord
 
   # 感情ラベルをenum化
   enum emotion_label: {
-    happy: '😊',
-    sad: '😢',
-    angry: '😠',
-    neutral: '😐',
-    excited: '🎉'
+    happy: "😊",
+    sad: "😢",
+    angry: "😠",
+    neutral: "😐",
+    excited: "🎉"
   }
 
   validates :emotion_rating, inclusion: { in: 1..5 }, allow_nil: true
