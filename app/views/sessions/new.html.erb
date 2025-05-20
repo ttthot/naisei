@@ -23,6 +23,9 @@
       <% end %>
       
       <%# /signupというURLパスへのGETリクエストをusersコントローラーのnewアクションにルーティングするよう指定しています。 %>
+      <%# link:         daisyUI基本的なリンクスタイルを適用
+          link-primary: daisyUIプライマリーカラー（アプリのメインカラー）でリンクを装飾 %>
+      <%# ルーティングファイルでsignup_pathというヘルパーメソッドを生成、/signupというURLパスを取得 %>
       <p class="mt-4 text-center"><%= link_to "登録はこちらから！", signup_path, class: "link link-primary" %></p>
     </div>
   </div>
