@@ -2,6 +2,10 @@
 
 # 記事を取得する
 class PostsController < ApplicationController
+  # ユーザーがログインしているか確認するフィルタ
+  before_action :logged_in_user, only: [:new, :create]
+
+
   def index
     @posts = Post.all
   end
@@ -13,7 +17,7 @@ class PostsController < ApplicationController
 
   def create
     @post = Post.new(post_params)
-    @post.user_id = 1 # TODO: 仮のユーザーID
+    @post.user_id = current_user.id # ログイン中のユーザーのIDを設定
 
     if @post.save
       redirect_to posts_path, notice: "記事を作成しました"
