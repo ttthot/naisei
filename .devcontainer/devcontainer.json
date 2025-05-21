@@ -1,10 +1,12 @@
 {
   "name": "Rails Dev",
-  "dockerComposeFile": [
-    "../docker-compose.yml"
-  ],
+  "dockerComposeFile": ["../docker-compose.yml"],
   "service": "web",
   "workspaceFolder": "/app",
+  //  docker が落ちるので開発環境で必要なメモリ設定を追加
+  "hostRequirements": {
+    "memory": "6gb"
+  },
   "customizations": {
     "vscode": {
       "extensions": [
@@ -20,7 +22,7 @@
         "terminal.integrated.shellIntegration.enabled": true,
         "terminal.integrated.suggest.enabled": true,
         "terminal.integrated.defaultLocation": "editor",
-        
+
         // Rubyの設定（必要に応じて既存の設定を保持）
         "[ruby]": {
           "editor.defaultFormatter": "Shopify.ruby-lsp",
@@ -32,7 +34,7 @@
         },
         "rubyLsp.formatter": "rubocop",
         "rubyLsp.testTimeout": 60,
-        
+
         // HTML用のPrettier設定
         "[html]": {
           "editor.defaultFormatter": "esbenp.prettier-vscode",
