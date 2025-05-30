@@ -1,24 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="lemonade" lang="ja">  
   <head>
     <title>App</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
     <%= javascript_importmap_tags %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+    <style>
+      @font-face {
+        font-family: 'Avenir';
+        src: local('Avenir');
+        /* 必要に応じてCDNやアセットからのパスを追加 */
+      }
+    </style>
   </head>
 
-  <body>    <%# login_path: The URL helper that generates the path for the login action %>
+  <body class="bg-base-100 text-base-content">
+
+    
     <% if flash.any? %>
       <% flash.each do |message_type, message| %>
-        <div class="flash-message <%= message_type %>">
-          <%= message %>
-        </div>
+        <% if message_type == "notice" %>
+          <div class="flash flash-notice">
+            <%= message %>
+          </div>
+        <% elsif message_type == "alert" %>
+          <div class="flash flash-alert">
+            <%= message %>
+          </div>
+        <% else %>
+          <div class="flash flash-other">
+            <%= message %>
+          </div>
+        <% end %>
       <% end %>
     <% end %>
     <%= yield %>
+    
     <%= debug(params) if Rails.env.development? %>
 
   </body>

@@ -1,29 +1,41 @@
 <%# ページごとにタイトルを動的に設定するためのRailsのヘルパーメソッドです。 %>
-<% provide(:title, 'Sign up') %>
+<% provide(:title, 'アカウント登録') %>
 
-<h1>Sign up</h1>
+<h1 class="text-2xl font-bold text-center my-6">アカウント登録</h1>
 
-<div class="row">
-  <div class="col-md-6 col-md-offset-3">
-    <%# /users にPOSTリクエストを送信するためのフォームを作成します。 %>
-    <%# @userはUsersControllerのnewアクションで作成されたインスタンス変数です。 %>
-    <%= form_with(model: @user) do |f| %>
-    <%# @userが新しいレコード（newまたはbuildで作成されたオブジェクト）である場合、Railsはフォームの送信方法をPOSTとして設定 %>
-    <%# Userモデルのname属性を設定する、ラベル付きテキストフィールド要素を作成するのに必要なHTMLを作成します。 %>
-      <%= render 'shared/error_messages' %>
-      <%= f.label :name %>
-      <%= f.text_field :name %>
-
-      <%= f.label :email %>
-      <%= f.email_field :email %>
-
-      <%= f.label :password %>
-      <%= f.password_field :password %>
-
-       <%= f.label :password_confirmation, "Confirmation" %>
-      <%= f.password_field :password_confirmation %>
-
-      <%= f.submit "Create my account", class: "btn btn-primary" %>
-    <% end %>
+<div class="max-w-md mx-auto">
+  <div class="card card-border bg-base-100 shadow-lg">
+    <div class="card-body">
+      <%= form_with(model: @user, class: "space-y-4") do |f| %>
+        <%= render 'shared/error_messages' %>
+        
+        <div class="form-control">
+          <%= f.label :name, "お名前", class: "label" %>
+          <%= f.text_field :name, class: "input input-bordered w-full", placeholder: "山田 太郎" %>
+        </div>
+        
+        <div class="form-control">
+          <%= f.label :email, "メールアドレス", class: "label" %>
+          <%= f.email_field :email, class: "input input-bordered w-full", placeholder: "example@mail.com" %>
+        </div>
+        
+        <div class="form-control">
+          <%= f.label :password, "パスワード", class: "label" %>
+          <span class="text-xs text-neutral-500 -mt-2 mb-1">6文字以上</span>
+          <%= f.password_field :password, class: "input input-bordered w-full" %>
+        </div>
+        
+        <div class="form-control">
+          <%= f.label :password_confirmation, "パスワード（確認）", class: "label" %>
+          <%= f.password_field :password_confirmation, class: "input input-bordered w-full" %>
+        </div>
+        
+        <div class="form-control mt-6">
+          <%= f.submit "アカウントを作成", class: "btn btn-primary w-full" %>
+        </div>
+      <% end %>
+      
+      <p class="mt-4 text-center"><%= link_to "ログインはこちらから", login_path, class: "link link-primary" %></p>
+    </div>
   </div>
 </div>

@@ -1,11 +1,35 @@
-<h1>投稿一覧</h1>
-<ul>
+<div class="max-w-4xl mx-auto px-4 py-6">
+  <h1 class="text-2xl font-bold text-center mb-6">投稿一覧</h1>
+  
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <% if @posts.empty? %>
+        <p>まだ投稿がありません。</p>
+      <% else %>
+        <p><%= @posts.count %>件の投稿があります</p>
+      <% end %>
+    </div>
+    <div>
+      <%= link_to "新規投稿", new_post_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+
+  <div class="space-y-4">
     <% @posts.each do |post| %>
-        <li>
-        <!-- titleフィールドがないのでトピックのタイトルを表示 -->
-        <h2><%= post.topic.title %></h2>
-        <p><%= post.content %></p>
-        <%= post.created_at %>
-        </li>
+<%# card - カードの基本コンテナ
+card-body - カードの本文部分を定義する
+card-title - カードのタイトル要素（ここではトピックのタイトル）
+card-actions - アクション要素を配置するための領域（ここでは日付バッジ） %>
+      <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow duration-300">
+        <div class="card-body">
+          <h2 class="card-title text-primary"><%= post.topic.title %></h2>
+          <p><%= post.content %></p>
+          <%# justify-endと組み合わせることで、バッジがカードの右端 %>
+          <div class="card-actions justify-end">
+            <div class="badge badge-outline"><%= post.created_at.strftime("%Y年%m月%d日") %></div>
+          </div>
+        </div>
+      </div>
     <% end %>
-</ul>
+  </div>
+</div>

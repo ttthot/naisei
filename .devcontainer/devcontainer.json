@@ -3,22 +3,58 @@
   "dockerComposeFile": ["../docker-compose.yml"],
   "service": "web",
   "workspaceFolder": "/app",
-  "postCreateCommand": "bundle install && rails db:create && git config --global core.pager ''",
+  //  docker が落ちるので開発環境で必要なメモリ設定を追加
+  "hostRequirements": {
+    "memory": "6gb"
+  },
   "customizations": {
     "vscode": {
       "extensions": [
         "Shopify.ruby-lsp",
         "misogi.ruby-rubocop",
         "ms-azuretools.vscode-docker",
-        "KoichiSasada.vscode-rdbg"
+        "KoichiSasada.vscode-rdbg",
+        "esbenp.prettier-vscode" // Prettier拡張機能を追加
       ],
       "settings": {
-        // "ruby.rubocop.executePath": "/app/bin/",
-        "ruby.rubocop.useBundler": true,  // Bundle経由で実行するよう変更
+        "ruby.rubocop.useBundler": true,
         "extensions.verifySignature": false,
         "terminal.integrated.shellIntegration.enabled": true,
         "terminal.integrated.suggest.enabled": true,
-        "terminal.integrated.defaultLocation": "editor"
+        "terminal.integrated.defaultLocation": "editor",
+
+        // Rubyの設定（必要に応じて既存の設定を保持）
+        "[ruby]": {
+          "editor.defaultFormatter": "Shopify.ruby-lsp",
+          "editor.formatOnSave": true,
+          "editor.tabSize": 2,
+          "editor.insertSpaces": true,
+          "editor.semanticHighlighting.enabled": true,
+          "editor.formatOnType": true
+        },
+        "rubyLsp.formatter": "rubocop",
+        "rubyLsp.testTimeout": 60,
+
+        // HTML用のPrettier設定
+        "[html]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.formatOnSave": true
+        },
+        // CSS用のPrettier設定
+        "[css]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.formatOnSave": true
+        },
+        // JavaScript用のPrettier設定
+        "[javascript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.formatOnSave": true
+        },
+        // JSON用のPrettier設定
+        "[json]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.formatOnSave": true
+        }
       }
     }
   },
@@ -27,5 +63,17 @@
   },
   "features": {
     "ghcr.io/devcontainers/features/git:1": {}
-  }
+  },
+  "mounts": [
+    // ホストマシンの.gitconfigファイルをコンテナにマウントし、
+    // それをpostCreateCommandでコピーすることでGit設定を引き継ぎます
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/tmp/.gitconfig,type=bind,consistency=cached"
+  ],
+  // 以下のpostCreateCommandでは:
+  // 1. bundle installでGemをインストール
+  // 2. rails db:createでデータベースを作成(既存の場合はスキップ)
+  // 3. ホストマシンの.gitconfig設定をコンテナにコピー
+  // 4. Gitのページャーを無効化
+  // 5. Prettierをインストール
+  "postCreateCommand": "bundle install && (rails db:create || true) && cp /tmp/.gitconfig ~/.gitconfig && git config --global core.pager '' && npm install --save-dev prettier"
 }

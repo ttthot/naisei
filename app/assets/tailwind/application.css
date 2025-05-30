@@ -1,0 +1,17 @@
+/* source(none) - デフォルトのソースファイルをスキャンせず、代わりに２行目以降に明示的に指定したソースファイルのみを使用するよう指示しています */
+@import 'tailwindcss';
+@source "../../../public/*.html";
+@source "../../../app/helpers/**/*.rb";
+@source "../../../app/javascript/**/*.js";
+@source "../../../app/views/**/*";
+
+/* DaisyUIの設定 */
+@plugin "daisyui" {
+  themes:
+    lemonade --default,
+    dark --prefersdark;
+}
+/* カスタムスタイルはここに追加 */
+:root {
+  font-family: '游明朝体', 'Avenir', sans-serif;
+}

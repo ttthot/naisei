@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 source "https://rubygems.org"
 
 ruby "3.4.2"
@@ -37,7 +38,7 @@ gem "jbuilder"
 gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[ windows jruby ]
+gem "tzinfo-data", platforms: %i[windows jruby]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
@@ -47,8 +48,7 @@ gem "bootsnap", require: false
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri windows ]
-  
+  gem "debug", platforms: %i[mri windows]
 end
 
 group :development do
@@ -62,6 +62,11 @@ group :development do
   # gem "spring"
 
   gem "rubocop", require: false
+  gem "rubocop-minitest", require: false
+  gem "rubocop-rails", require: false
+  gem "rubocop-packaging", require: false
+  gem "rubocop-performance", require: false
+  gem "rubocop-md", require: false
 end
 
 group :test do
@@ -69,3 +74,9 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+# tailwindcss-rails を削除し、cssbundling-rails＋jsbundling-rails＋daisyUI を導入する
+# gem "tailwindcss-rails", "~> 4.2"
+
+gem "cssbundling-rails", "~> 1.4"
+
+gem "jsbundling-rails", "~> 1.3"
