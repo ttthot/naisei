@@ -94,4 +94,18 @@ Rails.application.configure do
   # ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+  # ALB経由のアクセスを許可　　未完成
+  # config.hostsというのは、Railsのセキュリティ機能で、許可されたホスト名を指定するための設定です。
+  config.hosts << ".ap-northeast-1.elb.amazonaws.com"
+
+  # ヘルスチェック専用の除外設定
+  # 左辺＝Railsのセキュリティ機能の設定
+  config.host_authorization = {
+    # リクエストのパス（URL）に"health"が含まれている場合つまりヘルスチェック時は除外
+    # HTTPリクエスト情報を解析して、特定の条件に合致するリクエストを除外
+    exclude: ->(request) { request.path.include?("health") }
+  }
+  # 同一タスク内通信用（nginx rails用）
+  config.hosts << "127.0.0.1" # 自分自身を表すIPアドレスは許可
 end
