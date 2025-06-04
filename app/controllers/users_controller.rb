@@ -15,6 +15,8 @@ class UsersController < ApplicationController
   end
 
   def create
+    # binding.irb はデバッグ用のコードで、実行時にインタラクティブなコンソールを開く
+    # binding.irb
     @user = User.new(user_params)
     # rubyはfalseかnil以外の値はtrueとみなす
     if @user.save

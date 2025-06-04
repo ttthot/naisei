@@ -1,0 +1,39 @@
+# 静的ファイルはNginx自身が返し、それ以外のリクエストはRailsへ送る
+server {
+    # ポート80でHTTPリクエストを受け付け
+    listen 80;
+    #  ラウザから Host: localhost で来たリクエストを処理 
+    server_name localhost;
+    
+    # 特定のURLパターンに対するnginxの処理方法を定義
+    location ~ ^/(assets|packs|images|javascripts|stylesheets|system|builds|css|js)/ {
+        # 上記のファイルをDockerコンテナ内のRailsアプリケーションの公開ディレクトリのパスから探す
+        root /app/public;
+        # ファイルが見つからなければ404 
+        try_files $uri $uri/ =404;
+        # 高速化のためアクセスログをオフ
+        access_log off;
+        # キャッシュの有効期限を設定
+        expires max;
+        
+    
+    }
+    
+    # 動的リクエストをRailsに渡すための設定
+    location / {
+        # ポート80で受けたリクエストをdocker-compose内のwebサービス名の3000ポートに転送
+        # ローカル用設定
+        proxy_pass http://web:3000;
+        # 本番用設定
+        # proxy_pass http://rails-app:3000;
+        # リクエストヘッダをRailsに渡す
+        proxy_set_header Host $host;
+        # Nginx に直接接続してきたクライアントの IP アドレス
+        # これがないとRailsのログにNginxのIPアドレスが記録される
+        proxy_set_header X-Real-IP $remote_addr;
+        # Nginxがプロキシサーバーとして動作していることをRailsに伝える
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        # リクエストが HTTP か HTTPSかを伝える
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}

@@ -1,0 +1,54 @@
+## 擬似本番時は以下のコードで起動すること。
+## docker compose \
+# -f docker-compose.yml \           # ベースとなる設定ファイル
+# -f docker-compose.prod.yml \      # 本番環境用の追加設定を上書き
+# --env-file .env.prod \            # 擬似本番環境用の環境変数ファイル
+# up -d                             # バックグラウンドで起動
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: always
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${ECR_REGISTRY}/myapp-web:${TAG}
+    environment:
+      RAILS_ENV: production
+      DATABASE_URL: ${DATABASE_URL}
+      RAILS_SERVE_STATIC_FILES: 'true'
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+      RAILS_FORCE_SSL: ${RAILS_FORCE_SSL}
+      RAILS_ASSUME_SSL: ${RAILS_ASSUME_SSL}
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    restart: on-failure
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    image: ${ECR_REGISTRY}/myapp-nginx:${TAG}
+    ports:
+      # - '80:80'
+      # - '443:443'
+      - '8080:80'
+      - '8443:443'
+    depends_on:
+      - web
+    restart: on-failure
+
+volumes:
+  mysql_data:

@@ -12,7 +12,6 @@
 # - `validates :emotion_rating`: 感情の評価は1から5の範囲内である必要があります（nilも許容されます）。
 # - `validates :content`: 投稿の内容は必須です。
 class Post < ApplicationRecord
-  # TODO: 認証実装後にoptional: trueを削除する - 2025/04/20
   belongs_to :user, optional: true
   belongs_to :topic
 
