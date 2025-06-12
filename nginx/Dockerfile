@@ -1,9 +1,14 @@
+ARG RAILS_APP_IMAGE_REPO_URI=my-rails-app
+ARG RAILS_APP_IMAGE_TAG=latest
+
+FROM ${RAILS_APP_IMAGE_REPO_URI}:${RAILS_APP_IMAGE_TAG} AS rails_app
+
 # 軽量安定ばんどのnginxを使用
 FROM nginx:stable-alpine
 
 # デフォルト設定、Dockerイメージを「ビルドする時に変数を入れる
-ARG RAILS_APP_IMAGE_TAG=latest # デフォルトタグを latest に設定
-
+ARG RAILS_APP_IMAGE_REPO_URI
+ARG RAILS_APP_IMAGE_TAG
 # デフォルト設定ファイルを削除
 RUN rm -f /etc/nginx/conf.d/*
 
@@ -16,7 +21,7 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 # ファイルをenginxにコピーする機能
 # dockercompose用
 # COPY --from=my-rails-app-prod:local-test /app/public /app/public
-COPY --from=692859935005.dkr.ecr.ap-northeast-1.amazonaws.com/my-app-rails:${RAILS_APP_IMAGE_TAG} /app/public /app/public
+COPY --from=rails_app /app/public /app/public
 
 EXPOSE 80
 # HTTPSの場合

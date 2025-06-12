@@ -22,7 +22,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: ${ECR_REGISTRY}/myapp-web:${TAG}
+    image: ${ECR_REGISTRY}/my-app-rails:${TAG}
     environment:
       RAILS_ENV: production
       DATABASE_URL: ${DATABASE_URL}
@@ -40,7 +40,10 @@ services:
     build:
       context: ./nginx
       dockerfile: Dockerfile
-    image: ${ECR_REGISTRY}/myapp-nginx:${TAG}
+      args:
+        RAILS_APP_IMAGE_REPO_URI: ${ECR_REGISTRY}/my-app-rails # webサービスのイメージURIを指定
+        RAILS_APP_IMAGE_TAG: ${TAG}
+    image: ${ECR_REGISTRY}/my-app-nginx:${TAG}
     ports:
       # - '80:80'
       # - '443:443'

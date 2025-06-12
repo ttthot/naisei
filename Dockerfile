@@ -97,6 +97,8 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
     default-mysql-client \
     libvips42 \
+    iputils-ping \
+    curl \
     # ダウンロード済みパッケージのキャッシュを削除
     && apt-get clean && \ 
     # パッケージリストを削除
@@ -126,7 +128,9 @@ EXPOSE 3000
 # また、exec "$@" でCMDの内容を実行する,$@ はCMDで指定されたコマンドを指す
 # execあり: bashプロセスが親プロセスになるのではなく、新しいプロセスに置き換えられる
 # execなし: bashプロセスが親プロセスになり、CMDで指定されたコマンドがその子プロセスとして実行される
-ENTRYPOINT ["bash", "-c", "rm -f /app/tmp/pids/server.pid && exec \"$@\"", "--"]
+# 修正前
+# ENTRYPOINT ["bash", "-c", "rm -f /app/tmp/pids/server.pid && exec \"$@\"", "--"]
+ENTRYPOINT ["bash", "-c", "bundle exec rails db:migrate && rm -f /app/tmp/pids/server.pid && exec \"$@\"", "--"]
 # アプリケーションサーバーを起動するコマンド
 CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000"]
 
