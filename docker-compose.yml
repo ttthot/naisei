@@ -1,49 +1,19 @@
 services:
   db:
     image: mysql:8.4
-    ports:
-      - '3306:3306' # ホスト側:コンテナ側のポート番号
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_ROOT_HOST: '%'
     volumes:
       - mysql_data:/var/lib/mysql
-    healthcheck:
-      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
-      interval: 10s
-      timeout: 5s
-      retries: 3
 
   web:
-    build: .
-    ports:
-      - '3000:3000'
-    volumes:
-      - .:/app
-      - ~/.gitconfig:/root/.gitconfig:ro
-    environment:
-      DB_HOST: db
-      DB_USERNAME: root
-      DB_PASSWORD: password
-    depends_on:
-      db:
-        condition: service_healthy
-    command: bash -c "rm -f tmp/pids/server.pid && bin/dev"
-    tty: true # ウォッチャープロセスのために必要
-
-  # Nginxサービスを追加
-  nginx:
     build:
-      context: ./nginx
-    # HTTP通信用の標準ポートである80番で通信をローカルで受けて、このコンテナの80番ポートに転送、nginx.confへ
-    ports:
-      - '80:80' # 外部公開用ポート
-    #/app/public: Nginxコンテナ内の指定パス　、ここからローカルにあるpublicディレクトリを参照
-    volumes:
-      - ./public:/app/public #
-    # Railsアプリが起動してから、Nginxが起動する順序を保証
-    # proxy_pass http://web:3000の設定がエラーにならないためにはrailsが起動している必要がある
+      context: .
     depends_on:
-      - web # Railsアプリに依存
+      - db
+
+  nginx:
+    image: nginx:stable-alpine
+    depends_on:
+      - web
+
 volumes:
   mysql_data:

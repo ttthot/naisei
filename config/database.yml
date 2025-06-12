@@ -1,55 +1,72 @@
-# MySQL. Versions 5.5.8 and up are supported.
+# MySQL。バージョン5.5.8以上がサポートされています。
 #
-# Install the MySQL driver
+# MySQLドライバをインストールしてください:
 #   gem install mysql2
 #
-# Ensure the MySQL gem is defined in your Gemfile
+# GemfileにMySQL gemが定義されていることを確認してください:
 #   gem "mysql2"
 #
-# And be sure to use new-style password hashing:
+# そして、新しい形式のパスワードハッシュを使用するようにしてください:
 #   https://dev.mysql.com/doc/refman/5.7/en/password-hashing.html
-#
+#   (日本語参考: https://dev.mysql.com/doc/refman/5.7/ja/password-hashing.html)
+
+# 'default' セクション: 全ての環境で共通の設定を定義します。
+# YAMLのアンカー(&default)とエイリアス(*default)を使って、他の環境でこの共通設定を再利用します。
+# &default という記述により、このハッシュ（キーと値のペアの集まり）全体が defaultに保存される
 default: &default
-  adapter: mysql2
-  encoding: utf8mb4
+  adapter: mysql2 # 使用するデータベースアダプタ (MySQLの場合は mysql2)
+  encoding: utf8mb4 # 文字エンコーディング (絵文字なども扱えるutf8mb4を推奨)
+  # コネクションプールのサイズ。PumaなどのWebサーバーのスレッド数に合わせることが一般的です。
+  # 環境変数 RAILS_MAX_THREADS が設定されていればその値を、なければデフォルトで5を使用します。
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: <%= ENV['DB_USERNAME'] %>
-  password: <%= ENV['DB_PASSWORD'] %>
-  host: <%= ENV['DB_HOST'] %>
-
+  # データベースのユーザー名。環境変数 DB_USERNAME から取得します。
+  username: <%= ENV.fetch('DB_USERNAME', 'root') %>
+  # データベースのパスワード。環境変数 DB_PASSWORD から取得します。
+  password: <%= ENV.fetch('DB_PASSWORD', 'dummy_password') %>
+  # データベースサーバーのホスト名またはIPアドレス。環境変数 DB_HOST から取得します。
+  host: <%= ENV.fetch('DB_HOST', 'db') %>
+  # ★追加を強く推奨 (または環境に応じて必須): ポート番号
+  port: <%= ENV.fetch('DB_PORT', 3306) %> # MySQLのデフォルトポート3306
 development:
-  <<: *default
-  database: app_development
+  <<: *default # '&default'で定義された共通設定をここで展開(継承)します。
+  database: <%= ENV.fetch('DB_NAME_DEV') { Rails.application.class.module_parent_name.underscore + '_development' } %> # 開発用DB名も環境変数化推奨
 
-# Warning: The database defined as "test" will be erased and
-# re-generated from your development database when you run "rake".
-# Do not set this db to the same as development or production.
+# 警告: "test" として定義されたデータベースは、"rake" (現在は rails db:test:prepare など) を実行すると、
+# 開発データベースの内容から消去され、再生成されます。
+# このデータベースを開発用や本番用と同じものに設定しないでください。
+# --- 追加解説 ---
+# test環境のデータベースは、テスト実行時に自動的にスキーマがロードされ、テストデータが投入されるため、
+# 他の環境のデータベースとは独立している必要があります。
 test:
   <<: *default
-  database: app_test
+  database: <%= ENV.fetch('DB_NAME_TEST') { Rails.application.class.module_parent_name.underscore + '_test' } %> # テスト用DB名も環境変数化推奨
 
-# As with config/credentials.yml, you never want to store sensitive information,
-# like your database password, in your source code. If your source code is
-# ever seen by anyone, they now have access to your database.
+# config/credentials.yml と同様に、データベースのパスワードのような機密情報を
+# ソースコード内に直接保存するべきではありません。もしソースコードが何者かに見られた場合、
+# 彼らはあなたのデータベースにアクセスできてしまいます。
 #
-# Instead, provide the password or a full connection URL as an environment
-# variable when you boot the app. For example:
+# その代わりに、アプリケーションを起動する際に、パスワードや完全な接続URLを
+# 環境変数として提供してください。例:
 #
 #   DATABASE_URL="mysql2://myuser:mypass@localhost/somedatabase"
 #
-# If the connection URL is provided in the special DATABASE_URL environment
-# variable, Rails will automatically merge its configuration values on top of
-# the values provided in this file. Alternatively, you can specify a connection
-# URL environment variable explicitly:
+# もし接続URLが特別な DATABASE_URL 環境変数で提供された場合、Railsは
+# このファイルで提供された値の上に、その設定値を自動的にマージします。
+# あるいは、接続URL環境変数を明示的に指定することもできます:
 #
 #   production:
 #     url: <%= ENV["MY_APP_DATABASE_URL"] %>
 #
-# Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
-# for a full overview on how database connection configuration can be specified.
+# データベース接続設定の指定方法に関する完全な概要については、
+# https://guides.rubyonrails.org/configuring.html#configuring-a-database
+# (日本語版: https://railsguides.jp/configuring.html#データベースを設定する) を読んでください。
 #
 production:
-  <<: *default
-  database: app_production
-  username: <%= ENV['DB_USERNAME'] %>
-  password: <%= ENV['DB_PASSWORD'] %>
+  # <<: コマンドで定義されたdefaultセクションをproductionセクションで展開
+  <<: *default # 共通設定を継承。
+  # database: app_production # 本番環境で使用するデータベース名。
+  # ECSタスク定義で本番用の正しいデータベース名を指定
+  database:
+    <%= ENV.fetch('DB_NAME', Rails.application.class.module_parent_name.underscore + '_production') %>
+
+    #本番データベースがSSL/TLS接続を要求または推奨する場合は以下に設定
