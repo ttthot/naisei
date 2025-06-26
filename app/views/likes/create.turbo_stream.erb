@@ -1,0 +1,6 @@
+<%#  ユーザーが「いいね」ボタンを押した時いいね済みにする
+<%# @post idが１なら"like_button_post_1" のようなIDを持つ要素を、更新されたボタン部品で置き換える %>
+<%= turbo_stream.replace dom_id(@post, "like_button") do %>
+<%# 新しいHTMLを生成%>
+  <%= render 'likes/like_button', post: @post %>
+<% end %>

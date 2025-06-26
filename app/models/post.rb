@@ -14,7 +14,9 @@
 class Post < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :topic
-
+  # ポスト削除時に関連するいいねも削除するためアソシエーションオプションを設定
+  # destroyオプションはbelogns_toの関連付けに対しては使用できない、has_manyを使用
+  has_many :likes, dependent: :destroy
   # 感情ラベルをenum化
   enum emotion_label: {
     happy: "😊",

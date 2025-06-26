@@ -1,13 +1,10 @@
 {
-    "[ruby]": {
-      "editor.defaultFormatter": "Shopify.ruby-lsp",
-      "editor.formatOnSave": true,
-      "editor.tabSize": 2,
-      "editor.insertSpaces": true,
-      "editor.semanticHighlighting.enabled": true,
-      "editor.formatOnType": true
-    },
-    "rubyLsp.formatter": "rubocop",
-    "rubyLsp.testTimeout": 60
-    
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[ruby]": {
+    "editor.defaultFormatter": "Shopify.ruby-lsp"
+  },
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.semanticHighlighting.enabled": true,
+  "rubyLsp.formatter": "rubocop"
 }

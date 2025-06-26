@@ -1,6 +1,6 @@
 {
   "name": "Rails Dev",
-  "dockerComposeFile": ["../docker-compose.yml"],
+  "dockerComposeFile": ["../docker-compose.yml", "../docker-compose.override.yml"],
   "service": "web",
   "workspaceFolder": "/app",
   //  docker が落ちるので開発環境で必要なメモリ設定を追加

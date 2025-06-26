@@ -26,8 +26,16 @@ Rails.application.routes.draw do
 
   # localhost:3000/posts
   # localhost:3000/posts/new
-  resources :posts, only: %i[index new create]
+  #  %iはシンボルの配列を表す
+  # likesはposts抜きの状態は考えられないためネストしている
+  # %i[...] は、スペースで区切られた文字列をシンボルの配列に変換するための記法です。カンマ,は使えない
+  resources :posts, only: %i[index new create] do
+    resources :likes, only: %i[create destroy]
+  end
+
+  # postは一覧表示つまり独立したアクセスが必要なためpostsとusersはネストにしていない
   resources :users, only: %i[index show new create]
+  # likesはposts抜きの状態は考えられないためネストしている
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
