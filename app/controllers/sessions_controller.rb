@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class SessionsController < ApplicationController
+  # ログインページとログイン処理時にはログインチェックをスキップ
+  skip_before_action :logged_in_user, only: [:new, :create]
+  
   # get '/login'のルーティングに対応するアクション
   def new
     # @session = Session.newはモデルを使用しないため不要

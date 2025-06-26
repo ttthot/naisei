@@ -1,3 +1,5 @@
+# 一般的にはhelperとは動作をメソッド化して、ビューで使えるようにするもの
+# 一方このファイルはそれだけでなくコントローラーでも使用するものを扱っている。
 module SessionsHelper
   def log_in(user)
     session[:user_id] = user.id

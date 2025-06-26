@@ -1,5 +1,10 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::Base
+  # ヘルパーメソッドのlogin_in?メソッドを全体で使用するためにinclude
   include SessionsHelper
+  # 全てのコントローラーのアクションでログイン済みユーザーかどうかを確認するためのフィルター
+  before_action :logged_in_user
 
   private
     # ログイン済みユーザーかどうか確認

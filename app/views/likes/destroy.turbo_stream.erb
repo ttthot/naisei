@@ -1,0 +1,5 @@
+<%# createと中身は同じ、初期状態を作り直す %>
+<%# 「IDが dom_id(@post, "like_button") のHTML要素を、中身ごと指定された内容に置き換えな %>
+<%= turbo_stream.replace dom_id(@post, "like_button") do %>
+  <%= render 'likes/like_button', post: @post %>
+<% end %>

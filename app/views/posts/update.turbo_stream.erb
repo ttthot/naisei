@@ -1,0 +1,10 @@
+<%#  %>
+<%# 概要：likeコントローラのupdate Action処理が完了すると、通常のhtmlではなくturbostream形式のレスポンスを受け取る%>
+<%# 指定したidを置き換える命令 %>
+<%= turbo_stream.replace dom_id(@post, :like_area) do %>
+<%# 引数で指定された部品ファイルを呼び出す %>
+<%# 第一引数の先頭のアンダーバーは省略して記述がルール%>
+<%# 第二引数は @postという実際のデータを変数postに入れて部品ファイルに渡す%>
+  <%= render 'likes/like_button', post: @post %>
+
+<% end %>

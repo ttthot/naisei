@@ -2,8 +2,7 @@
 
 # 記事を取得する
 class PostsController < ApplicationController
-  # ユーザーがログインしているか確認するフィルタ
-  before_action :logged_in_user, only: [:new, :create]
+  #  ログイン必須機能はapplication_controller.rbに移動した
 
 
   def index

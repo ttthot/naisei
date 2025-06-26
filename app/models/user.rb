@@ -4,6 +4,9 @@
 class User < ApplicationRecord
   has_secure_password
   has_many :posts
+  # # これによりインスタンスメソッド .likes が生成
+  # ユーザー削除時に関連するいいねも削除するためアソシエーションオプション:を設定
+  has_many :likes, dependent: :destroy
 
   # バリデーションを追加
   validates :email, presence: true, uniqueness: true
