@@ -19,11 +19,13 @@ class PostsController < ApplicationController
     @post.user_id = current_user.id # ログイン中のユーザーのIDを設定
 
     if @post.save
+      # posts_path	==> /posts
       redirect_to posts_path, notice: "記事を作成しました"
     else
       # デバッグ情報を追加
       Rails.logger.info "保存エラー: #{@post.errors.full_messages.join(', ')}"
       set_random_topic
+      # :newアクションにリダイレクト
       render :new
     end
   end
@@ -41,9 +43,8 @@ class PostsController < ApplicationController
 
     # Postモデルのストロングパラメータメソッド。
     # paramsハッシュから:content属性と:topic_id属性を許可します。
-    # これにより、作成や更新時に使用できるパラメータを明示的に指定することで、
-    # マスアサインメントの脆弱性を防ぎます。
+    # これにより、作成や更新時に使用できるパラメータを明示的に指定することで脆弱性を防ぎます。
     def post_params
-      params.require(:post).permit(:content, :topic_id)
+      params.require(:post).permit(:content, :topic_id, :emotion, :emotion_rating)
     end
 end

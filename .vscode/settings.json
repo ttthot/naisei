@@ -12,5 +12,29 @@
         "args": ["-y", "@upstash/context7-mcp@latest"]
       }
     }
-  }
+  },
+  // デフォルトのフォーマッタをPrettier
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "prettier.documentSelectors": [],
+
+  // Ruby設定 - RuboCopに変更
+  "[ruby]": {
+    "editor.defaultFormatter": "misogi.ruby-rubocop"
+  },
+
+  // ERB設定 - ERB::Formatterを使用
+  "[erb]": {
+    "editor.defaultFormatter": "elia.erb-formatter",
+    "editor.formatOnSave": true
+  },
+
+  // ERB::Formatter固有の設定
+  "erb-formatter.maxWidth": 120,
+  "erb-formatter.formattingStyle": "html",
+
+  // インデント設定
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.semanticHighlighting.enabled": true
 }

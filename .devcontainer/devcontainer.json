@@ -14,8 +14,11 @@
         "misogi.ruby-rubocop",
         "ms-azuretools.vscode-docker",
         "KoichiSasada.vscode-rdbg",
-        "esbenp.prettier-vscode" // Prettier拡張機能を追加
+        "esbenp.prettier-vscode",
+        "elia.erb-formatter",
+        "anthropic.claude-vscode"
       ],
+
       "settings": {
         "ruby.rubocop.useBundler": true,
         "extensions.verifySignature": false,
@@ -60,6 +63,8 @@
   },
   "containerEnv": {
     "VSCODE_SHELL_INTEGRATION": "1"
+    // 権限の関係で/home/rails/.npm-global/bin/claude-codeに実行ファイルがあるのでパスを通す
+    // "PATH": "/home/rails/.npm-global/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   },
   "features": {
     "ghcr.io/devcontainers/features/git:1": {}
@@ -67,13 +72,14 @@
   "mounts": [
     // ホストマシンの.gitconfigファイルをコンテナにマウントし、
     // それをpostCreateCommandでコピーすることでGit設定を引き継ぎます
-    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/tmp/.gitconfig,type=bind,consistency=cached"
+    "source=${localEnv:HOME}/.gitconfig,target=/tmp/.gitconfig,type=bind,consistency=cached"
   ],
   // 以下のpostCreateCommandでは:
   // 1. bundle installでGemをインストール
   // 2. rails db:createでデータベースを作成(既存の場合はスキップ)
   // 3. ホストマシンの.gitconfig設定をコンテナにコピー
   // 4. Gitのページャーを無効化
-  // 5. Prettierをインストール
-  "postCreateCommand": "bundle install && (rails db:create || true) && cp /tmp/.gitconfig ~/.gitconfig && git config --global core.pager '' && npm install --save-dev prettier"
+  // 5. Prettierをインストール等
+  // "postCreateCommand": "bash -c 'bundle install && (rails db:create || true) && cp /tmp/.gitconfig ~/.gitconfig && git config --global core.pager \"\" && npm install --save-dev prettier && npm list -g --depth=0 > ~/npm-global-packages.txt && mkdir -p ~/.npm-global && npm config set prefix ~/.npm-global && echo \"export PATH=~/.npm-global/bin:\\$PATH\" >> ~/.bashrc && source ~/.bashrc && npm install -g @anthropic-ai/claude-code'"
+  "postCreateCommand": "bash -c 'bundle install && (rails db:create || true) && cp /tmp/.gitconfig ~/.gitconfig && git config --global core.pager \"\" && npm install --save-dev prettier && mkdir -p ~/.npm-global && npm config set prefix ~/.npm-global && export PATH=\"$HOME/.npm-global/bin:$PATH\" && echo \"export PATH=\\\"$HOME/.npm-global/bin:$PATH\\\"\" >> ~/.bashrc && npm install -g @anthropic-ai/claude-code && echo \"alias claude-code=\\\"npx @anthropic-ai/claude-code\\\"\" >> ~/.bashrc && source ~/.bashrc'"
 }
