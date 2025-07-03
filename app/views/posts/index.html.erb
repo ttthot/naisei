@@ -4,7 +4,10 @@
 <%# 全体の構造を担当、ファイナ内でいいね部品を呼び出す %>
 <div class="max-w-4xl mx-auto px-4 py-6">
   <h1 class="text-2xl font-bold text-center mb-6">投稿一覧</h1>
-
+  <%# 仮リンク：感情カレンダー画面へ %>
+  <div class="mt-6 text-center">
+    <%= link_to "感情カレンダー（仮）", emotion_calendar_index_path, class: "btn btn-secondary" %>
+  </div>
   <div class="flex justify-between items-center mb-6">
     <div>
       <% if @posts.empty? %>
@@ -21,9 +24,11 @@
   <%# 投稿をリスト表示するエリア %>
   <div class="space-y-4" id="posts">
     <%# @post　＝ Post.allを確認し、Postクラスのオフジェクトの集まりと認識してループを展開し出す@ %>
-    <%# ループ内でpostオブジェクトを発見部品が入ったファイルは_post.html,,と予測、つまりコレクションレンダリング>
+    <%# ループ内でpostオブジェクトを発見部品が入ったファイルは_post.html,,と予測、つまりコレクションレンダリング %>
     <%# 部品ファイルのpost変数にループで扱っているオブジェクトPost id:1等を渡す %>
     <%# 全ループをここで繰り返す %>
     <%= render @posts %>
   </div>
+  <%= debug(@posts) if Rails.env.development? %>
+
 </div>

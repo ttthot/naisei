@@ -63,13 +63,14 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
-
-  gem "rubocop", require: false
-  gem "rubocop-minitest", require: false
-  gem "rubocop-rails", require: false
-  gem "rubocop-packaging", require: false
-  gem "rubocop-performance", require: false
-  gem "rubocop-md", require: false
+  gem "rubocop"
+  gem "rubocop-rails"
+  gem "rubocop-rspec"
+  gem "rubocop-minitest"
+  gem "rubocop-packaging"
+  gem "rubocop-performance"
+  gem "rubocop-md"
+  gem "erb-formatter"
 end
 
 group :test do
@@ -83,3 +84,5 @@ end
 gem "cssbundling-rails", "~> 1.4"
 
 gem "jsbundling-rails", "~> 1.3"
+
+gem "erb_lint", "~> 0.9.0", group: :development

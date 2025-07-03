@@ -1,0 +1,32 @@
+---
+glob: '**/*.html.erb'
+linters:
+  RuboCop:
+    enabled: true
+    rubocop_config:
+      inherit_from:
+        - .rubocop.yml
+  FinalNewline:
+    enabled: true
+  TrailingWhitespace:
+    enabled: true
+  SpaceAroundErbTag:
+    enabled: true
+  SpaceInHtmlTag:
+    enabled: true
+  SpaceIndentation:
+    enabled: true
+  RightTrim:
+    enabled: true
+  SelfClosingTag:
+    enabled: true
+  ClosingErbTagIndent:
+    enabled: true
+  ErbStatement:
+    enabled: true
+  NoJavascriptTagHelper:
+    enabled: true
+  ParserErrors:
+    enabled: true
+  RequireInputLabel:
+    enabled: false

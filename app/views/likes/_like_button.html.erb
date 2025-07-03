@@ -5,6 +5,7 @@
   <% if like %>
     <%= button_to post_like_path(post, like), method: :delete, 
         class: "btn btn-circle btn-sm w-12 h-12 flex items-center justify-center", 
+        # <form action="url,,," method="post" data-turbo-stream="true">trueにすると非同期化
         form: { data: { turbo_stream: true } } do %>
       <div class="flex flex-col items-center">
         <%# これは赤色のハートアイコンを表示
@@ -16,8 +17,8 @@
         <span class="text-xs"><%= post.likes.count %></span>
       </div>
     <% end %>
+      <%# いいねボタンがまだ押されていない %>
   <% else %>
-  <%# いいねボタンがすでに押されている %>
     <%= button_to post_likes_path(post), method: :post, 
         class: "btn btn-circle btn-outline btn-sm w-12 h-12 flex items-center justify-center", 
         form: { data: { turbo_stream: true } } do %>

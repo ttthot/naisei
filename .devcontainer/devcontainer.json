@@ -5,7 +5,7 @@
   "workspaceFolder": "/app",
   //  docker が落ちるので開発環境で必要なメモリ設定を追加
   "hostRequirements": {
-    "memory": "6gb"
+    "memory": "4gb"
   },
   "customizations": {
     "vscode": {
@@ -14,8 +14,13 @@
         "misogi.ruby-rubocop",
         "ms-azuretools.vscode-docker",
         "KoichiSasada.vscode-rdbg",
-        "esbenp.prettier-vscode" // Prettier拡張機能を追加
+        "esbenp.prettier-vscode",
+        "elia.erb-formatter",
+        "bradlc.vscode-tailwindcss",
+        "anthropic.claude-dev",
+        "anthropic.claude-code"
       ],
+
       "settings": {
         "ruby.rubocop.useBundler": true,
         "extensions.verifySignature": false,
@@ -34,6 +39,15 @@
         },
         "rubyLsp.formatter": "rubocop",
         "rubyLsp.testTimeout": 60,
+        "ruby.useLanguageServer": true,
+        "ruby.lsp.enabled": true,
+        "ruby.lsp.server": "ruby-lsp",
+
+        // ERBファイルの関連付け
+        "files.associations": {
+          "*.erb": "erb",
+          "*.html.erb": "erb"
+        },
 
         // HTML用のPrettier設定
         "[html]": {
@@ -54,12 +68,22 @@
         "[json]": {
           "editor.defaultFormatter": "esbenp.prettier-vscode",
           "editor.formatOnSave": true
-        }
+        },
+
+        // Tailwind CSS設定
+        "tailwindCSS.includeLanguages": {
+          "erb": "html",
+          "html.erb": "html"
+        },
+        "tailwindCSS.emmetCompletions": true,
+        "tailwindCSS.classAttributes": ["class", "className", "classList", "ngClass"]
       }
     }
   },
   "containerEnv": {
     "VSCODE_SHELL_INTEGRATION": "1"
+    // 権限の関係で/home/rails/.npm-global/bin/claude-codeに実行ファイルがあるのでパスを通す
+    // "PATH": "/home/rails/.npm-global/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   },
   "features": {
     "ghcr.io/devcontainers/features/git:1": {}
@@ -67,13 +91,11 @@
   "mounts": [
     // ホストマシンの.gitconfigファイルをコンテナにマウントし、
     // それをpostCreateCommandでコピーすることでGit設定を引き継ぎます
-    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/tmp/.gitconfig,type=bind,consistency=cached"
+    "source=${localEnv:HOME}/.gitconfig,target=/tmp/.gitconfig,type=bind,consistency=cached"
   ],
-  // 以下のpostCreateCommandでは:
-  // 1. bundle installでGemをインストール
-  // 2. rails db:createでデータベースを作成(既存の場合はスキップ)
-  // 3. ホストマシンの.gitconfig設定をコンテナにコピー
-  // 4. Gitのページャーを無効化
-  // 5. Prettierをインストール
-  "postCreateCommand": "bundle install && (rails db:create || true) && cp /tmp/.gitconfig ~/.gitconfig && git config --global core.pager '' && npm install --save-dev prettier"
+  // 軽量なGit設定（毎回実行）
+  "postCreateCommand": "bash -c 'cp /tmp/.gitconfig ~/.gitconfig || true; git config --global pager.branch false; git config --global pager.diff false; git config --global pager.log false'",
+  // bundle installのみ自動実行（サーバー起動はdocker-composeに委ねる）
+  "postStartCommand": "bundle install",
+  "onCreateCommand": "echo '=====================================' && echo 'DevContainer起動完了！' && echo '手動実行が必要です:' && echo '1. rails db:create (初回のみ)' && echo '2. rails db:migrate (初回のみ)' && echo 'rails serverはdocker-composeで自動起動されます' && echo '===================================='"
 }
