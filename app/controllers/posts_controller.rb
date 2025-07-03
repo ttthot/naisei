@@ -20,7 +20,7 @@ class PostsController < ApplicationController
 
     if @post.save
       # posts_path	==> /posts
-      redirect_to posts_path, notice: "記事を作成しました"
+      redirect_to posts_path # notice: "記事を作成しました"  メッセージが欲しい時はコメントを外す
     else
       # デバッグ情報を追加
       Rails.logger.info "保存エラー: #{@post.errors.full_messages.join(', ')}"

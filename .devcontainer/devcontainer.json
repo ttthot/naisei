@@ -5,7 +5,7 @@
   "workspaceFolder": "/app",
   //  docker が落ちるので開発環境で必要なメモリ設定を追加
   "hostRequirements": {
-    "memory": "6gb"
+    "memory": "4gb"
   },
   "customizations": {
     "vscode": {
@@ -16,7 +16,9 @@
         "KoichiSasada.vscode-rdbg",
         "esbenp.prettier-vscode",
         "elia.erb-formatter",
-        "anthropic.claude-vscode"
+        "bradlc.vscode-tailwindcss",
+        "anthropic.claude-dev",
+        "anthropic.claude-code"
       ],
 
       "settings": {
@@ -37,6 +39,15 @@
         },
         "rubyLsp.formatter": "rubocop",
         "rubyLsp.testTimeout": 60,
+        "ruby.useLanguageServer": true,
+        "ruby.lsp.enabled": true,
+        "ruby.lsp.server": "ruby-lsp",
+
+        // ERBファイルの関連付け
+        "files.associations": {
+          "*.erb": "erb",
+          "*.html.erb": "erb"
+        },
 
         // HTML用のPrettier設定
         "[html]": {
@@ -57,7 +68,15 @@
         "[json]": {
           "editor.defaultFormatter": "esbenp.prettier-vscode",
           "editor.formatOnSave": true
-        }
+        },
+
+        // Tailwind CSS設定
+        "tailwindCSS.includeLanguages": {
+          "erb": "html",
+          "html.erb": "html"
+        },
+        "tailwindCSS.emmetCompletions": true,
+        "tailwindCSS.classAttributes": ["class", "className", "classList", "ngClass"]
       }
     }
   },
@@ -74,12 +93,9 @@
     // それをpostCreateCommandでコピーすることでGit設定を引き継ぎます
     "source=${localEnv:HOME}/.gitconfig,target=/tmp/.gitconfig,type=bind,consistency=cached"
   ],
-  // 以下のpostCreateCommandでは:
-  // 1. bundle installでGemをインストール
-  // 2. rails db:createでデータベースを作成(既存の場合はスキップ)
-  // 3. ホストマシンの.gitconfig設定をコンテナにコピー
-  // 4. Gitのページャーを無効化
-  // 5. Prettierをインストール等
-  // "postCreateCommand": "bash -c 'bundle install && (rails db:create || true) && cp /tmp/.gitconfig ~/.gitconfig && git config --global core.pager \"\" && npm install --save-dev prettier && npm list -g --depth=0 > ~/npm-global-packages.txt && mkdir -p ~/.npm-global && npm config set prefix ~/.npm-global && echo \"export PATH=~/.npm-global/bin:\\$PATH\" >> ~/.bashrc && source ~/.bashrc && npm install -g @anthropic-ai/claude-code'"
-  "postCreateCommand": "bash -c 'bundle install && (rails db:create || true) && cp /tmp/.gitconfig ~/.gitconfig && git config --global core.pager \"\" && npm install --save-dev prettier && mkdir -p ~/.npm-global && npm config set prefix ~/.npm-global && export PATH=\"$HOME/.npm-global/bin:$PATH\" && echo \"export PATH=\\\"$HOME/.npm-global/bin:$PATH\\\"\" >> ~/.bashrc && npm install -g @anthropic-ai/claude-code && echo \"alias claude-code=\\\"npx @anthropic-ai/claude-code\\\"\" >> ~/.bashrc && source ~/.bashrc'"
+  // 軽量なGit設定（毎回実行）
+  "postCreateCommand": "bash -c 'cp /tmp/.gitconfig ~/.gitconfig || true; git config --global pager.branch false; git config --global pager.diff false; git config --global pager.log false'",
+  // bundle installのみ自動実行（サーバー起動はdocker-composeに委ねる）
+  "postStartCommand": "bundle install",
+  "onCreateCommand": "echo '=====================================' && echo 'DevContainer起動完了！' && echo '手動実行が必要です:' && echo '1. rails db:create (初回のみ)' && echo '2. rails db:migrate (初回のみ)' && echo 'rails serverはdocker-composeで自動起動されます' && echo '===================================='"
 }

@@ -12,6 +12,7 @@
 # ルートパス（"/"）はデフォルトではコメントアウトされています。
 # デフォルトのランディングページを定義するには、`root` の行をアンコメントして修正してください。
 Rails.application.routes.draw do
+  get "emotion_calendar/index"
   # アプリケーションのルートURL（"/"）にアクセスしたとき、sessionsコントローラーのnewアクションを表示する
   root "sessions#new"
 
@@ -36,6 +37,8 @@ Rails.application.routes.draw do
   # postは一覧表示つまり独立したアクセスが必要なためpostsとusersはネストにしていない
   resources :users, only: %i[index show new create]
   # likesはposts抜きの状態は考えられないためネストしている
+  # カレンダー表示のルーティング
+  resources :emotion_calendar, only: [:index]
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

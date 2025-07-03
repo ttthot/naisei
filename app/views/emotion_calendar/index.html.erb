@@ -1,0 +1,85 @@
+<%# 最大横幅28rem cardにより中央寄せは自動 %>
+<div class="card bg-base-100 shadow-lg w-full max-w-md mx-auto m-4">
+  <div class="card-body flex flex-col items-center">
+    <h1 class="text-2xl font-bold mb-4 text-center">感情カレンダー</h1>
+    <%# 曜日ラベル %>
+    <%# テキストの色は自動選択、濃淡60だけ指定 %>
+    <div
+      class="
+        grid grid-cols-7 gap-1 mb-2 text-xs text-base-content/60 text-center w-fit
+      "
+    >
+      <%# flexコンテナを作るオプション　itmes縦方向、justify 横方向 %>
+      <div class="w-6 h-6 flex items-center justify-center">日</div>
+      <div class="w-6 h-6 flex items-center justify-center">月</div>
+      <div class="w-6 h-6 flex items-center justify-center">火</div>
+      <div class="w-6 h-6 flex items-center justify-center">水</div>
+      <div class="w-6 h-6 flex items-center justify-center">木</div>
+      <div class="w-6 h-6 flex items-center justify-center">金</div>
+      <div class="w-6 h-6 flex items-center justify-center">土</div>
+    </div>
+    <%# カレンダーのマス部分 %>
+    <%# w-fitで広がりすぎなようにする %>
+    <div class="grid grid-cols-7 gap-1 w-fit">
+      <%# 最初の週の空白を埋める sun:0 saturday:6 %>
+      <% first_wday = @calendar_dates.first.wday %>
+      <% first_wday.times do %>
+        <div class="w-6 h-6"></div>
+      <% end %>
+
+      <%# 染色するマスを確定 %>
+      <% @calendar_dates.each do |date| %>
+        <%# 正方形の枠を設定 %>
+        <%# ヘルパーメソッドに日付を渡し返ってきた色、濃淡がそのままマス内の色になる %>
+        <%# ーーー将来用にリンクをつけるーーー %>
+        <div
+          class="w-6 h-6 <%= emotion_color_class(date) %> rounded-sm"
+          title="<%= date.strftime("%Y-%m-%d") %>"
+        >
+        </div>
+      <% end %>
+    </div>
+
+    <%# 感情の種類説明 %>
+    <div class="mt-6 p-4 bg-base-200 rounded-lg w-full">
+      <h3 class="text-lg font-semibold mb-3 text-base-content">感情の種類</h3>
+      <div class="flex flex-wrap gap-3 justify-center">
+        <% [
+          ["happy", "😊 Happy", "bg-green-500"],
+          ["sad", "😢 Sad", "bg-blue-500"],
+          ["angry", "😠 Angry", "bg-red-500"],
+          ["excited", "🎉 Excited", "bg-yellow-500"],
+          ["neutral", "😐 Neutral", "bg-gray-400"]
+        ].each do |emotion, label, color| %>
+          <%# 一列のアイコンの数は不問なのでグリッドではなくflexを選択 %>
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 <%= color %> rounded-sm"></div>
+            <span class="text-lg text-base-content/80"><%= label %></span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <%# 前のページに戻るボタン %>
+    <div class="mt-6 text-center">
+      <%#アウトライン付きボタン %>
+      <button onclick="history.back()" class="btn btn-outline">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M10 19l-7-7m0 0l7-7m-7 7h18"
+          />
+        </svg>
+        戻る
+      </button>
+    </div>
+  </div>
+</div>

@@ -27,6 +27,8 @@ services:
     volumes:
       - .:/app
       - ~/.gitconfig:/root/.gitconfig:ro
+    # DevContainer用のメモリ制限
+    mem_limit: 4g
     environment:
       #　開発用の環境変数を指定
       RAILS_ENV: development
@@ -40,7 +42,7 @@ services:
       db:
         condition: service_healthy
     # devcontainerにサーバー起動を設定したためこの設定を暫定的にコメントアウト
-    # command: bash -c "rm -f tmp/pids/server.pid && bin/dev"
+    command: bash -c "ls -la Procfile.dev && ls -la bin/dev && bin/dev"
     tty: true # ウォッチャープロセスのために必要
 
   # Nginxサービスを追加

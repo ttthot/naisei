@@ -1,0 +1,32 @@
+# 日本語表示を行うためのファイル
+# 画面のエラーメッセージを直接記載ではなくここで一元管理
+# バリデーションエラーやラベル表示などのタイミングで自動的にこのファイルから該当する日本語メッセージを探して表示
+ja:
+  hello: 'こんにちは世界'
+
+  # フォームのラベル
+  email: 'メールアドレス'
+  password: 'パスワード'
+  login: 'ログイン'
+  logout: 'ログアウト'
+  signup: '新規登録'
+
+  # エラーメッセージ
+  errors:
+    messages:
+      blank: 'を入力してください'
+      invalid: 'は無効です'
+      too_short: 'は%{count}文字以上で入力してください'
+      too_long: 'は%{count}文字以下で入力してください'
+
+  # ActiveRecord関連
+  activerecord:
+    errors:
+      messages:
+        blank: 'を入力してください'
+        invalid: 'は無効です'
+    attributes:
+      user:
+        email: 'メールアドレス'
+        password: 'パスワード'
+        name: '名前'

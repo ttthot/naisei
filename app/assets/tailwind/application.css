@@ -1,9 +1,12 @@
-/* source(none) - デフォルトのソースファイルをスキャンせず、代わりに２行目以降に明示的に指定したソースファイルのみを使用するよう指示しています */
+/* Tailwind CSS v4の正しい構文 */
 @import 'tailwindcss';
+
+/* スキャン対象のファイルを指定 */
 @source "../../../public/*.html";
-@source "../../../app/helpers/**/*.rb";
+@source "../../../app/views/**/*.erb";
 @source "../../../app/javascript/**/*.js";
-@source "../../../app/views/**/*";
+@source "../../../app/views/emotion_calendar/index.html.erb";
+@source "../../../app/views/test_tailwind.html.erb";
 
 /* DaisyUIの設定 */
 @plugin "daisyui" {
