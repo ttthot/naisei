@@ -96,14 +96,17 @@
             "background": "#f14c4c",
             "iconColour": "#f14c4c"
           },
+          // バグや不具合が明確に存在する箇所
           "BUG": {
             "background": "#ff0000",
             "iconColour": "#ff0000"
           },
+          // 一時的な回避策や、理想的ではない実装
           "HACK": {
             "background": "#ff00ff",
             "iconColour": "#ff00ff"
           },
+          // コードの意図や設計上の理由、特別な注意点
           "NOTE": {
             "background": "#2fad75",
             "iconColour": "#2fad75"
