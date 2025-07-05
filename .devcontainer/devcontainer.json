@@ -74,15 +74,27 @@
         // Tailwind CSS設定
         "tailwindCSS.includeLanguages": {
           "erb": "html",
-          "html.erb": "html"
+          "html.erb": "html",
+          // rubyと解釈される場所でもhtmlとして認識しコード補完をする
+          "ruby": "html"
         },
         "tailwindCSS.emmetCompletions": true,
-        "tailwindCSS.classAttributes": ["class", "className", "classList", "ngClass"],
+        "tailwindCSS.classAttributes": [
+          "class",
+          "className",
+          "classList",
+          "ngClass",
+          "alert",
+          "div",
+          "ul",
+          "li",
+          "span"
+        ],
 
         // Todo Tree設定
         "todo-tree.general.tags": ["TODO", "FIXME", "BUG", "HACK", "NOTE", "REVIEW", "OPTIMIZE"],
         "todo-tree.highlights.defaultHighlight": {
-          "foreground": "white",
+          "foreground": "#ffffff",
           "background": "#ffbd2a",
           "iconColour": "#ffbd2a",
           "type": "tag"
