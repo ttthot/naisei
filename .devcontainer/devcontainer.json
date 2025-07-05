@@ -142,7 +142,5 @@
   ],
   // 軽量なGit設定（毎回実行）
   "postCreateCommand": "bash -c 'cp /tmp/.gitconfig ~/.gitconfig || true; git config --global pager.branch false; git config --global pager.diff false; git config --global pager.log false'",
-  // bundle installのみ自動実行（サーバー起動はdocker-composeに委ねる）
-  "postStartCommand": "bundle install",
-  "onCreateCommand": "echo '=====================================' && echo 'DevContainer起動完了！' && echo '手動実行が必要です:' && echo '1. rails db:create (初回のみ)' && echo '2. rails db:migrate (初回のみ)' && echo 'rails serverはdocker-composeで自動起動されます' && echo '===================================='"
+  "onCreateCommand": "echo '=====================================' && echo 'DevContainer起動完了！' && echo 'Dockerfileで依存関係は既にインストール済みです' && echo '手動実行が必要な場合:' && echo '• rails db:create (初回のみ、データベースが存在しない場合)' && echo '• rails db:migrate (マイグレーション未実行の場合)' && echo 'Rails/Tailwind/JSプロセスは全て自動起動されています' && echo '===================================='"
 }
