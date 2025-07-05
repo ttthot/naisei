@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-theme="lemonade" lang="ja">  
+<html data-theme="lemonade" lang="ja">
   <head>
     <title>App</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -11,7 +11,9 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
 
     <%= javascript_importmap_tags %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+    <%= javascript_include_tag "application",
+    "data-turbo-track": "reload",
+    type: "module" %>
     <style>
       @font-face {
         font-family: 'Avenir';
@@ -20,12 +22,14 @@
       }
     </style>
     <%# Font Awesomeを導入　アイコンを「アイコンフォント」という文字として利用 %>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      rel="stylesheet"
+    >
   </head>
 
   <body class="bg-base-100 text-base-content">
 
-    
     <% if flash.any? %>
       <% flash.each do |message_type, message| %>
         <% if message_type == "notice" %>
@@ -43,9 +47,18 @@
         <% end %>
       <% end %>
     <% end %>
+
+    <% if Rails.env.development? %>
+      <%# 以下２個は必要時に使う %>
+      <%# <%= debug flash %>
+      <%# <%= debug session %>
+      <%= debug(params) %>
+
+    <% end %>
+
+    <%# 以下に子要素を挿入される %>
+    <%# リクエスト、コントローラはアクションに対応するビューをレンダリング、まず本ファイルが呼ばれる、その後yieldを発見し挿入 %>
     <%= yield %>
-    
-    <%= debug(params) if Rails.env.development? %>
 
   </body>
 </html>
