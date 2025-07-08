@@ -18,7 +18,8 @@
         "elia.erb-formatter",
         "bradlc.vscode-tailwindcss",
         "anthropic.claude-dev",
-        "anthropic.claude-code"
+        "anthropic.claude-code",
+        "gruntfuggly.todo-tree"
       ],
 
       "settings": {
@@ -73,10 +74,56 @@
         // Tailwind CSS設定
         "tailwindCSS.includeLanguages": {
           "erb": "html",
-          "html.erb": "html"
+          "html.erb": "html",
+          // rubyと解釈される場所でもhtmlとして認識しコード補完をする
+          "ruby": "html"
         },
         "tailwindCSS.emmetCompletions": true,
-        "tailwindCSS.classAttributes": ["class", "className", "classList", "ngClass"]
+        "tailwindCSS.classAttributes": [
+          "class",
+          "className",
+          "classList",
+          "ngClass",
+          "alert",
+          "div",
+          "ul",
+          "li",
+          "span"
+        ],
+
+        // Todo Tree設定
+        "todo-tree.general.tags": ["TODO", "FIXME", "BUG", "HACK", "NOTE", "REVIEW", "OPTIMIZE"],
+        "todo-tree.highlights.defaultHighlight": {
+          "foreground": "#ffffff",
+          "background": "#ffbd2a",
+          "iconColour": "#ffbd2a",
+          "type": "tag"
+        },
+        "todo-tree.highlights.customHighlight": {
+          "TODO": {
+            "background": "#3ea8ff",
+            "iconColour": "#3ea8ff"
+          },
+          "FIXME": {
+            "background": "#f14c4c",
+            "iconColour": "#f14c4c"
+          },
+          // バグや不具合が明確に存在する箇所
+          "BUG": {
+            "background": "#ff0000",
+            "iconColour": "#ff0000"
+          },
+          // 一時的な回避策や、理想的ではない実装
+          "HACK": {
+            "background": "#ff00ff",
+            "iconColour": "#ff00ff"
+          },
+          // コードの意図や設計上の理由、特別な注意点
+          "NOTE": {
+            "background": "#2fad75",
+            "iconColour": "#2fad75"
+          }
+        }
       }
     }
   },
@@ -95,7 +142,6 @@
   ],
   // 軽量なGit設定（毎回実行）
   "postCreateCommand": "bash -c 'cp /tmp/.gitconfig ~/.gitconfig || true; git config --global pager.branch false; git config --global pager.diff false; git config --global pager.log false'",
-  // bundle installのみ自動実行（サーバー起動はdocker-composeに委ねる）
-  "postStartCommand": "bundle install",
-  "onCreateCommand": "echo '=====================================' && echo 'DevContainer起動完了！' && echo '手動実行が必要です:' && echo '1. rails db:create (初回のみ)' && echo '2. rails db:migrate (初回のみ)' && echo 'rails serverはdocker-composeで自動起動されます' && echo '===================================='"
+  "onCreateCommand": "echo '=====================================' && echo 'DevContainer起動完了！' && echo 'Dockerfileで依存関係は既にインストール済みです' && echo '手動実行が必要な場合:' && echo '• rails db:create (初回のみ、データベースが存在しない場合)' && echo '• rails db:migrate (マイグレーション未実行の場合)' && echo 'Rails/Tailwind/JSプロセスは全て自動起動されています' && echo '======================================'",
+  "postStartCommand": "bin/dev"
 }

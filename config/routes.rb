@@ -27,9 +27,8 @@ Rails.application.routes.draw do
 
   # localhost:3000/posts
   # localhost:3000/posts/new
-  #  %iはシンボルの配列を表す
+  # %iはシンボルの配列を表す== [:index, :new, :create]
   # likesはposts抜きの状態は考えられないためネストしている
-  # %i[...] は、スペースで区切られた文字列をシンボルの配列に変換するための記法です。カンマ,は使えない
   resources :posts, only: %i[index new create] do
     resources :likes, only: %i[create destroy]
   end
