@@ -1,14 +1,19 @@
-<%# ---「投稿1件分」の設計部品を表す、本ファイルは繰り返しindex.html内で使われる --- %>
+<%# ---本ファイルは「投稿1件分」の設計部品を表す_パーシャルファイル、繰り返しindex.html内で使われる --- %>
 <%# また本ファイルも別のファイルを呼びだしている、全体は三層構造になっている %>
 
 <%# card - カードの基本コンテナ %>
-  <%#重要！！ dom_id(post) はTurboがこの全体を特定するために追加されている  %>
-<div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow duration-300" id="<%= dom_id(post) %>">
+<%#重要！！ dom_id(post) はTurboがこの全体を特定するために追加されている %>
+<div
+  class="
+    card bg-base-100 shadow-md hover:shadow-lg transition-shadow duration-300
+  "
+  id="<%= dom_id(post) %>"
+>
 
   <%# card-body - カードの本文部分を定義する %>
   <div class="card-body">
 
-    <%# card-title - カードのタイトル要素（ここではトピックのタイトル）%>
+    <%# card-title - カードのタイトル要素（ここではトピックのタイトル） %>
     <h2 class="card-title text-primary"><%= post.topic.title %></h2>
 
     <p><%= post.content %></p>
@@ -20,13 +25,15 @@
       <%# いいね機能の表示エリア。Turbo StreamがこのIDを目印にこの部分だけページ更新をせずに部分更新 %>
       <%# dom_idヘルパーメソッド、idを生成する。id = post_idnum_like_buttonを作成 %>
       <%# 暫定的にlike_buttonを文字リテラルに変更 %>
-        <%# ここで部品テンプレを呼び出す、第一引数でファイル名指定、第二postオブジェクト入りの引数を渡す %
-        <%# likesフォルダ内のlikes_buttonという名前のファイルを探す %>
-        <%= render 'likes/like_button', post: post %>
+      <%# ここで部品テンプレを呼び出す、第一引数でファイル名指定、第二postオブジェクト入りの引数を渡す %>
+      <%= render "likes/like_button", post: post %>
 
       <%# 日付のバッジ %>
       <div class="badge badge-outline"><%= post.created_at.strftime("%Y年%m月%d日") %></div>
 
     </div>
+    <%# card-actionsの閉じタグ %>
   </div>
+  <%# card-bodyの閉じタグ %>
 </div>
+<%# cardの閉じタグ %>

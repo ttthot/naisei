@@ -14,7 +14,7 @@ gem "sprockets-rails"
 gem "mysql2", "~> 0.5"
 
 # SQLite3 for development/testing when MySQL is not available
-gem "sqlite3", "~> 1.4"
+# gem "sqlite3", "~> 1.4"
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
@@ -49,9 +49,18 @@ gem "bootsnap", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
+# チャットGPT APIとの通信用
+gem "ruby-openai"
+# 以下は公式のapiだが現在使用予定なし
+# gem "openai", "~> 0.11.0"
+# チャットgpt apiで使用するか未定
+# gem "faraday", "~> 2.7"
+# LINE Messaging APIを使用するため
+gem "line-bot-api"
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri windows]
+  gem "dotenv-rails"
 end
 
 group :development do
@@ -71,6 +80,7 @@ group :development do
   gem "rubocop-performance"
   gem "rubocop-md"
   gem "erb-formatter"
+  gem "ruby-lsp", require: false
 end
 
 group :test do

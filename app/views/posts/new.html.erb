@@ -2,33 +2,27 @@
 <div class="max-w-2xl mx-auto px-4 py-6">
   <div class="card bg-base-100 shadow-xl">
     <div class="card-body">
-      <%# 以下 ERB (Embedded Ruby) 、テンプレートエンジン、によりrubyが実行されhtmlが出力される %>
+      <%# 以下 ERB (Embedded Ruby) 、テンプレートエンジンによりrubyが実行されhtmlが出力される %>
+      <%# form_withは、@postが新規なら/postsにPOSTで送信するHTMLフォームを生成すると規定されている %>
       <%= form_with(model: @post, data: { turbo: false }) do |form| %>
-        <%# --%ポストした時にエラーが発生した場合 %>
+        <%# --%ポストした時にエラーが発生した場合 (  validates :content, presence: true)が設定されているため %>
         <% if @post.errors.any? %>
-          <div role="alert" class="alert alert-error mb-4">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="stroke-current shrink-0 h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <div>
-              <h4 class="font-bold">エラーが発生しました（<%= @post.errors.count %>件）</h4>
-              <ul>
+          <%# alertコンポーネント縦表示不可のためcardコンポーネントを使用してエラー表示 %>
+          <div class="card bg-error text-error-content shadow-lg mb-8">
+            <%# card-body以下クラスは自動パディング %>
+            <div class="card-body p-4">
+              <%# タイトル表示 %>
+              <div class="card-title text-lg">エラーが発生しました（<%= @post.errors.count %>件）</div>
+              <%# リスト表示 %>
+              <ul class="list-disc list-inside">
+                <%# errors属性は自動的にpostインスタンスに入る %>
                 <% @post.errors.full_messages.each do |message| %>
                   <li><%= message %></li>
                 <% end %>
               </ul>
             </div>
           </div>
+
         <% end %>
         <%# ーーここまでーー %>
 
@@ -146,10 +140,22 @@
           </label>
         </div>
 
+        <%# 送信ボタンエリア %>
         <%# クラス名 "card-actionsクラスは、カード内のボタンやリンクに適切なマージンやパディングを提供 %>
         <%# "justify-end" は、アクション要素を右端に揃えるためのユーティリティクラスです。 %>
         <div class="card-actions justify-end">
-          <%= form.submit "投稿する", class: "btn btn-primary btn-xl" %>
+          <%# デフォルトはname="commit" なので params[:commit]でvalueが取得可能 %>
+          <%= button_tag "投稿",
+          type: "submit",
+          name: "commit",
+          value: "post",
+          class: "btn btn-primary btn-xl" %>
+
+          <%= button_tag "投稿とアドバイス",
+          type: "submit",
+          name: "commit",
+          value: "post_and_aiadvice",
+          class: "btn btn-primary btn-xl" %>
         </div>
       <% end %>
     </div>
