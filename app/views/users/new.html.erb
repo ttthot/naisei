@@ -1,41 +1,42 @@
-<%# ページごとにタイトルを動的に設定するためのRailsのヘルパーメソッドです。 %>
-<% provide(:title, 'アカウント登録') %>
+<% provide(:title, "Sign up") %>
 
-<h1 class="text-2xl font-bold text-center my-6">アカウント登録</h1>
-
-<div class="max-w-md mx-auto">
-  <div class="card card-border bg-base-100 shadow-lg">
-    <div class="card-body">
-      <%= form_with(model: @user, class: "space-y-4") do |f| %>
-        <%= render 'shared/error_messages' %>
-        
-        <div class="form-control">
-          <%= f.label :name, "お名前", class: "label" %>
-          <%= f.text_field :name, class: "input input-bordered w-full", placeholder: "山田 太郎" %>
-        </div>
-        
-        <div class="form-control">
-          <%= f.label :email, "メールアドレス", class: "label" %>
-          <%= f.email_field :email, class: "input input-bordered w-full", placeholder: "example@mail.com" %>
-        </div>
-        
-        <div class="form-control">
-          <%= f.label :password, "パスワード", class: "label" %>
-          <span class="text-xs text-neutral-500 -mt-2 mb-1">6文字以上</span>
-          <%= f.password_field :password, class: "input input-bordered w-full" %>
-        </div>
-        
-        <div class="form-control">
-          <%= f.label :password_confirmation, "パスワード（確認）", class: "label" %>
-          <%= f.password_field :password_confirmation, class: "input input-bordered w-full" %>
-        </div>
-        
-        <div class="form-control mt-6">
-          <%= f.submit "アカウントを作成", class: "btn btn-primary w-full" %>
+<div class="max-w-md mx-auto py-12">
+  <div class="card card-border bg-base-100 shadow-2xl rounded-2xl mt-6">
+    <div class="card-body p-8">
+      <h2 class="text-2xl font-bold mb-8 text-center font-sans tracking-wide">アカウント登録</h2>
+      <%= form_with(model: @user) do |f| %>
+        <div class="space-y-6">
+          <%= render "shared/error_messages" %>
+          <div class="form-control">
+            <%= f.text_field :name,
+                         class: "input input-bordered w-full text-lg py-3 px-4",
+                         placeholder: "お名前" %>
+          </div>
+          <div class="form-control">
+            <%= f.email_field :email,
+                          class: "input input-bordered w-full text-lg py-3 px-4",
+                          placeholder: "メールアドレス" %>
+          </div>
+          <div class="form-control">
+            <%= f.password_field :password,
+                             class: "input input-bordered w-full text-lg py-3 px-4",
+                             placeholder: "パスワード（6文字以上）" %>
+          </div>
+          <div class="form-control">
+            <%= f.password_field :password_confirmation,
+                             class: "input input-bordered w-full text-lg py-3 px-4",
+                             placeholder: "パスワード（確認）" %>
+          </div>
+          <div class="form-control">
+            <%= f.submit "アカウントを作成",
+                     class:
+                       "btn btn-primary btn-lg w-full text-lg font-bold btn-shadow hover:scale-105 transition" %>
+          </div>
         </div>
       <% end %>
-      
-      <p class="mt-4 text-center"><%= link_to "ログインはこちらから", login_path, class: "link link-primary" %></p>
+      <p class="mt-6 text-center tracking-wide text-base">
+        <%= link_to "ログインはこちらから", login_path, class: "link link-primary hover:underline" %>
+      </p>
     </div>
   </div>
 </div>
