@@ -1,35 +1,33 @@
 <% provide(:title, "Log in") %>
-<%# `my-6` クラスは上下に1.5rem (24px) のマージンを追加します。 %>
 
-<div class="max-w-md mx-auto">
-  <%# カードコンポーネントを使用してログインフォームをスタイリング %>
-  <div class="card card-border bg-base-100 shadow-lg mt-6">
-    <div class="card-body">
-      <%# RailsのHTMLフォームのデフォルトメソッドはPOSTです。明示的に:method => :getを指定しない限り、POSTリクエスト。%>
-      <%= form_with(url: login_path, scope: :session, class: "space-y-4") do |f| %>
-        <div class="form-control">
-          <%= f.label :email, class: "label" %>
-          <%= f.email_field :email, class: 'input input-bordered w-full' %>
-        </div>
+<div class="max-w-md mx-auto py-12">
+  <div class="card card-border bg-base-100 shadow-2xl rounded-2xl mt-6">
+    <div class="card-body p-8">
+      <%= form_with(url: login_path, scope: :session) do |f| %>
+        <div class="space-y-6">
+          <div class="form-control">
+            <%= f.email_field :email,
+                          class: "input input-bordered w-full text-lg py-3 px-4",
+                          placeholder: "メールアドレス" %>
+          </div>
 
-        <div class="form-control">
-          <%= f.label :password, class: "label" %>
-          <%= f.password_field :password, class: 'input input-bordered w-full' %>
-        </div>
+          <div class="form-control">
+            <%= f.password_field :password,
+                             class: "input input-bordered w-full text-lg py-3 px-4",
+                             placeholder: "パスワード" %>
+          </div>
 
-        <div class="form-control mt-6">
-          <%= f.submit "Log in", class: "btn btn-primary w-full" %>
+          <div class="form-control">
+            <%= f.submit "Log in",
+                     class:
+                       "btn btn-primary btn-lg w-full text-lg font-bold btn-shadow hover:scale-105 transition" %>
+          </div>
         </div>
       <% end %>
-      
-      <%# /signupというURLパスへのGETリクエストをusersコントローラーのnewアクションにルーティングするよう指定しています。 %>
-      <%# link:         daisyUI基本的なリンクスタイルを適用
-          link-primary: daisyUIプライマリーカラー（アプリのメインカラー）でリンクを装飾 %>
-      <%# ルーティングファイルでsignup_pathというヘルパーメソッドを生成、/signupというURLパスを取得 %>
-      <p class="mt-4 text-center"><%= link_to "登録はこちらから！", signup_path, class: "link link-primary" %></p>
+
+      <p class="mt-4 text-center tracking-wide text-base">
+        <%= link_to "登録はこちらから！", signup_path, class: "link link-primary hover:underline" %>
+      </p>
     </div>
   </div>
 </div>
-
-
-
