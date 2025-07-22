@@ -18,6 +18,7 @@ RUN apt-get update -qq && \
     libvips \
     pkg-config \
     libyaml-dev && \
+    # エラー修正
     # NodeSource から Node.js v18 をインストール
     curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install --no-install-recommends -y nodejs && \

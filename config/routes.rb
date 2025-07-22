@@ -12,6 +12,10 @@
 # ルートパス（"/"）はデフォルトではコメントアウトされています。
 # デフォルトのランディングページを定義するには、`root` の行をアンコメントして修正してください。
 Rails.application.routes.draw do
+  # ラインボットのwebhookエンドポイントを定義
+  # postリクエストはユーザーがLINE上で選択した時間を受け取るため
+  get "line/webhook"
+  post "line/webhook", to: "line#webhook"
   get "emotion_calendar/index"
   # アプリケーションのルートURL（"/"）にアクセスしたとき、sessionsコントローラーのnewアクションを表示する
   root "sessions#new"

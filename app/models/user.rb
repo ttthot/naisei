@@ -14,4 +14,5 @@ class User < ApplicationRecord
 
   # パスワードの長さを制限
   validates :password, length: { minimum: 6 }, allow_nil: true
+  validates :line_user_id, uniqueness: true, allow_nil: true
 end

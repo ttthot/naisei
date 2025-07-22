@@ -1,0 +1,31 @@
+name: LINE Broadcast (毎日定期実行)
+
+on:
+  schedule:
+    - cron: '0 13 * * *' # 日本時間22時
+
+jobs:
+  broadcast:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.4.2
+
+      - name: Install dependencies
+        run: |
+          bundle install --jobs 4 --retry 3
+
+      - name: Send LINE broadcast
+        # secrets in GitHub Actions用の設定
+        # 本体はgithub上に保存れている
+        env:
+          LINE_CHANNEL_TOKEN: ${{ secrets.LINE_CHANNEL_TOKEN }}
+          LINE_CHANNEL_SECRET: ${{ secrets.LINE_CHANNEL_SECRET }}
+        run: |
+          ruby send_line_broadcast.rb
