@@ -1,8 +1,12 @@
+
+
 # frozen_string_literal: true
 
 # 記事を取得する
 class PostsController < ApplicationController
   #  ログイン必須機能はapplication_controller.rbに移動した
+  # サイドバー設置レイアウトファイル変更（indexのみ）
+  layout "sidebar_layout", only: [:index]
 
   def index
     # ビューがurlを作成　posts_path(page: @current_page + 1)

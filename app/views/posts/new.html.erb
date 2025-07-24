@@ -1,7 +1,7 @@
 <%# filepath: /app/app/views/posts/new.html.erb %>
-<div class="max-w-2xl mx-auto px-4 py-6">
-  <div class="card bg-base-100 shadow-xl">
-    <div class="card-body">
+<div class="max-w-2xl mx-auto px-4 py-8">
+  <div class="card bg-base-100 shadow-2xl rounded-2xl border border-base-300/60">
+    <div class="card-body space-y-8 px-6 py-8">
       <%# 以下 ERB (Embedded Ruby) 、テンプレートエンジンによりrubyが実行されhtmlが出力される %>
       <%# form_withは、@postが新規なら/postsにPOSTで送信するHTMLフォームを生成すると規定されている %>
       <%= form_with(model: @post, data: { turbo: false }) do |form| %>
@@ -29,13 +29,13 @@
         <%# 感情選択欄 %>
         <div class="flex flex-wrap gap-4 mt-2">
           <div class="w-full">
-            <%= form.label :emotion, "感情を記入しましょう", class: "label" %>
+            <%= form.label :emotion, "一番近い感情を選んでください", class: "label" %>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
               <%# form_with内で@postを渡すこれを元に　name="post[属性名]"を出力、今回はpost[emotion] %>
               <%= form.collection_radio_buttons(:emotion, Post.emotions.keys, :to_s, :to_s) do |b| %>
                 <%# 背景色は透明のボタン %>
-                <label class="btn btn-outline w-full normal-case">
+                <label class="btn btn-lg btn-outline w-full normal-case rounded-full ">
                   <%= b.radio_button(class: "hidden", onchange: "updateButtons('post[emotion]')") %>
                   <%# 感情に対応する絵文字を表示,文字サイズは顔文字のサイズを示す %>
                   <span class="text-2xl">
@@ -135,7 +135,7 @@
           <%# form-controlは入力フィールドとそのラベルをグループ化し、適切に配置する %>
           <label class="form-control w-full">
             <%= form.text_area :content,
-                           class: "textarea textarea-bordered h-200 w-full",
+                           class: "textarea textarea-bordered h-100 w-full",
                            placeholder: "ここに投稿内容を入力してください" %>
           </label>
         </div>

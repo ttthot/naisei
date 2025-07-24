@@ -77,5 +77,5 @@ Rails.application.configure do
   config.action_controller.raise_on_missing_callback_actions = true
 
   # ngrok経由でアクセスするためのホスト許可
-  config.hosts << "2c9e7fc42884.ngrok-free.app"
+  config.hosts << "c4bc120da9ec.ngrok-free.app"
 end

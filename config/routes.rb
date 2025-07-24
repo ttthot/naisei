@@ -12,6 +12,8 @@
 # ルートパス（"/"）はデフォルトではコメントアウトされています。
 # デフォルトのランディングページを定義するには、`root` の行をアンコメントして修正してください。
 Rails.application.routes.draw do
+  get "emotion_calendar/index"
+  get "settings/index"
   # ラインボットのwebhookエンドポイントを定義
   # postリクエストはユーザーがLINE上で選択した時間を受け取るため
   get "line/webhook"
@@ -42,6 +44,8 @@ Rails.application.routes.draw do
   # likesはposts抜きの状態は考えられないためネストしている
   # カレンダー表示のルーティング
   resources :emotion_calendar, only: [:index]
+  # 設定画面
+  get "settings", to: "settings#index"
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
