@@ -1,6 +1,6 @@
-# frozen_string_literal: true
-
 class EmotionCalendarController < ApplicationController
+  # サイドバー設置レイアウトファイル変更
+  layout "sidebar_layout"
   def index
     # データ一覧を取得
     @posts = Post.where(user_id: current_user.id)
@@ -25,15 +25,4 @@ class EmotionCalendarController < ApplicationController
       @calendar_dates << date
     end
   end
-  # def index
-  #   @dates = (0..29).map { |i| Date.today - 29 + i }
-
-  #   # テスト用の感情データ（本来はDBから取得）
-  #   @emotions = {
-  #     (Date.today - 20).to_s => { emotion: "happy", intensity: 4 },
-  #     (Date.today - 15).to_s => { emotion: "sad", intensity: 3 },
-  #     (Date.today - 5).to_s => { emotion: "angry", intensity: 5 },
-  #     (Date.today).to_s => { emotion: "excited", intensity: 4 }
-  #   }
-  # end
 end

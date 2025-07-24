@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html data-theme="lemonade" lang="ja">
+  <head>
+<title><%= content_for?(:title) ? yield(:title) : "Naisei" %></title>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+    <style>
+       body {
+      font-family: 'Zen Maru Gothic', 'Avenir', 'Hiragino Sans', 'Meiryo', sans-serif;
+       line-height: 1.7;        /* 行間（1.7倍） */
+      letter-spacing: 0.03em;  /* 文字間隔を少し広げる */
+    }
+    </style>
+    <%#  Google Fonts  %>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700&display=swap" rel="stylesheet">
+    <%# ハート,カレンダーなどのアイコン %>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      rel="stylesheet"
+    >
+  </head>
+  <body class="bg-base-100 text-base-content font-sans">
+    <%# フラッシュメッセージ %>
+    <% if flash.any? %>
+      <% flash.each do |message_type, message| %>
+        <% if message_type == "notice" %>
+          <div class="flash flash-notice">
+            <%= message %>
+          </div>
+        <% elsif message_type == "alert" %>
+          <div class="flash flash-alert">
+            <%= message %>
+          </div>
+        <% else %>
+          <div class="flash flash-other">
+            <%= message %>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+    <% if Rails.env.development? %>
+      <%= debug(params) %>
+    <% end %>
+    <%# --- 左メニューバーつまり　daisyUI Drawer構造 --- %>
+<div class="drawer lg:drawer-open min-h-screen">
+  <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+
+  <!-- サイドバー（左側） -->
+<div class="drawer-side">
+  <label for="my-drawer" class="drawer-overlay"></label>
+  <aside class="w-64 min-h-full bg-base-200 flex flex-col">
+    <!-- ロゴ＋アプリ名 -->
+    <div class="flex items-center gap-2 px-6 py-4 border-b border-base-300">
+      <span class="text-3xl text-primary">
+        <i class="fa-solid fa-face-smile"></i>
+      </span>
+      <span class="font-bold text-xl tracking-tight">Naisei</span>
+    </div>
+
+    <!-- メニューリスト (daisyUI menu) -->
+    <ul class="menu flex-1 px-4 py-2 gap-2">
+      <li>
+        <%= link_to posts_path, class: ("active" if current_page?(posts_path)) do %>
+          <i class="fa-solid fa-list-ul"></i>
+          <span>投稿一覧</span>
+        <% end %>
+      </li>
+      <li>
+        <%= link_to new_post_path do %>
+          <i class="fa-solid fa-pen-to-square"></i>
+          <span>新規投稿</span>
+        <% end %>
+      </li>
+      <li>
+
+        <%= link_to emotion_calendar_index_path(anchor: "calendar") do %>
+          <i class="fa-solid fa-calendar-days"></i>
+          <span>感情カレンダー</span>
+        <% end %>
+      </li>
+      <li>
+        <%= link_to settings_path do %>
+          <i class="fa-solid fa-gear"></i>
+          <span>設定</span>
+        <% end %>
+      </li>
+      <li class="mt-auto">
+        <%= link_to logout_path, method: :delete do %>
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>ログアウト</span>
+        <% end %>
+      </li>
+    </ul>
+    <!-- サイドバーフッター -->
+    <footer class="p-4 text-xs text-base-content/60 text-center border-t border-base-300">
+      &copy; 2025 Naisei
+    </footer>
+  </aside>
+</div>
+
+
+  <!-- メインコンテンツ（右側） -->
+  <div class="drawer-content flex flex-col min-h-screen bg-base-100">
+    <!-- モバイル用メニューボタン -->
+    <label for="my-drawer" class="btn btn-square btn-primary drawer-button lg:hidden m-4 w-12 h-12 flex items-center justify-center">
+      <i class="fa-solid fa-bars text-xl"></i>
+    </label>
+    <%= yield %>
+  </div>
+</div>
+
+    <%# --- Drawerここまで --- %>
+  </body>
+</html>
