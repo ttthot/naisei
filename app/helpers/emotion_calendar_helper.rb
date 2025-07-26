@@ -20,15 +20,26 @@ module EmotionCalendarHelper
 
   private
     # 感情に応じた基本色を返す
+    def emotion_options
+      [
+        ["happy",   "😊 嬉しい",   "bg-green-500"],
+        ["sad",     "😢 悲しい",   "bg-blue-500"],
+        ["angry",   "😠 怒り",     "bg-red-500"],
+        ["excited", "🎉 ワクワク", "bg-yellow-500"],
+        ["neutral", "😐 普通",     "bg-purple-400"]
+      ]
+    end
+
+    # 透明度を除いた色を取得する
     def get_base_color(emotion)
-      colors = {
-        "neutral" => "bg-gray-400",
-        "happy"   => "bg-green-500",
-        "sad"     => "bg-blue-500",
-        "angry"   => "bg-red-500",
-        "excited" => "bg-yellow-500"
-      }
-      colors[emotion] || "bg-base-300"
+      # 感情ボタンを押してくれるなら
+      option = emotion_options.find { |opt| opt[0] == emotion }
+      if option
+        option[2]
+      # もし感情ボタンを押してくれなかったら
+      else
+        "bg-base-300"
+      end
     end
 
     # 感情強度に応じた不透明度を返す

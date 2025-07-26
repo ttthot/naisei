@@ -66,7 +66,13 @@
     </div>
 
     <!-- メニューリスト (daisyUI menu) -->
-    <ul class="menu flex-1 px-4 py-2 gap-2">
+    <ul class="menu flex-1 px-4 py-4 gap-4">
+      <li>
+        <%= link_to new_post_path, class: "btn btn-ghost btn-outline w-full flex items-center gap-2 justify-start" do %>
+          <i class="fa-solid fa-pen-to-square"></i>
+          <span>新規投稿</span>
+        <% end %>
+      </li>
       <li>
         <%= link_to posts_path, class: ("active" if current_page?(posts_path)) do %>
           <i class="fa-solid fa-list-ul"></i>
@@ -74,13 +80,6 @@
         <% end %>
       </li>
       <li>
-        <%= link_to new_post_path do %>
-          <i class="fa-solid fa-pen-to-square"></i>
-          <span>新規投稿</span>
-        <% end %>
-      </li>
-      <li>
-
         <%= link_to emotion_calendar_index_path(anchor: "calendar") do %>
           <i class="fa-solid fa-calendar-days"></i>
           <span>感情カレンダー</span>
@@ -93,7 +92,8 @@
         <% end %>
       </li>
       <li class="mt-auto">
-        <%= link_to logout_path, method: :delete do %>
+        <%#通常getリリクエスのみだが、turbo @hotwired/turbo-rails のjsがクリック時にDELETEリクエストとしてサーバーに送信 %>
+        <%= link_to logout_path, data: { turbo_method: :delete } do %>
           <i class="fa-solid fa-right-from-bracket"></i>
           <span>ログアウト</span>
         <% end %>
@@ -110,7 +110,7 @@
   <!-- メインコンテンツ（右側） -->
   <div class="drawer-content flex flex-col min-h-screen bg-base-100">
     <!-- モバイル用メニューボタン -->
-    <label for="my-drawer" class="btn btn-square btn-primary drawer-button lg:hidden m-4 w-12 h-12 flex items-center justify-center">
+    <label for="my-drawer" class="btn btn-square btn-outline btn-ghost drawer-button lg:hidden m-4 w-12 h-12 flex items-center justify-center">
       <i class="fa-solid fa-bars text-xl"></i>
     </label>
     <%= yield %>
