@@ -1,18 +1,25 @@
-<%# filepath: /app/app/views/posts/new.html.erb %>
 <div class="max-w-2xl mx-auto px-4 py-8">
-  <div class="card bg-base-100 shadow-2xl rounded-2xl border border-base-300/60">
-    <div class="card-body space-y-8 px-6 py-8">
+  <div
+    class="
+      card bg-base-100 shadow-2xl rounded-2xl border border-base-300/60 relative
+    "
+  >
+    <%= link_to posts_path, class: "btn btn-sm btn-circle btn-ghost absolute right-2 top-2 z-10" do %>
+      ✕
+    <% end %>
+    <%# space-y-8 は子要素の間隔を空けるためのクラス %>
+    <div class="card-body px-6 py-8">
       <%# 以下 ERB (Embedded Ruby) 、テンプレートエンジンによりrubyが実行されhtmlが出力される %>
       <%# form_withは、@postが新規なら/postsにPOSTで送信するHTMLフォームを生成すると規定されている %>
-      <%= form_with(model: @post, data: { turbo: false }) do |form| %>
-        <%# --%ポストした時にエラーが発生した場合 (  validates :content, presence: true)が設定されているため %>
+      <%= form_with(model: @post, data: { turbo: false }, html: { class: "space-y-10" }) do |form| %>
+        <%#----%ポストした時にエラーが発生した場合 (  validates :content, presence: true)が設定されているため %>
         <% if @post.errors.any? %>
           <%# alertコンポーネント縦表示不可のためcardコンポーネントを使用してエラー表示 %>
           <div class="card bg-error text-error-content shadow-lg mb-8">
             <%# card-body以下クラスは自動パディング %>
             <div class="card-body p-4">
               <%# タイトル表示 %>
-              <div class="card-title text-lg">エラーが発生しました（<%= @post.errors.count %>件）</div>
+              <div class="card-title text-lg">エラーが発生しました</div>
               <%# リスト表示 %>
               <ul class="list-disc list-inside">
                 <%# errors属性は自動的にpostインスタンスに入る %>
@@ -24,75 +31,39 @@
           </div>
 
         <% end %>
-        <%# ーーここまでーー %>
+        <%# ------ここまでエラー表示ーー %>
 
         <%# 感情選択欄 %>
-        <div class="flex flex-wrap gap-4 mt-2">
-          <div class="w-full">
-            <%= form.label :emotion, "一番近い感情を選んでください", class: "label" %>
-
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
-              <%# form_with内で@postを渡すこれを元に　name="post[属性名]"を出力、今回はpost[emotion] %>
-              <%= form.collection_radio_buttons(:emotion, Post.emotions.keys, :to_s, :to_s) do |b| %>
-                <%# 背景色は透明のボタン %>
-                <label class="btn btn-lg btn-outline w-full normal-case rounded-full ">
-                  <%= b.radio_button(class: "hidden", onchange: "updateButtons('post[emotion]')") %>
-                  <%# 感情に対応する絵文字を表示,文字サイズは顔文字のサイズを示す %>
-                  <span class="text-2xl">
-                    <%= case b.value
-                    when "neutral"
-                      "😐"
-                    when "happy"
-                      "😊"
-                    when "sad"
-                      "😢"
-                    when "angry"
-                      "😠"
-                    when "excited"
-                      "🎉"
-                    end %>
-                  </span>
-                </label>
-              <% end %>
-            </div>
+        <div class="space-y-2 mt-2">
+          <%= form.label :emotion, "一番近い感情を選んでください", class: "label" %>
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
+            <%= form.collection_radio_buttons(:emotion, Post.emotions.keys, :to_s, :to_s) do |b| %>
+              <label class="btn btn-lg btn-outline w-full normal-case rounded-full ">
+                <%#  : インラインイベントハンドラーを削除  onchange=,,, %>
+                <%= b.radio_button(class: "hidden") %>
+                <span class="text-2xl">
+                  <%= case b.value
+                  when "neutral"
+                    "😐"
+                  when "happy"
+                    "😊"
+                  when "sad"
+                    "😢"
+                  when "angry"
+                    "😠"
+                  when "excited"
+                    "🎉"
+                  end %>
+                </span>
+              </label>
+            <% end %>
           </div>
         </div>
+        <%# JSは app/javascript/application.js に移動済み %>
 
-        <script>
-  // すべてのラジオボタングループを更新する関数
-  function updateButtons(groupName) {
-    // 以下の条件に一致するラジオボタン
-    // 要素名input, type属性がradioで、name属性が関数に渡されたgroupNameの値であるもの
-    const radios = document.querySelectorAll(`input[type="radio"][name="${groupName}"]`);
-    
-    // 1---すべてのラベルをリセット
-    // 取得したすべてのラジオボタンの親要素のクラスを更新
-    // 親要素のクラスからbtn-primaryを削除し、btn-outline透明背景を追加
-    radios.forEach(radio => {
-      radio.parentElement.classList.remove('btn-primary');
-      radio.parentElement.classList.add('btn-outline');
-    });
-    
-    // 2---選択されているラジオボタンのラベルを更新
-    radios.forEach(radio => {
-      // inputelementに搭載のcheckedプロパティがtrue
-      if (radio.checked) {
-        radio.parentElement.classList.remove('btn-outline');
-        radio.parentElement.classList.add('btn-primary');
-      }
-    });
-  }
-  
-  // ボタンがクリックされたときとDOM構築完了後、上記定義の関数が実行される
-  // DOM構築完了後に実行、つまりページが読み込まれた後
-  // element.addEventListener(event, function, capture)
-  document.addEventListener('DOMContentLoaded', function() {
-    updateButtons('post[emotion]');
-  });
-        </script>
         <%# 感情強度欄 %>
         <%# post.rbで定義済みの感情表現 %>
-        <div class="form-control w-full max-w-xs">
+        <div class="form-control w-full">
           <%# form_withヘルパーではフィールド名からHTML IDを生成する際、モデル名をつける %>
           <label class="label" for="post_emotion_rating">
             <span class="label-text">感情の強さ</span>
@@ -104,6 +75,7 @@
                            min: 1,
                            max: 5,
                            value: 3,
+                           # 長さは 親要素に合わせる
                            class: "range range-success w-full",
                            step: 1 %>
           <%# メモリ線 %>
@@ -132,30 +104,32 @@
 
         <%# 感情を文章で表現する欄 %>
         <div class="w-full mb-4">
-          <%# form-controlは入力フィールドとそのラベルをグループ化し、適切に配置する %>
           <label class="form-control w-full">
             <%= form.text_area :content,
                            class: "textarea textarea-bordered h-100 w-full",
-                           placeholder: "ここに投稿内容を入力してください" %>
+                           placeholder: "ここにあなたの気持ちを300字以内で入力してみましょう",
+                           id: "emotion_content" %>
           </label>
         </div>
-
+        <%#TODO　ボタンを調整した後spaceが効いているか確認 %>
         <%# 送信ボタンエリア %>
         <%# クラス名 "card-actionsクラスは、カード内のボタンやリンクに適切なマージンやパディングを提供 %>
         <%# "justify-end" は、アクション要素を右端に揃えるためのユーティリティクラスです。 %>
         <div class="card-actions justify-end">
           <%# デフォルトはname="commit" なので params[:commit]でvalueが取得可能 %>
-          <%= button_tag "投稿",
-          type: "submit",
-          name: "commit",
-          value: "post",
-          class: "btn btn-primary btn-xl" %>
+          <%# <%= button_tag "投稿", %>
+          <%# type: "submit", %>
+          <%# name: "commit", %>
+          <%# value: "post", %>
+          <%# class: "btn btn-primary btn-xl" %>
 
           <%= button_tag "投稿とアドバイス",
           type: "submit",
           name: "commit",
           value: "post_and_aiadvice",
-          class: "btn btn-primary btn-xl" %>
+          class: "btn btn-primary btn-xl",
+          id: "submit_btn",
+          disabled: true %>
         </div>
       <% end %>
     </div>

@@ -1,7 +1,11 @@
+<%# カレンダーの詳細表示についてはヘルパー参照 %>
 <%# 最大横幅28rem cardにより中央寄せは自動 %>
 <div class="card bg-base-100 shadow-lg w-full max-w-md mx-auto m-4">
   <div class="card-body flex flex-col items-center">
-    <h1 class="text-2xl font-bold mb-4 text-center">感情カレンダー</h1>
+
+    <div class="tooltip tooltip-success" data-tip="色の濃淡で感情の強さがわかります！">
+      <button class="btn btn-soft text-2xl font-bold mb-4 text-center">感情カレンダー</button>
+    </div>
     <%# 曜日ラベル %>
     <%# テキストの色は自動選択、濃淡60だけ指定 %>
     <div
@@ -44,14 +48,8 @@
     <div class="mt-6 p-4 bg-base-200 rounded-lg w-full">
       <h3 class="text-lg font-semibold mb-3 text-base-content">感情の種類</h3>
       <div class="flex flex-wrap gap-3 justify-center">
-        <% [
-          ["happy", "😊 Happy", "bg-green-500"],
-          ["sad", "😢 Sad", "bg-blue-500"],
-          ["angry", "😠 Angry", "bg-red-500"],
-          ["excited", "🎉 Excited", "bg-yellow-500"],
-          ["neutral", "😐 Neutral", "bg-gray-400"]
-        ].each do |emotion, label, color| %>
-          <%# 一列のアイコンの数は不問なのでグリッドではなくflexを選択 %>
+        <%# ヘルパー関数から色々取得 %>
+        <% emotion_options.each do |emotion, label, color| %>
           <div class="flex items-center gap-2">
             <div class="w-4 h-4 <%= color %> rounded-sm"></div>
             <span class="text-lg text-base-content/80"><%= label %></span>

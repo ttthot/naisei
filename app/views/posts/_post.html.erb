@@ -16,7 +16,40 @@
     <%# card-title - カードのタイトル要素（ここではトピックのタイトル） %>
     <h2 class="card-title text-primary"><%= post.topic.title %></h2>
 
-    <p><%= post.content %></p>
+    <%# 100字までtruncateで切り取り省略表示し、全文はdaisyUIモーダルで展開 %>
+    <div class="mb-4 flex flex-col gap-2">
+      <span><%= simple_format(truncate(post.content, length: 100)) %></span>
+      <%# モーダルを開くためのボタン（daisyUI推奨のlabel+input方式） %>
+      <button
+        type="button"
+        class="underline text-primary cursor-pointer"
+        <%# idがmodal-〇〇という要素を探して取得 %>
+        onclick="document.getElementById('modal-<%= post.id %>').showModal()"
+      >
+        続きを読む
+      </button>
+    </div>
+
+    <%# daisyUIモーダル本体 - 各投稿ごとにユニークなIDを使う %>
+    <%# idはmodal-〇〇 %>
+    <dialog id="modal-<%= post.id %>" class="modal">
+      <div class="modal-box max-w-2xl relative">
+        <button
+          form="modal-<%= post.id %>"
+          class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+          aria-label="閉じる"
+          type="button"
+          onclick="this.closest('dialog').close()"
+        >
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+        <div class="prose max-w-none mb-4 mt-8">
+          <%= simple_format(post.content) %>
+        </div>
+      </div>
+      <%# モーダル背景をクリックしても閉じる %>
+      <label class="modal-backdrop" for="modal-<%= post.id %>"></label>
+    </dialog>
 
     <%# card-actions - アクション要素を配置するための領域 %>
     <%# justify-endと組み合わせることで、要素がカードの右端に寄ります %>

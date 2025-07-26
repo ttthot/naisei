@@ -30,3 +30,11 @@ ja:
         email: 'メールアドレス'
         password: 'パスワード'
         name: '名前'
+      post:
+        content: "投稿内容"
+    errors:
+      models:
+        post:
+          attributes:
+            content:
+              blank: "を入力してください"

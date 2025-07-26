@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Postモデルは、ユーザーとトピックに関連付けられた投稿を表します。
 #
 # - `belongs_to :user`: 投稿は1人のユーザーに属します。
@@ -22,5 +24,5 @@ class Post < ApplicationRecord
   }
 
   validates :emotion_rating, inclusion: { in: 1..5 }, allow_nil: true
-  validates :content, presence: true
+  validates :content, presence: true, length: { maximum: 300 }
 end

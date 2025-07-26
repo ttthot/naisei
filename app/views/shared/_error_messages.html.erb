@@ -1,14 +1,13 @@
+<%# new.html.erbのrender shared/error_messages から呼び出し %>
 <% if @user.errors.any? %>
-  <div id="error_explanation">
-    <div class="alert alert-danger">
-        <%# 単純に複数形にするだけ %>
-      The form contains <%= pluralize(@user.errors.count, "error") %>.
+  <div class="alert alert-error shadow-lg mb-4">
+    <div>
+      <span class="font-bold">入力内容にエラーがあります</span>
+      <ul class="list-disc list-inside mt-2">
+        <% @user.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
     </div>
-    <ul>
-    <% @user.errors.full_messages.each do |msg| %>
-      <li><%= msg %></li>
-    <% end %>
-    </ul>
   </div>
 <% end %>
-
