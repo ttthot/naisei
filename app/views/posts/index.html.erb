@@ -4,6 +4,15 @@
 
   <div class="max-w-4xl mx-auto px-4 py-6">
 
+    <div class="tabs mb-6">
+      <%= link_to "全体",
+      posts_path,
+      class: "tab tab-bordered #{"tab-active" unless params[:scope]}" %>
+      <%= link_to "自分の投稿",
+      posts_path(scope: "mine"),
+      class: "tab tab-bordered #{"tab-active" if params[:scope] == "mine"}" %>
+    </div>
+
     <h1 class="text-2xl font-bold text-center mb-6">投稿一覧</h1>
 
     <div class="flex justify-between items-center mb-6">
@@ -22,6 +31,7 @@
 
     <%# 投稿をリスト表示するエリア %>
     <div class="space-y-4" id="posts">
+      <%# @postsに入っている投稿データ1つ1つについて自動的に部品テンプレート_post.htmlを使って繰り返し表示する %>
       <%# @post　＝ Post.allを確認し、Postクラスのオフジェクトの集まりと認識、render @posts 1件ずつパーシャルに渡す %>
       <%# ループ内でpostオブジェクトを発見、部品が入ったファイルは_post.htmlと予測、つまりコレクションレンダリング %>
       <%# 部品ファイル内のpost変数にループで扱っているオブジェクトPost id:1等を渡す %>

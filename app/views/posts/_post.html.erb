@@ -52,18 +52,23 @@
     </dialog>
 
     <%# card-actions - アクション要素を配置するための領域 %>
-    <%# justify-endと組み合わせることで、要素がカードの右端に寄ります %>
-    <div class="card-actions justify-end items-center">
-
-      <%# いいね機能の表示エリア。Turbo StreamがこのIDを目印にこの部分だけページ更新をせずに部分更新 %>
-      <%# dom_idヘルパーメソッド、idを生成する。id = post_idnum_like_buttonを作成 %>
-      <%# 暫定的にlike_buttonを文字リテラルに変更 %>
-      <%# ここで部品テンプレを呼び出す、第一引数でファイル名指定、第二postオブジェクト入りの引数を渡す %>
-      <%= render "likes/like_button", post: post %>
-
-      <%# 日付のバッジ %>
-      <div class="badge badge-outline"><%= post.created_at.strftime("%Y年%m月%d日") %></div>
-
+    <%# flex justify-betweenで横並び両橋揃え、、縦方向中央揃え %>
+    <div class="card-actions flex justify-between items-center">
+      <%# ユーザー名 左寄せ %>
+      <%# 文字の色は不透明度70% %>
+      <div class="flex items-center text-sm text-base-content/70">
+        <i class="fa-solid fa-user mr-1"></i><%= post.user.name %>
+      </div>
+      <%# いいね機能・日付 右寄せ %>
+      <div class="flex items-center gap-2">
+        <%# いいね機能の表示エリア。Turbo StreamがこのIDを目印にこの部分だけページ更新をせずに部分更新 %>
+        <%# dom_idヘルパーメソッド、idを生成する。id = post_idnum_like_buttonを作成 %>
+        <%# 暫定的にlike_buttonを文字リテラルに変更 %>
+        <%# ここで部品テンプレを呼び出す、第一引数でファイル名指定、第二postオブジェクト入りの引数を渡す %>
+        <%= render "likes/like_button", post: post %>
+        <%# 日付のバッジ %>
+        <div class="badge badge-outline"><%= post.created_at.strftime("%Y年%m月%d日") %></div>
+      </div>
     </div>
     <%# card-actionsの閉じタグ %>
   </div>
