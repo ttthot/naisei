@@ -32,7 +32,7 @@ class UsersController < ApplicationController
       # 4. このルーティングは config/routes.rb の resources :users によって定義
 
       # redirect_to @user, notice: "ユーザーを作成しました"
-      redirect_to new_post_path, notice: "アカウントが作成されました！投稿を始めましょう。"
+      redirect_to posts_path, notice: "アカウントが作成されました！投稿を始めましょう。"
     else
       # バリデーションエラーが発生した場合、新規作成フォームを再表示する
       render "new", status: :unprocessable_entity
