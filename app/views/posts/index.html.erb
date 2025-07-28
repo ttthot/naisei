@@ -3,7 +3,7 @@
   <%#いいね作成時@postを取得し一つのpostオブジェクトを取得し、_post.htmlを呼び出す %>
 
   <div class="max-w-4xl mx-auto px-4 py-6">
-
+    <%# ここはテストまだ %>
     <div class="tabs mb-6">
       <%= link_to "全体",
       posts_path,
@@ -32,7 +32,7 @@
     <%# 投稿をリスト表示するエリア %>
     <div class="space-y-4" id="posts">
       <%# @postsに入っている投稿データ1つ1つについて自動的に部品テンプレート_post.htmlを使って繰り返し表示する %>
-      <%# @post　＝ Post.allを確認し、Postクラスのオフジェクトの集まりと認識、render @posts 1件ずつパーシャルに渡す %>
+      <%# @post　＝ Post.allをコントローラーで確認し、Postクラスのオフジェクトの集まりと認識、render @posts 1件ずつパーシャルに渡す %>
       <%# ループ内でpostオブジェクトを発見、部品が入ったファイルは_post.htmlと予測、つまりコレクションレンダリング %>
       <%# 部品ファイル内のpost変数にループで扱っているオブジェクトPost id:1等を渡す %>
       <%# 全ループをここで繰り返す %>
@@ -43,11 +43,16 @@
     <div class="mt-6 flex justify-end space-x-2">
       <%# 前へボタン %>
       <% if @has_previous_page %>
-        <%= link_to "前のページ", posts_path(page: @current_page - 1), class: "btn btn-secondary" %>
+        <%# ルーティングヘルパーにscope: @scopeを追加　 /posts?パラメータ1=値1&パラメータ2=値2になる %>
+        <%= link_to "前のページ",
+        posts_path(page: @current_page - 1, scope: @scope),
+        class: "btn btn-secondary" %>
       <% end %>
       <%# 次へボタン %>
       <% if @has_next_page %>
-        <%= link_to "次のページ", posts_path(page: @current_page + 1), class: "btn btn-secondary" %>
+        <%= link_to "次のページ",
+        posts_path(page: @current_page + 1, scope: @scope),
+        class: "btn btn-secondary" %>
       <% end %>
 
     </div>
