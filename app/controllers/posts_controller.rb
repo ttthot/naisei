@@ -18,12 +18,20 @@ class PostsController < ApplicationController
     @per_page = 5
     # offsetとはｘｘ件スキップすること Post.limit(10).offset(10)な１０件目からスタート
     offset = (@current_page - 1) * @per_page
-    # Postモデルからデータを取得、オフセットな何件めから取得するかを指定メメソッド順番は問われないいが、、、
-    # @posts = Post.order(created_at: :desc).limit(@per_page).offset(offset)
-    # N+1問題を解決 最初に投稿一覧を1回、ID一覧を1回の合計2回
-    @posts = Post.includes(:user, :topic).order(created_at: :desc).limit(@per_page).offset(offset)
-    # ページネーション機能用
-    @total_posts = Post.count
+    if params[:scope] == "mine"
+      # Postモデルからデータを取得
+      @posts = Post.includes(:user, :topic).where(user_id: current_user.id).order(created_at: :desc).limit(@per_page).offset(offset)
+      @total_posts = Post.where(user_id: current_user.id).count
+      @scope = "mine"
+    else
+      # Postモデルからデータを取得、オフセットな何件めから取得するかを指定メメソッド順番は問われないいが、、、
+      # @posts = Post.order(created_at: :desc).limit(@per_page).offset(offset)
+      # N+1問題を解決 最初に投稿一覧を1回、ID一覧を1回の合計2回
+      @posts = Post.includes(:user, :topic).order(created_at: :desc).limit(@per_page).offset(offset)
+      # ページネーション機能用
+      @total_posts = Post.count
+      @scope = "all"
+    end
     @total_pages = (@total_posts.to_f / @per_page).ceil
 
     @has_next_page = @current_page < @total_pages
