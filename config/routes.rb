@@ -12,25 +12,19 @@
 # ルートパス（"/"）はデフォルトではコメントアウトされています。
 # デフォルトのランディングページを定義するには、`root` の行をアンコメントして修正してください。
 Rails.application.routes.draw do
-  get "emotion_calendar/index"
-  get "settings/index"
-  # ラインボットのwebhookエンドポイントを定義
-  # postリクエストはユーザーがLINE上で選択した時間を受け取るため
-  get "line/webhook"
-  post "line/webhook", to: "line#webhook"
-  get "emotion_calendar/index"
-  # アプリケーションのルートURL（"/"）にアクセスしたとき、sessionsコントローラーのnewアクションを表示する
-  root "sessions#new"
+  # インフラ用ヘルスチェック
+  get "up" => "rails/health#show", as: :rails_health_check
 
-  # ユーザー登録用のカスタムルート
+  # 認証ルート　deviceは不使用
   get "/signup", to: "users#new"
-
-  # ユーザーログイン用のカスタムルート
   get    "/login",   to: "sessions#new"
   post   "/login",   to: "sessions#create"
   delete "/logout",  to: "sessions#destroy"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  # アプリケーションのルートURL（"/"）にアクセスしたとき、sessionsコントローラーのnewアクションを表示する
+  root "sessions#new"
 
+  # 　メイン機能
+  # いいね機能
   # localhost:3000/posts
   # localhost:3000/posts/new
   # %iはシンボルの配列を表す== [:index, :new, :create]
@@ -39,15 +33,19 @@ Rails.application.routes.draw do
     resources :likes, only: %i[create destroy]
   end
 
+  # ユーザー投稿機能
   # postは一覧表示つまり独立したアクセスが必要なためpostsとusersはネストにしていない
   resources :users, only: %i[index show new create]
-  # likesはposts抜きの状態は考えられないためネストしている
-  # カレンダー表示のルーティング
+
+  # 感情カレンダー機能
   resources :emotion_calendar, only: [:index]
   # 設定画面
   get "settings", to: "settings#index"
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
+  # ---現在不使用　テストコードには含めない
+  # ラインボットのwebhookエンドポイントを定義
+  # postリクエストはユーザーがLINE上で選択した時間を受け取るため
+  get "line/webhook"
+  post "line/webhook", to: "line#webhook"
+  # ---
 end
