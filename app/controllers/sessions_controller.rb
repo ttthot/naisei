@@ -13,14 +13,14 @@ class SessionsController < ApplicationController
   def create
     # emailカラムがparams[:session][:email]の値と一致するユーザーを検索しています。
     user = User.find_by(email: params[:session][:email].downcase)
-    # @userがnilでない場合、つまりユーザーが存在する場合
+    # &. safe navigation operator @userがnilでない場合、つまりユーザーが存在する場合
     if user&.authenticate(params[:session][:password])
       # log_inメソッドの説明
       # session[:user_id] = user.id
       # session[:user_id]は、現在ログインしているユーザーのIDを保持するためのセッション変数です。
       # session[:user_id]は、ユーザーがログインしている間、サーバー側で保持されます。
       log_in(user)
-
+      user.check_post_streak_on_login!  # 連続投稿の確認を行う
       # new_post_pathは通常/posts/newに対応します。
       # redirect_toは、HTTPレスポンスに302ステータスコードを設定し、Locationヘッダーにリダイレクト先のURLを指定します。
       redirect_to new_post_path
