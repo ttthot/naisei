@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_07_22_075556) do
+ActiveRecord::Schema[7.1].define(version: 2025_07_31_072454) do
   create_table "likes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "post_id", null: false
@@ -49,6 +49,12 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_22_075556) do
     t.datetime "updated_at", null: false
     t.integer "notify_hour"
     t.string "line_user_id"
+    t.integer "login_streak", default: 0, null: false
+    t.integer "max_login_streak", default: 0, null: false
+    t.date "last_logged_in_at"
+    t.integer "post_streak", default: 0, null: false
+    t.integer "max_post_streak", default: 0, null: false
+    t.date "last_posted_at"
     t.index ["line_user_id"], name: "index_users_on_line_user_id", unique: true
   end
 

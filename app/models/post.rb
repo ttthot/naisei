@@ -25,4 +25,11 @@ class Post < ApplicationRecord
 
   validates :emotion_rating, inclusion: { in: 1..5 }, allow_nil: true
   validates :content, presence: true, length: { maximum: 300 }
+
+  after_create :update_user_post_streak
+
+  def update_user_post_streak
+    #  Userモデルのメソッドなので、、
+    user.update_post_streak!
+  end
 end

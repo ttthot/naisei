@@ -36,6 +36,9 @@ class PostsController < ApplicationController
 
     @has_next_page = @current_page < @total_pages
     @has_previous_page = @current_page > 1
+
+    # 連続投稿をビューで使いたい
+    @user = current_user
   end
 
   def new
