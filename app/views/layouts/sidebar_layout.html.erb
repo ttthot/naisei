@@ -28,27 +28,7 @@
     >
   </head>
   <body class="bg-base-100 text-base-content font-sans">
-    <%# フラッシュメッセージ %>
-    <% if flash.any? %>
-      <% flash.each do |message_type, message| %>
-        <% if message_type == "notice" %>
-          <div class="flash flash-notice">
-            <%= message %>
-          </div>
-        <% elsif message_type == "alert" %>
-          <div class="flash flash-alert">
-            <%= message %>
-          </div>
-        <% else %>
-          <div class="flash flash-other">
-            <%= message %>
-          </div>
-        <% end %>
-      <% end %>
-    <% end %>
-    <% if Rails.env.development? %>
-      <%= debug(params) %>
-    <% end %>
+
     <%# --- 左メニューバーつまり　daisyUI Drawer構造 --- %>
 <div class="drawer lg:drawer-open min-h-screen">
   <input id="my-drawer" type="checkbox" class="drawer-toggle" />
@@ -68,16 +48,17 @@
     <!-- メニューリスト (daisyUI menu) -->
     <ul class="menu flex-1 px-4 py-4 gap-4">
       <li>
-        <%= link_to new_post_path, class: "btn btn-ghost btn-outline w-full flex items-center gap-2 justify-start" do %>
-          <i class="fa-solid fa-pen-to-square"></i>
-          <span>新規投稿</span>
-        <% end %>
+      <%= link_to new_post_path,
+        class: "btn btn-ghost w-full justify-start gap-2 text-sm font-normal bg-base-200 hover:bg-base-300 shadow" do %>
+        <i class="fa-solid fa-plus text-sm"></i>
+        <span>新規投稿</span>
+      <% end %>
       </li>
       <li>
-        <%= link_to posts_path, class: ("active" if current_page?(posts_path)) do %>
-          <i class="fa-solid fa-list-ul"></i>
-          <span>投稿一覧</span>
-        <% end %>
+      <%= link_to posts_path, class: ("active" if current_page?(posts_path)) do %>
+        <i class="fa-solid fa-list-ul"></i>
+        <span>投稿一覧</span>
+      <% end %>
       </li>
       <li>
         <%= link_to emotion_calendar_index_path(anchor: "calendar") do %>
@@ -109,8 +90,35 @@
 
   <!-- メインコンテンツ（右側） -->
   <div class="drawer-content flex flex-col min-h-screen bg-base-100">
+        <%# フラッシュメッセージ %>
+    <% if flash.any? %>
+      <div
+        <%# left1/2で画面半分スタートかつ、自身の幅の半分左ずらす %>
+        class="
+           w-full max-w-2xl mx-auto mt-6 px-4
+        "
+      >
+        <% flash.each do |message_type, message| %>
+          <% key = message_type.to_s %>
+          <% if key == "notice" || key == "success" %>
+            <%# margin-top と margin-bottomに 0.5rem %>
+            <div class="alert alert-success shadow-lg my-2">
+              <span><%= message %></span>
+            </div>
+          <% elsif key == "alert" || key == "danger" || key == "error" %>
+            <div class="alert alert-error shadow-lg my-2">
+              <span><%= message %></span>
+            </div>
+          <% else %>
+            <div class="alert alert-info shadow-lg my-2">
+              <span><%= message %></span>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
     <!-- モバイル用メニューボタン -->
-    <label for="my-drawer" class="btn btn-square btn-outline btn-ghost drawer-button lg:hidden m-4 w-12 h-12 flex items-center justify-center">
+    <label for="my-drawer" class="btn btn-square btn-outline btn-ghost drawer-button lg:hidden mt-0 w-12 h-12 flex items-center justify-center">
       <i class="fa-solid fa-bars text-xl"></i>
     </label>
     <%= yield %>
