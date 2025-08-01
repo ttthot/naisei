@@ -4,20 +4,53 @@
 
   <div class="max-w-4xl mx-auto px-4 py-6">
 
-    <%# 🔽ここを置き換え %>
-<i class="fa-solid fa-fire text-2xl" style="color: #f97316;"></i>
+    <%# card からstatsコンポーネントに変更 %>
+    <div
+      class="
+        stats stats-vertical lg:stats-horizontal glass shadow-xl backdrop-blur-md p-4
+        w-full max-w-4xl mx-auto text-base-content
+      "
+    >
+      <!-- 現在の連続投稿 -->
+      <div class="stat text-center">
+        <div class="stat-figure text-primary text-3xl">
+          <i class="fa-solid fa-fire"></i>
+        </div>
+        <div class="stat-title">現在の連続投稿</div>
+        <div class="stat-value text-primary"><%= @post_streak %>日</div>
+        <div class="stat-desc">継続中です</div>
+      </div>
+      <!-- 最長記録 -->
+      <div class="stat text-center">
+        <div class="stat-figure text-secondary text-3xl">
+          <i class="fa-solid fa-medal"></i>
+        </div>
+        <div class="stat-title">最長記録</div>
+        <div class="stat-value text-secondary"><%= @max_post_streak %>日</div>
+        <div class="stat-desc">これまでの最高記録</div>
+      </div>
+      <!-- ステータス -->
+      <div class="stat text-center">
+        <div class="stat-figure text-accent text-3xl">
+          <i class="fa-solid fa-chart-line"></i>
+        </div>
 
-  <h2 class="text-xl font-bold">連続投稿記録</h2>
+        <% if @post_streak == 0 %>
+          <div class="stat-title">ステータス</div>
+          <div class="stat-value text-neutral">未開始</div>
+          <div class="stat-desc">まずは投稿を始めましょう</div>
+        <% elsif current_user.post_streak >= current_user.max_post_streak %>
+          <div class="stat-title">ステータス</div>
+          <div class="stat-value text-accent">更新中</div>
+          <div class="stat-desc">自己ベストを超えています</div>
+        <% else %>
+          <div class="stat-title">ステータス</div>
+          <div class="stat-value text-neutral"><%= @post_streak %>日目</div>
+          <div class="stat-desc">あと<%= @max_post_streak - @post_streak %>日で自己ベスト</div>
+        <% end %>
+      </div>
 
-  <div class="mt-4 space-y-2">
-    <p>現在: <%= @user.post_streak %>日連続</p>
-    <p>最長記録: <%= @user.max_post_streak %>日</p>
-  </div>
-
-  <% if @user.post_streak > 0 && @user.post_streak == @user.max_post_streak %>
-    <p class="mt-2 text-red-500">🎉 記録更新中！</p>
-  <% end %>
-</div>
+    </div>
 
     <%# タブナビゲーション %>
     <div class="tabs mb-6">
@@ -28,7 +61,6 @@
       posts_path(scope: "mine"),
       class: "tab tabs-border #{"tab-active" if params[:scope] == "mine"}" %>
     </div>
-
     <h1 class="text-2xl font-bold text-center mb-6">投稿一覧</h1>
 
     <div class="flex justify-between items-center mb-6">

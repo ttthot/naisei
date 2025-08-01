@@ -38,7 +38,8 @@ class PostsController < ApplicationController
     @has_previous_page = @current_page > 1
 
     # 連続投稿をビューで使いたい
-    @user = current_user
+    @post_streak = current_user.post_streak
+    @max_post_streak = current_user.max_post_streak
   end
 
   def new
@@ -51,15 +52,13 @@ class PostsController < ApplicationController
     @post.user_id = current_user.id # ログイン中のユーザーのIDを設定
 
     if @post.save
-      if params[:commit] == "post"
-        # posts_path	==> /posts
-        # 投稿一覧画面に戻る
-        redirect_to posts_path # notice: "記事を作成しました"  メッセージが欲しい時はコメントを外す
-      elsif params[:commit] == "post_and_aiadvice"
+      if params[:commit] == "post_and_aiadvice"
         service = ChatgptService.new
         ai_response = service.get_chatgpt_response(@post.content)
-        flash[:notice] = "記事を作成しました。AIからのアドバイス: #{ai_response}"
+        flash[:notice] = "AIからのアドバイス: #{ai_response}"
         redirect_to posts_path
+      elsif params[:commit] == "post"
+        redirect_to posts_path # notice: "記事を作成しました"
       end
     else
       # デバッグ情報を追加
