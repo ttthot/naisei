@@ -10,7 +10,7 @@ class ChatgptService
       access_token: ENV["OPENAI_API_KEY"],
       # TODO 本番環境時はオフにする
       # エラーをフログに保存
-      log_errors: true
+      # log_errors: true
     )
   end
 
@@ -25,7 +25,7 @@ class ChatgptService
       相手の気持ちを否定しない
       認知の歪み（例：全か無か思考、過度の一般化、マイナス思考など）がないか一緒に確認する
       もし歪みがあれば、現実的な捉え方や別の視点を提案する
-      100文字程度で簡潔に応答する
+      150文字程度で簡潔に応答する
       認知の歪みがあれば共感は関係つにして歪みの指摘を優先する
       返答は一回で終了すること、つまり深掘りは不要
     PROMPT
