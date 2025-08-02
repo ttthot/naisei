@@ -3,10 +3,18 @@
 # モデルに書くのはデータベースに関連するものとアプリの仕組み　今回でいえば連続ログイン
 class User < ApplicationRecord
   has_secure_password
-  has_many :posts
+
+  has_many :posts, dependent: :destroy
   # # これによりインスタンスメソッド .likes が生成
   # ユーザー削除時に関連するいいねも削除するためアソシエーションオプション:を設定
   has_many :likes, dependent: :destroy
+  # userが「いいね」したpostを取得したいので設定
+  # userはlikeを通じてpostをたくさん持っていると定義する
+  # User ---< Like >--- Post の関係をたどる
+  # liked_posts は自分で命名したアソシエーション（自由に決められる）
+  # source: :post は「中間モデルlikeの中にある belongs_to :post を使う」という意味
+  # これがないと、Railsは like モデルに liked_post という関連があると勘違いしてエラーになる
+  has_many :liked_posts, through: :likes, source: :post
 
   # バリデーションを追加
   validates :email, presence: true, uniqueness: true

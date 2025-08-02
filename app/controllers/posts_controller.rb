@@ -19,10 +19,15 @@ class PostsController < ApplicationController
     # offsetとはｘｘ件スキップすること Post.limit(10).offset(10)な１０件目からスタート
     offset = (@current_page - 1) * @per_page
     if params[:scope] == "mine"
-      # Postモデルからデータを取得
-      @posts = Post.includes(:user, :topic).where(user_id: current_user.id).order(created_at: :desc).limit(@per_page).offset(offset)
-      @total_posts = Post.where(user_id: current_user.id).count
+      # 自分の投稿データを取得　current_userでUSerモデルのインスタインスタンスを取得に変更,railsっぽい表現へ
+      #  user, topicを事前読み込みしてN+1問題を解決
+      @posts = current_user.posts.includes(:user, :topic).order(created_at: :desc).limit(@per_page).offset(offset)
+      @total_posts = current_user.posts.count
       @scope = "mine"
+    elsif params[:scope] == "liked"
+      @posts = current_user.liked_posts.includes(:user, :topic).order(created_at: :desc).limit(@per_page).offset(offset)
+      @total_posts = current_user.liked_posts.count
+      @scope = "liked"
     else
       # Postモデルからデータを取得、オフセットな何件めから取得するかを指定メメソッド順番は問われないいが、、、
       # @posts = Post.order(created_at: :desc).limit(@per_page).offset(offset)
