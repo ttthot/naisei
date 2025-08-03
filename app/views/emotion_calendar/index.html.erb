@@ -6,13 +6,16 @@
     <div class="tooltip tooltip-success" data-tip="色の濃淡で感情の強さがわかります！">
       <button class="btn btn-soft text-2xl font-bold mb-4 text-center">感情カレンダー</button>
     </div>
-    <%# 曜日ラベル %>
+
+    <%# 曜日ラベル（月表示列を追加） %>
     <%# テキストの色は自動選択、濃淡60だけ指定 %>
     <div
       class="
-        grid grid-cols-7 gap-1 mb-2 text-xs text-base-content/60 text-center w-fit
+        grid grid-cols-8 gap-1 mb-2 text-xs text-base-content/60 text-center w-fit
       "
     >
+      <%# 月表示用の列を追加 %>
+      <div class="w-6 h-6 flex items-center justify-center">月</div>
       <%# flexよりみぎはflexコンテナを作るオプション　itmes縦方向、justify 横方向 %>
       <div class="w-6 h-6 flex items-center justify-center">日</div>
       <div class="w-6 h-6 flex items-center justify-center">月</div>
@@ -22,25 +25,40 @@
       <div class="w-6 h-6 flex items-center justify-center">金</div>
       <div class="w-6 h-6 flex items-center justify-center">土</div>
     </div>
+
     <%# カレンダーのマス部分 %>
     <%# w-fitで広がりすぎなようにする %>
-    <div class="grid grid-cols-7 gap-1 w-fit">
-      <%# 最初の週の空白を埋める sun:0 saturday:6 %>
-      <% first_wday = @calendar_dates.first.wday %>
-      <% first_wday.times do %>
-        <div class="w-6 h-6"></div>
-      <% end %>
-
-      <%# 染色するマスを確定 %>
-      <% @calendar_dates.each do |date| %>
-        <%# 正方形の枠を設定 %>
-        <%# ヘルパーメソッドに日付を渡し返ってきた色、濃淡がそのままマス内の色になる %>
-        <%# ーーー将来用にリンクをつけるーーー %>
+    <div class="grid grid-cols-8 gap-1 w-fit">
+      <%# 年間の週ごとにループ %>
+      <% @calendar_weeks.each do |week| %>
+        <%# 各週の最初に月表示列 %>
+        <%# ✅ 修正：その週に1日が含まれている場合に月名を表示 %>
         <div
-          class="w-6 h-6 <%= emotion_color_class(date) %> rounded-sm"
-          title="<%= date.strftime("%Y-%m-%d") %>"
+          class="
+            w-6 h-6 flex items-center justify-center text-xs text-base-content/80
+          "
         >
+          <% month_start_date = week.find { |date| date&.day == 1 } %>
+          <%= month_start_date ? month_start_date.strftime("%-m月").tr("0-9", "０-９") : "" %>
         </div>
+
+        <%# その週の7日分をループ %>
+        <% week.each do |date| %>
+          <% if date %>
+            <%# 染色するマスを確定 %>
+            <%# 正方形の枠を設定 %>
+            <%# ヘルパーメソッドに日付を渡し返ってきた色、濃淡がそのままマス内の色になる %>
+            <%# ーーー将来用にリンクをつけるーーー %>
+            <div
+              class="w-6 h-6 <%= emotion_color_class(date) %> rounded-sm"
+              title="<%= date.strftime("%Y-%m-%d") %>"
+            >
+            </div>
+          <% else %>
+            <%# 空白の日（年初・年末の余り） %>
+            <div class="w-6 h-6"></div>
+          <% end %>
+        <% end %>
       <% end %>
     </div>
 

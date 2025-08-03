@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class EmotionCalendarController < ApplicationController
   # サイドバー設置レイアウトファイル変更
   layout "sidebar_layout"
   def index
     # データ一覧を取得
-    @posts = Post.where(user_id: current_user.id)
+    @posts = current_user.posts
     # 日付で投稿をマッピングするハッシュを初期化
     @date_post_map = {}
 
@@ -24,5 +26,7 @@ class EmotionCalendarController < ApplicationController
     (start_date..today).each do |date|
       @calendar_dates << date
     end
+    # ビューで7日ごとに分けるために、7日ごとにグループ化
+    @calendar_weeks = @calendar_dates.in_groups_of(7, false)
   end
 end
