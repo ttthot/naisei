@@ -19,15 +19,17 @@
     <%# 100字までtruncateで切り取り省略表示し、全文はdaisyUIモーダルで展開 %>
     <div class="mb-4 flex flex-col gap-2">
       <span><%= simple_format(truncate(post.content, length: 100)) %></span>
+      <% if post.content.length > 100 %>
+        <button
+          type="button"
+          class="link link-primary"
+          onclick="document.getElementById('modal-<%= post.id %>').showModal()"
+        >
+          続きを読む
+        </button>
+      <% end %>
       <%# モーダルを開くためのボタン（daisyUI推奨のlabel+input方式） %>
-      <button
-        type="button"
-        class="underline text-primary cursor-pointer"
-        <%# idがmodal-〇〇という要素を探して取得 %>
-        onclick="document.getElementById('modal-<%= post.id %>').showModal()"
-      >
-        続きを読む
-      </button>
+
     </div>
 
     <%# daisyUIモーダル本体 - 各投稿ごとにユニークなIDを使う %>
@@ -60,14 +62,21 @@
         <i class="fa-solid fa-user mr-1"></i><%= post.user.name %>
       </div>
       <%# いいね機能・日付 右寄せ %>
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-8">
         <%# いいね機能の表示エリア。Turbo StreamがこのIDを目印にこの部分だけページ更新をせずに部分更新 %>
         <%# dom_idヘルパーメソッド、idを生成する。id = post_idnum_like_buttonを作成 %>
         <%# 暫定的にlike_buttonを文字リテラルに変更 %>
         <%# ここで部品テンプレを呼び出す、第一引数でファイル名指定、第二postオブジェクト入りの引数を渡す %>
         <%= render "likes/like_button", post: post %>
         <%# 日付のバッジ %>
-        <div class="badge badge-outline"><%= post.created_at.strftime("%Y年%m月%d日") %></div>
+        <div
+          class="
+            badge bg-base-100 text-sm text-base-content font-medium px-3 py-1 rounded-full
+            shadow-sm
+          "
+        >
+          <%= post.created_at.strftime("%Y年%m月%d日") %>
+        </div>
       </div>
     </div>
     <%# card-actionsの閉じタグ %>

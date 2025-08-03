@@ -1,37 +1,57 @@
-<%# _likes_button.html..で %>
+<%# _likes_button.html.erbで %>
 <%# 全体の構造を担当、ファイル内でいいね部品を呼び出す %>
-<%# domidはヘルパーメソッド、一意のidをpostオブジェクトからー生成ーする　"第二引数_post_6" %>
+<%# dom_id はヘルパーメソッド、一意の id を post オブジェクトから生成する　"第二引数_post_6" %>
 <div
   id="<%= dom_id(post, "like_button") %>"
   class="flex items-center justify-center"
 >
   <% like = current_user.likes.find_by(post: post) %>
-  <%# いいねボタンが押されているのであれば %>
-  <% if like %>
-    <%# button to でフォーム（いいね投稿削除）＋ボタン（ハートがわだけ）を生成 %>
-    <%# DELETE /posts/:post_id/likes/:id likes#destroy  post_like_path %>
-    <%= button_to post_like_path(post, like), method: :delete, 
-        class: "btn btn-circle btn-sm w-12 h-12 flex items-center justify-center", 
-        form: { data: { turbo_stream: true } } do %>
-      <div class="flex flex-col items-center">
+
+  <%# button_to 共通の属性定義（フォームにTurboを適用） %>
+  <% turbo_form_opts = { data: { turbo_stream: true } } %>
+
+  <%# ボタン共通クラス定義（daisyUI+Tailwind併用） %>
+  <% btn_base_class =
+    "btn btn-circle btn-sm shadow-lg hover:scale-105 transition-transform duration-150" %>
+
+  <div class="relative inline-block">
+    <% if like %>
+      <%# button_to でフォーム（いいね投稿削除）＋ボタン（ハートアイコン）を生成 %>
+      <%# DELETE /posts/:post_id/likes/:id => likes#destroy  post_like_path %>
+      <%= button_to post_like_path(post, like),
+          method: :delete,
+          class: "#{btn_base_class} bg-white text-error",
+          form: turbo_form_opts do %>
         <%# 赤色のハートアイコンを表示 %>
         <%# - fas: スタイル（塗りつぶしアイコン） %>
         <%# - fa-heart: Font Awesomeライブラリのハートアイコン %>
-        <%# - text-red-500: Tailwind CSSの赤色（強度500）を適用 %>
-        <i class="fas fa-heart text-red-500"></i>
-        <span class="text-xs"><%= post.likes.count %></span>
-      </div>
+        <%# - text-error: daisyUIの赤系テキスト色（例: text-red-500 相当） %>
+        <i class="fas fa-heart text-error text-lg"></i>
+      <% end %>
+
+      <%# daisyuiバッジでいいね数を表示 %>
+      <span
+        class="
+          badge badge-sm bg-error text-white font-bold shadow absolute -top-1 -right-4
+        "
+      >
+        <%= post.likes.count %>
+      </span>
+
+      <%# いいねボタンがまだ押されていない場合 %>
+    <% else %>
+      <%# button_to でフォーム（いいね投稿）＋ボタン（ハートアイコン）を生成 %>
+      <%# POST /posts/:post_id/likes => likes#create  post_likes_path %>
+      <%= button_to post_likes_path(post),
+          method: :post,
+          class: "#{btn_base_class} btn-outline text-gray-500",
+          form: turbo_form_opts do %>
+        <%# 枠線のみのハートアイコンを表示 %>
+        <%# - far: スタイル（アウトラインアイコン） %>
+        <%# - text-gray-500: Tailwind CSSのグレーカラー（控えめ） %>
+        <i class="far fa-heart text-gray-500 text-lg"></i>
+      <% end %>
+
     <% end %>
-    <%# いいねボタンがまだ押されていない %>
-  <% else %>
-    <%# POST   /posts/:post_id/likes     likes#create   post_likes_path %>
-    <%= button_to post_likes_path(post), method: :post, 
-        class: "btn btn-circle btn-outline btn-sm w-12 h-12 flex items-center justify-center", 
-        form: { data: { turbo_stream: true } } do %>
-      <div class="flex flex-col items-center">
-        <i class="far fa-heart text-gray-500"></i>
-        <span class="text-xs"><%= post.likes.count %></span>
-      </div>
-    <% end %>
-  <% end %>
+  </div>
 </div>
