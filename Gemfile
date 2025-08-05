@@ -63,7 +63,10 @@ gem "line-bot-api", "~> 1.28"
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri windows]
+  # 環境ファイルから自動読み込み
   gem "dotenv-rails"
+  # テストコードよう
+  gem "rspec-rails", "~> 6.1"
 end
 
 group :development do

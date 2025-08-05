@@ -140,8 +140,8 @@
     // それをpostCreateCommandでコピーすることでGit設定を引き継ぎます
     "source=${localEnv:HOME}/.gitconfig,target=/tmp/.gitconfig,type=bind,consistency=cached"
   ],
-  // 軽量なGit設定（毎回実行）
-  "postCreateCommand": "bash -c 'cp /tmp/.gitconfig ~/.gitconfig || true; git config --global pager.branch false; git config --global pager.diff false; git config --global pager.log false'",
-  "onCreateCommand": "echo '=====================================' && echo 'DevContainer起動完了！' && echo 'Dockerfileで依存関係は既にインストール済みです' && echo '手動実行が必要な場合:' && echo '• rails db:create (初回のみ、データベースが存在しない場合)' && echo '• rails db:migrate (マイグレーション未実行の場合)' && echo 'Rails/Tailwind/JSプロセスは全て自動起動されています' && echo '======================================'",
-  "postStartCommand": "bin/dev"
+  //nmp install = node_modules が 空のまま になるのを防ぐ
+  "postCreateCommand": "npm install && bash -c 'cp /tmp/.gitconfig ~/.gitconfig || true; git config --global pager.branch false; git config --global pager.diff false; git config --global pager.log false'",
+  // bin/dev || echo devが失敗すればその時点で終了
+"postStartCommand": "bin/dev || (echo '[postStartCommand] ⚠️ bin/dev failed'; ls -la node_modules/tailwindcss || echo '[debug] tailwindcss not found'; ls -la ./app/assets/builds || true; exit 0)"
 }
