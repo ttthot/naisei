@@ -6,7 +6,7 @@
     <div class="tooltip tooltip-success" data-tip="色の濃淡で感情の強さがわかります！">
       <button class="btn btn-soft text-2xl font-bold mb-4 text-center">感情カレンダー</button>
     </div>
-
+    <%# <%= render "shared/css_test" %>
     <%# 曜日ラベル（月表示列を追加） %>
     <%# テキストの色は自動選択、濃淡60だけ指定 %>
     <div
@@ -32,13 +32,14 @@
       <%# 年間の週ごとにループ %>
       <% @calendar_weeks.each do |week| %>
         <%# 各週の最初に月表示列 %>
-        <%# ✅ 修正：その週に1日が含まれている場合に月名を表示 %>
+        <%# 修正：その週に日付の1日が含まれている場合に⭕️月と表示 %>
         <div
           class="
-            w-6 h-6 flex items-center justify-center text-xs text-base-content/80
+            w-8 h-8 flex items-center justify-center text-xs text-base-content/80
           "
         >
           <% month_start_date = week.find { |date| date&.day == 1 } %>
+          <%# (2025, 1, 1) なら1月と表示 %>
           <%= month_start_date ? month_start_date.strftime("%-m月").tr("0-9", "０-９") : "" %>
         </div>
 
