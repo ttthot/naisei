@@ -2,6 +2,7 @@
 @import 'tailwindcss';
 
 /* スキャン対象のファイルを指定 */
+/*NOTE 注意！！！！これ以外のファイルにtailwindの色を書いても表示されない */
 @source "../../../public/*.html";
 @source "../../../app/views/**/*.erb";
 @source "../../../app/javascript/**/*.js";
