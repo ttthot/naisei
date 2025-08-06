@@ -1,0 +1,99 @@
+<%#本ファイルはdaisyUIとTailwindの表示をテストするものである、頻繁に表示ができなくなるので消去しないこと %>
+<%# <%= render "shared/css_test"を該当ビューにを貼り付けることでテストできる %>
+<div class="p-4 m-4 bg-base-200 rounded-lg">
+  <h2 class="text-2xl font-bold text-primary mb-4">daisyUI・Tailwindテスト</h2>
+  <!-- Tailwindの基本スタイル -->
+  <div class="flex flex-col gap-4 mb-6">
+    <p class="text-lg text-blue-500 font-semibold">Tailwindの色: 青色のテキスト</p>
+    <div class="bg-green-200 p-2 rounded">Tailwindの背景色: 緑色の背景</div>
+    <div class="border-2 border-red-500 p-2">Tailwindのボーダー: 赤色の枠線</div>
+    <!-- Tailwindの基本色パレット -->
+    <div class="p-3 bg-base-100 rounded-lg shadow-sm">
+      <h3 class="font-bold mb-2">Tailwindの基本色パレット</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <!-- 赤系 -->
+        <div class="p-2 bg-red-100 text-center rounded">red-100</div>
+        <div class="p-2 bg-red-300 text-center rounded">red-300</div>
+        <div class="p-2 bg-red-500 text-center rounded text-white">red-500</div>
+        <div class="p-2 bg-red-700 text-center rounded text-white">red-700</div>
+        <!-- 青系 -->
+        <div class="p-2 bg-blue-100 text-center rounded">blue-100</div>
+        <div class="p-2 bg-blue-300 text-center rounded">blue-300</div>
+        <div class="p-2 bg-blue-500 text-center rounded text-white">blue-500</div>
+        <div class="p-2 bg-blue-700 text-center rounded text-white">blue-700</div>
+        <!-- 緑系 -->
+        <div class="p-2 bg-green-100 text-center rounded">green-100</div>
+        <div class="p-2 bg-green-300 text-center rounded">green-300</div>
+        <div class="p-2 bg-green-500 text-center rounded text-white">green-500</div>
+        <div class="p-2 bg-green-700 text-center rounded text-white">green-700</div>
+        <!-- グレー系 -->
+        <div class="p-2 bg-gray-100 text-center rounded">gray-100</div>
+        <div class="p-2 bg-gray-300 text-center rounded">gray-300</div>
+        <div class="p-2 bg-gray-500 text-center rounded text-white">gray-500</div>
+        <div class="p-2 bg-gray-700 text-center rounded text-white">gray-700</div>
+      </div>
+    </div>
+    <!-- テキスト色のテスト -->
+    <div class="p-3 bg-base-100 rounded-lg shadow-sm">
+      <h3 class="font-bold mb-2">テキスト色のテスト</h3>
+      <p class="text-red-500">これは text-red-500 です - 動作確認済み</p>
+      <p class="text-blue-500">これは text-blue-500 です - 動作確認済み</p>
+      <p class="text-green-500">これは text-green-500 です - 動作確認済み</p>
+      <p class="text-yellow-500">これは text-yellow-500 です</p>
+      <p class="text-purple-500">これは text-purple-500 です</p>
+      <p class="text-pink-500">これは text-pink-500 です</p>
+      <p class="text-gray-500">これは text-gray-500 です</p>
+      <!-- 追加テスト: 他の色相やシェード -->
+      <div class="mt-4 border-t pt-2">
+        <h4 class="font-semibold">追加テスト: 他の色相</h4>
+        <p class="text-orange-500">これは text-orange-500 です</p>
+        <p class="text-amber-500">これは text-amber-500 です</p>
+        <p class="text-teal-500">これは text-teal-500 です</p>
+        <p class="text-cyan-500">これは text-cyan-500 です</p>
+        <p class="text-indigo-500">これは text-indigo-500 です</p>
+      </div>
+
+      <div class="mt-4 border-t pt-2">
+        <h4 class="font-semibold">追加テスト: 赤色の他のシェード</h4>
+        <p class="text-red-100">これは text-red-100 です</p>
+        <p class="text-red-200">これは text-red-200 です</p>
+        <p class="text-red-300">これは text-red-300 です</p>
+        <p class="text-red-400">これは text-red-400 です</p>
+        <p class="text-red-600">これは text-red-600 です</p>
+        <p class="text-red-700">これは text-red-700 です</p>
+        <p class="text-red-800">これは text-red-800 です</p>
+        <p class="text-red-900">これは text-red-900 です</p>
+      </div>
+    </div>
+  </div>
+  <!-- daisyUIのコンポーネント -->
+  <div class="flex flex-col gap-4">
+    <!-- ボタン -->
+    <div class="flex gap-2 flex-wrap">
+      <button class="btn">通常ボタン</button>
+      <button class="btn btn-primary">プライマリ</button>
+      <button class="btn btn-secondary">セカンダリ</button>
+      <button class="btn btn-accent">アクセント</button>
+    </div>
+    <!-- アラート -->
+    <div class="alert alert-info">
+      <span>daisyUI アラート - 情報</span>
+    </div>
+    <!-- バッジ -->
+    <div class="flex gap-2">
+      <span class="badge badge-primary">バッジ1</span>
+      <span class="badge badge-secondary">バッジ2</span>
+      <span class="badge badge-outline">バッジ3</span>
+    </div>
+    <!-- カード -->
+    <div class="card bg-base-100 shadow-lg w-full max-w-xs">
+      <div class="card-body">
+        <h3 class="card-title">daisyUIカード</h3>
+        <p>カードの内容がここに表示されます</p>
+        <div class="card-actions justify-end">
+          <button class="btn btn-sm btn-primary">ボタン</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
