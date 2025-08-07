@@ -1,7 +1,230 @@
-<h1 class="text-2xl font-bold mb-8 text-center">設定画面</h1>
-<a href="https://lin.ee/OhYePqR"><img
-    src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png"
-    alt="友だちに追加"
-    height="36"
-    border="0"
-  ></a>
+<div class="container mx-auto p-4 max-w-2xl">
+  <h1 class="text-2xl font-bold mb-8 text-center">設定</h1>
+  <!-- LINE友だち追加 -->
+  <div class="card bg-base-100 shadow-xl mb-6">
+    <div class="card-body text-center">
+      <h2 class="card-title justify-center mb-4">LINE通知で習慣にしましょう！</h2>
+      <div class="flex justify-center mb-4">
+        <a href="https://lin.ee/OhYePqR">
+          <img
+            src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png"
+            alt="友だちに追加"
+            height="36"
+          >
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- 統一設定フォーム開始 -->
+  <%= form_with model: current_user, url: settings_path, local: true, id: "settings-form" do |form| %><% if notice %>
+      <div class="alert alert-success mb-6"><%= notice %></div>
+    <% end %>
+    <% if alert %>
+      <div class="alert alert-error mb-6"><%= alert %></div>
+    <% end %>
+    <!-- 習慣設定フォーム -->
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title justify-center mb-6">習慣設定</h2>
+        <!-- いつ日記を書くか -->
+        <div class="form-control mb-6">
+          <label class="label">
+            <span class="label-text text-lg font-bold">いつ日記を書きますか？</span>
+          </label>
+          <div class="dropdown dropdown-bottom w-full">
+            <div
+              tabindex="0"
+              role="button"
+              class="btn btn-outline w-full justify-between"
+              id="trigger-btn"
+            >
+              <span id="trigger-selected"></span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                ></path>
+              </svg>
+            </div>
+            <ul
+              tabindex="0"
+              class="
+                dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-full border
+                border-base-200
+              "
+            >
+              <% User::DIARY_TRIGGER_OPTIONS.each do |value| %>
+                <li>
+                  <a href="#" class="trigger-option" data-value="<%= value %>">
+                    <%= value %>
+                  </a>
+                </li>
+              <% end %>
+            </ul>
+            <%= form.hidden_field :diary_trigger_action,
+                              id: "trigger-hidden",
+                              value: current_user.diary_trigger_action %>
+          </div>
+        </div>
+        <!-- ご褒美 -->
+        <div class="form-control mb-6">
+          <label class="label">
+            <span class="label-text text-lg font-bold">完了後のご褒美は？</span>
+          </label>
+          <div class="dropdown dropdown-bottom w-full">
+            <div
+              tabindex="0"
+              role="button"
+              class="btn btn-outline w-full justify-between"
+              id="reward-btn"
+            >
+              <span id="reward-selected"></span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                ></path>
+              </svg>
+            </div>
+            <ul
+              tabindex="0"
+              class="
+                dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-full border
+                border-base-200
+              "
+            >
+              <% User::DIARY_REWARD_OPTIONS.each do |value| %>
+                <li>
+                  <a href="#" class="reward-option" data-value="<%= value %>">
+                    <%= value %>
+                  </a>
+                </li>
+              <% end %>
+            </ul>
+            <%= form.hidden_field :diary_reward,
+                              id: "reward-hidden",
+                              value: current_user.diary_reward %>
+          </div>
+        </div>
+        <!-- 事前準備 -->
+        <div class="form-control mb-6">
+          <label class="label">
+            <span class="label-text text-lg font-bold">事前準備（任意）</span>
+          </label>
+          <div class="dropdown dropdown-bottom w-full">
+            <div
+              tabindex="0"
+              role="button"
+              class="btn btn-outline w-full justify-between"
+              id="preparation-btn"
+            >
+              <span id="preparation-selected"></span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                ></path>
+              </svg>
+            </div>
+            <ul
+              tabindex="0"
+              class="
+                dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-full border
+                border-base-200 max-h-60 overflow-y-auto
+              "
+            >
+              <% User::DIARY_PREPARATION_OPTIONS.each do |value| %>
+                <li>
+                  <a href="#" class="preparation-option" data-value="<%= value %>">
+                    <%= value %>
+                  </a>
+                </li>
+              <% end %>
+            </ul>
+            <%= form.hidden_field :diary_preparation,
+                              id: "preparation-hidden",
+                              value: current_user.diary_preparation %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 投稿方式設定 -->
+    <div class="card bg-base-100 shadow-xl mt-6">
+      <div class="card-body">
+        <h2 class="card-title justify-center mb-6">投稿方式設定</h2>
+        <div class="form-control">
+          <label class="label cursor-pointer justify-start gap-4">
+            <%= form.check_box :show_topic_title,
+                           class: "checkbox checkbox-primary",
+                           id: "topic-checkbox" %>
+            <div class="flex-1">
+              <span class="label-text text-lg font-medium">お題提供を受ける</span>
+              <div class="label-text-alt mt-1">チェックを外すと自由記述になります</div>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+    <!-- 統一保存ボタン -->
+    <div class="mt-6 text-center">
+      <%= form.submit "すべての設定を保存", class: "btn btn-primary btn-lg px-12" %>
+    </div>
+  <% end %>
+  <!-- 統一設定フォーム終了 -->
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  function setupDropdown(params) {
+    const textBox = document.getElementById(params.textId);
+    const hiddenInput = document.getElementById(params.hiddenId);
+    const optionItems = document.querySelectorAll(params.optionsSelector);
+
+    if (hiddenInput.value) {
+      textBox.textContent = hiddenInput.value;
+    } else {
+      textBox.textContent = params.defaultText || '選んでください';
+    }
+
+    optionItems.forEach(option => {
+      option.addEventListener('click', event => {
+        event.preventDefault();
+        const value = option.getAttribute('data-value');
+        const label = option.textContent.trim();
+        textBox.textContent = label;
+        hiddenInput.value = value;
+        setTimeout(() => {
+          document.activeElement.blur();
+        }, 50);
+      });
+    });
+  }
+
+  setupDropdown({
+    textId: 'trigger-selected',
+    hiddenId: 'trigger-hidden',
+    optionsSelector: '.trigger-option',
+    defaultText: '選択してください'
+  });
+
+  setupDropdown({
+    textId: 'reward-selected',
+    hiddenId: 'reward-hidden',
+    optionsSelector: '.reward-option',
+    defaultText: '選択してください'
+  });
+
+  setupDropdown({
+    textId: 'preparation-selected',
+    hiddenId: 'preparation-hidden',
+    optionsSelector: '.preparation-option',
+    defaultText: '選択してください'
+  });
+});
+</script>

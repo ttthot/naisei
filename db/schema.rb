@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_08_04_060916) do
+ActiveRecord::Schema[7.1].define(version: 2025_08_07_082006) do
   create_table "likes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "post_id", null: false
@@ -53,6 +53,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_04_060916) do
     t.integer "post_streak", default: 0, null: false
     t.integer "max_post_streak", default: 0, null: false
     t.date "last_posted_at"
+    t.string "diary_trigger_action"
+    t.string "diary_trigger_time"
+    t.string "diary_reward"
+    t.string "diary_preparation"
+    t.boolean "show_topic_title", default: true, null: false
     t.index ["line_user_id"], name: "index_users_on_line_user_id", unique: true
   end
 

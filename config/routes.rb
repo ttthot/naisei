@@ -39,8 +39,10 @@ Rails.application.routes.draw do
 
   # 感情カレンダー機能
   resources :emotion_calendar, only: [:index]
-  # 設定画面
-  get "settings", to: "settings#index"
+
+  # 設定画面　複数の設定項目があるのでsettings
+  # get "settings", to: "settings#index"
+  resources :settings, only: [:index, :update]
 
   # ---現在不使用　テストコードには含めない
   # ラインボットのwebhookエンドポイントを定義

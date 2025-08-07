@@ -24,6 +24,12 @@ class User < ApplicationRecord
   validates :password, length: { minimum: 6 }, allow_nil: true
   validates :line_user_id, uniqueness: true, allow_nil: true
 
+  # 習慣支援機能長さ制限
+  validates :diary_trigger_action, length: { maximum: 100 }
+  validates :diary_trigger_time, length: { maximum: 100 }
+  validates :diary_reward, length: { maximum: 100 }
+  validates :diary_preparation, length: { maximum: 255 }
+
   # ----連続投稿機能 メイン関数は一番最後----
 
   # --ログイン時に連続投稿かどうかを毎回確認
@@ -93,4 +99,49 @@ class User < ApplicationRecord
     puts "連続投稿数を更新したよ"
   end
   # --------連続投稿機能-
+
+
+
+  # 習慣設定が完了しているか　ビュー側で表示に制御をかける 将来用
+  def habit_setup_completed?
+    diary_trigger_action.present? && diary_trigger_time.present? &&
+    diary_reward.present? && diary_preparation.present?
+  end
+  # 以下は設定のビューの
+  # 日記のトリガーアクション選択肢
+  DIARY_TRIGGER_OPTIONS = [
+    "歯磨き後",
+    "コーヒーを淹れる前",
+    "夕食後",
+    "お風呂の後",
+    "寝る前"
+  ].freeze
+
+  # 日記のご褒美選択肢
+  DIARY_REWARD_OPTIONS = [
+    "好きなお茶を飲む",
+    "チョコレートを食べる",
+    "音楽を聴く",
+    "SNSを見る",
+    "ストレッチする"
+  ].freeze
+
+  # 日記の事前準備選択肢
+  DIARY_PREPARATION_OPTIONS = [
+    "SNSアプリを開かない",
+    "YouTubeを見ない",
+    "ニュースサイトを見ない",
+    "通知を切らずに始めない",
+    "長文を書こうとしない",
+    "完璧な文章を書こうとしない",
+    "毎日書けなくても自分を責めない",
+    "時間を気にしすぎない",
+    "「今日は何もない」と諦めない",
+    "疲れているからと後回しにしない",
+    "散らかった場所で書き始めない",
+    "他の作業と同時にやらない",
+    "バッテリー残量を確認せずに始めない",
+    "「特別な出来事がない」を理由にしない",
+    "気分が乗らないからと延期しない"
+  ].freeze
 end
