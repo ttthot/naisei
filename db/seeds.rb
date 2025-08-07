@@ -72,3 +72,49 @@ User.find_or_create_by!(email: "admin@example.com") do |user|
   user.name = "管理者ユーザー"
   user.password = "password123"
 end
+
+topics.each do |title|
+  Topic.find_or_create_by!(title: title)
+end
+# ユーザーが存在しない場合のみ作成
+User.find_or_create_by!(email: "admin@example.com") do |user|
+  user.name = "管理者ユーザー"
+  user.password = "password123"
+end
+
+# 対象ユーザー取得（存在しない場合はエラー）
+user = User.find_by!(email: "test@gmail.com")
+Post.where(user_id: user.id).destroy_all
+
+topic_id = 1
+
+sample_contents = [
+  "今日もがんばった。",
+  "少し疲れたけど前進した。",
+  "とてもいい気分！",
+  "イライラした一日だった。",
+  "悲しいことがあった。",
+  "達成感のある一日！",
+  "なんとなく不安だった。",
+  "人と話せてうれしかった。",
+  "リフレッシュできた。",
+  "思ったよりもうまくいった。"
+]
+
+start_date = Date.today - 199  # ← 終点：今日、起点：199日前
+end_date = Date.today
+
+(start_date..end_date).each do |date|
+  post = Post.create!(
+    user_id: user.id,
+    topic_id: topic_id,
+    emotion: rand(0..4),
+    emotion_rating: rand(1..5),
+    content: sample_contents.sample
+  )
+
+  Post.where(id: post.id).update_all(
+    created_at: Time.zone.local(date.year, date.month, date.day, 12),
+    updated_at: Time.zone.local(date.year, date.month, date.day, 12)
+  )
+end
