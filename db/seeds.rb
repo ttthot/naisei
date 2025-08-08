@@ -8,6 +8,7 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 topics = [
+  "自由記述",
   "今日、あなたはどんな気持ちで過ごしましたか？",
   "最近、心に強く残った出来事は何ですか？",
   "今感じている感情を言葉にするとしたら？",

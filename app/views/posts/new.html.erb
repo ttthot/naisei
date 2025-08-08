@@ -88,19 +88,22 @@
           </div>
         </div>
 
-        <%# お題表示欄 - 感情強度欄の下に移動 %>
-        <div class="card bg-base-200 w-full mb-4 mt-4">
-          <div class="card-body">
-            <%# .titleお題はランダムで提示 %>
-            <p class="text-lg"><%= @random_topic.title %></p>
-            <%# お題は定数変更不可なのでhiddenを使用 %>
-            <%# name属性を生成、　name: post[topic_id] %>
-            <%# value属性を生成、value: randamid具体値 %>
-            <%# 送信時railsはハッシュの入れ子構造　、params[:post][:topic_id]　= "数値"を受け取る %>
-            <%# どのモデルのどのデータを受け取る %>
-            <%= form.hidden_field :topic_id, value: @random_topic.id %>
+        <%# お題表示はユーザー設定が設定をオンにしているかつとランダムお題が存在%>
+        <%# titleはnull制約なしなのでなくても問題なし %>
+        <% if current_user&.show_topic_title? && @random_topic&.title.present? %>
+          <div class="card bg-base-200 w-full mb-4 mt-4">
+            <div class="card-body">
+              <%# .title お題はランダムで提示 %>
+              <p class="text-lg"><%= @random_topic.title %></p>
+
+              <%# お題は定数変更不可なので hidden を使用　ユーザーは変更できない %>
+              <%#　form.hidden_fieldは name属性を生成、name: post[topic_id] %>
+              <%# value属性を生成、value: @random_topic.id %>
+              <%# 送信時 rails内のparams,  params[:post][:topic_id] に入る %>
+              <%= form.hidden_field :topic_id, value: @random_topic.id %>
+            </div>
           </div>
-        </div>
+        <% end %>
 
         <%# 感情を文章で表現する欄 %>
         <div class="w-full mb-4">
@@ -111,7 +114,6 @@
                            id: "emotion_content" %>
           </label>
         </div>
-        <%#TODO　ボタンを調整した後spaceが効いているか確認 %>
         <%# 送信ボタンエリア %>
         <%# クラス名 "card-actionsクラスは、カード内のボタンやリンクに適切なマージンやパディングを提供 %>
         <%# "justify-end" は、アクション要素を右端に揃えるためのユーティリティクラスです。 %>
