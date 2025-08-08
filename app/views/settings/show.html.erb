@@ -1,6 +1,7 @@
 <div class="container mx-auto p-4 max-w-2xl">
   <h1 class="text-2xl font-bold mb-8 text-center">設定</h1>
-  <!-- LINE友だち追加 -->
+
+  <%# LINE友だち追加 %>
   <div class="card bg-base-100 shadow-xl mb-6">
     <div class="card-body text-center">
       <h2 class="card-title justify-center mb-4">LINE通知で習慣にしましょう！</h2>
@@ -13,24 +14,32 @@
           >
         </a>
       </div>
+
     </div>
   </div>
-  <!-- 統一設定フォーム開始 -->
-  <%= form_with model: current_user, url: settings_path, local: true, id: "settings-form" do |form| %><% if notice %>
+
+  <%# 統一設定フォーム開始 %>
+  <%= form_with model: current_user, url: settings_path, method: :patch, local: true, id: "settings-form" do |form| %>
+
+    <%# 成功・エラーメッセージ %>
+    <% if notice %>
       <div class="alert alert-success mb-6"><%= notice %></div>
     <% end %>
     <% if alert %>
       <div class="alert alert-error mb-6"><%= alert %></div>
     <% end %>
-    <!-- 習慣設定フォーム -->
+
+    <%# 習慣設定フォーム %>
     <div class="card bg-base-100 shadow-xl">
       <div class="card-body">
         <h2 class="card-title justify-center mb-6">習慣設定</h2>
-        <!-- いつ日記を書くか -->
+
+        <%# いつ日記を書くか %>
         <div class="form-control mb-6">
           <label class="label">
             <span class="label-text text-lg font-bold">いつ日記を書きますか？</span>
           </label>
+
           <div class="dropdown dropdown-bottom w-full">
             <div
               tabindex="0"
@@ -39,15 +48,9 @@
               id="trigger-btn"
             >
               <span id="trigger-selected"></span>
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                ></path>
-              </svg>
+              <i class="fas fa-chevron-down w-4 h-4"></i>
             </div>
+
             <ul
               tabindex="0"
               class="
@@ -63,16 +66,19 @@
                 </li>
               <% end %>
             </ul>
+
             <%= form.hidden_field :diary_trigger_action,
                               id: "trigger-hidden",
                               value: current_user.diary_trigger_action %>
           </div>
         </div>
-        <!-- ご褒美 -->
+
+        <%# ご褒美 %>
         <div class="form-control mb-6">
           <label class="label">
             <span class="label-text text-lg font-bold">完了後のご褒美は？</span>
           </label>
+
           <div class="dropdown dropdown-bottom w-full">
             <div
               tabindex="0"
@@ -81,15 +87,9 @@
               id="reward-btn"
             >
               <span id="reward-selected"></span>
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                ></path>
-              </svg>
+              <i class="fas fa-chevron-down w-4 h-4"></i>
             </div>
+
             <ul
               tabindex="0"
               class="
@@ -105,16 +105,19 @@
                 </li>
               <% end %>
             </ul>
+
             <%= form.hidden_field :diary_reward,
                               id: "reward-hidden",
                               value: current_user.diary_reward %>
           </div>
         </div>
-        <!-- 事前準備 -->
+
+        <%# 事前準備 %>
         <div class="form-control mb-6">
           <label class="label">
-            <span class="label-text text-lg font-bold">事前準備（任意）</span>
+            <span class="label-text text-lg font-bold">どんなことに気をつければ日記を続けられる？</span>
           </label>
+
           <div class="dropdown dropdown-bottom w-full">
             <div
               tabindex="0"
@@ -123,15 +126,9 @@
               id="preparation-btn"
             >
               <span id="preparation-selected"></span>
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                ></path>
-              </svg>
+              <i class="fas fa-chevron-down w-4 h-4"></i>
             </div>
+
             <ul
               tabindex="0"
               class="
@@ -147,17 +144,21 @@
                 </li>
               <% end %>
             </ul>
+
             <%= form.hidden_field :diary_preparation,
                               id: "preparation-hidden",
                               value: current_user.diary_preparation %>
           </div>
         </div>
+
       </div>
     </div>
-    <!-- 投稿方式設定 -->
+
+    <%# 投稿方式設定 %>
     <div class="card bg-base-100 shadow-xl mt-6">
       <div class="card-body">
         <h2 class="card-title justify-center mb-6">投稿方式設定</h2>
+
         <div class="form-control">
           <label class="label cursor-pointer justify-start gap-4">
             <%= form.check_box :show_topic_title,
@@ -169,62 +170,69 @@
             </div>
           </label>
         </div>
+
       </div>
     </div>
-    <!-- 統一保存ボタン -->
-    <div class="mt-6 text-center">
-      <%= form.submit "すべての設定を保存", class: "btn btn-primary btn-lg px-12" %>
-    </div>
+
   <% end %>
-  <!-- 統一設定フォーム終了 -->
+  <%# 統一設定フォーム終了 %>
+
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  function setupDropdown(params) {
-    const textBox = document.getElementById(params.textId);
-    const hiddenInput = document.getElementById(params.hiddenId);
-    const optionItems = document.querySelectorAll(params.optionsSelector);
+document.addEventListener('DOMContentLoaded', function() {
+  function setupDropdown(config) {
+    const button = document.getElementById(config.buttonId);
+    const text = document.getElementById(config.textId);
+    const hiddenField = document.getElementById(config.hiddenId);
+    const options = document.querySelectorAll(config.optionsSelector);
 
-    if (hiddenInput.value) {
-      textBox.textContent = hiddenInput.value;
+    // 初期表示
+    if (hiddenField.value && hiddenField.value !== '') {
+      text.textContent = hiddenField.value;
     } else {
-      textBox.textContent = params.defaultText || '選んでください';
+      text.textContent = config.defaultText || '選んでください';
     }
 
-    optionItems.forEach(option => {
-      option.addEventListener('click', event => {
+    // クリックイベント
+    options.forEach(function(option) {
+      option.addEventListener('click', function(event) {
         event.preventDefault();
-        const value = option.getAttribute('data-value');
-        const label = option.textContent.trim();
-        textBox.textContent = label;
-        hiddenInput.value = value;
-        setTimeout(() => {
-          document.activeElement.blur();
-        }, 50);
+
+        const selectedValue = option.getAttribute('data-value');
+        const selectedText = option.textContent.trim();
+
+        text.textContent = selectedText;
+        hiddenField.value = selectedValue;
+
+        // ボタンをblurして閉じる
+        button.blur();
       });
     });
   }
 
+  // ✅ 呼び出し部もここに入れる
   setupDropdown({
+    buttonId: 'trigger-btn',
     textId: 'trigger-selected',
     hiddenId: 'trigger-hidden',
-    optionsSelector: '.trigger-option',
-    defaultText: '選択してください'
+    optionsSelector: '.trigger-option'
   });
 
   setupDropdown({
+    buttonId: 'reward-btn',
     textId: 'reward-selected',
     hiddenId: 'reward-hidden',
-    optionsSelector: '.reward-option',
-    defaultText: '選択してください'
+    optionsSelector: '.reward-option'
   });
 
   setupDropdown({
+    buttonId: 'preparation-btn',
     textId: 'preparation-selected',
     hiddenId: 'preparation-hidden',
     optionsSelector: '.preparation-option',
-    defaultText: '選択してください'
+    defaultText: '指定しない'
   });
+
 });
 </script>
