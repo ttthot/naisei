@@ -3,17 +3,15 @@
 
 class SettingsController < ApplicationController
   layout "sidebar_layout"
-  def index
+  def show
   end
 
   def update
-    # 自分の設定のみ扱うため current_user
+    Rails.logger.debug "パラメータ: #{params[:user].inspect}"
     if current_user.update(habit_params)
-      #  　まっさらなidexページにリダイレクト
       redirect_to settings_path, notice: ""
     else
-      # 入力データとエラー情報が保持されたままにしたいのでrender再表示
-      render :index, status: :unprocessable_entity
+      render :show, status: :unprocessable_entity
     end
   end
 
@@ -26,6 +24,6 @@ class SettingsController < ApplicationController
     def habit_params
       # # params[:user][:diary_trigger_action]等を許可
       params.require(:user).permit(:diary_trigger_action, :diary_trigger_time,
-                                 :diary_reward, :diary_preparation)
+                                  :diary_reward, :diary_preparation, :show_topic_title)
     end
 end

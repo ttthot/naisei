@@ -1,3 +1,5 @@
+<%# 本ページでは設定が行われた際にフラッシュメッセージ出力しない %>
+<% content_for :suppress_flash, true %>
 <div class="container mx-auto p-4 max-w-2xl">
   <h1 class="text-2xl font-bold mb-8 text-center">設定</h1>
 
@@ -21,13 +23,9 @@
   <%# 統一設定フォーム開始 %>
   <%= form_with model: current_user, url: settings_path, method: :patch, local: true, id: "settings-form" do |form| %>
 
-    <%# 成功・エラーメッセージ %>
-    <% if notice %>
-      <div class="alert alert-success mb-6"><%= notice %></div>
-    <% end %>
-    <% if alert %>
-      <div class="alert alert-error mb-6"><%= alert %></div>
-    <% end %>
+
+
+
 
     <%# 習慣設定フォーム %>
     <div class="card bg-base-100 shadow-xl">
@@ -161,6 +159,7 @@
 
         <div class="form-control">
           <label class="label cursor-pointer justify-start gap-4">
+            <%# show_topic_titleのtrue false切り替えする %>
             <%= form.check_box :show_topic_title,
                            class: "checkbox checkbox-primary",
                            id: "topic-checkbox" %>
@@ -180,59 +179,72 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('turbo:load', function() {
   function setupDropdown(config) {
     const button = document.getElementById(config.buttonId);
     const text = document.getElementById(config.textId);
     const hiddenField = document.getElementById(config.hiddenId);
-    const options = document.querySelectorAll(config.optionsSelector);
+    const form = document.getElementById('settings-form');
 
-    // 初期表示
-    if (hiddenField.value && hiddenField.value !== '') {
-      text.textContent = hiddenField.value;
-    } else {
-      text.textContent = config.defaultText || '選んでください';
-    }
+    // 初期表示 エラーのため.trim()で空白除去
+    const v = (hiddenField && hiddenField.value || '').trim();
+    text.textContent = v ? v : (config.defaultText || '選んでください');
 
-    // クリックイベント
-    options.forEach(function(option) {
-      option.addEventListener('click', function(event) {
-        event.preventDefault();
+    // メニュー（親）に1回だけバインド（イベント委譲）
+    const menu = button?.parentElement?.querySelector('.dropdown-content');
+    if (!menu) return;
 
-        const selectedValue = option.getAttribute('data-value');
-        const selectedText = option.textContent.trim();
+    menu.addEventListener('click', function(e) {
+      const a = e.target.closest(config.itemSelector || 'a');
+      if (!a) return;
+      // <a>タグなら通常のリンク動作を停止
+      e.preventDefault();
 
-        text.textContent = selectedText;
-        hiddenField.value = selectedValue;
+      const selectedValue = a.getAttribute('data-value');
+      const selectedText  = a.textContent.trim();
 
-        // ボタンをblurして閉じる
-        button.blur();
-      });
-    });
-  }
+      // 表示とhidden更新
+      text.textContent = selectedText;
+      hiddenField.value = selectedValue;
+      // 即保存
+      form?.requestSubmit();
 
-  // ✅ 呼び出し部もここに入れる
+      // UI整えるだけ
+      button.blur();
+        });
+      }
+
+      // 投稿方式選択
+      const topic = document.getElementById('topic-checkbox');
+      const form = document.getElementById('settings-form');
+      if (topic && form) {
+        topic.addEventListener('change', () => {
+      form.requestSubmit(); // チェック切替で即保存
+        });
+      }
+
+      // ３つ分のドロップダウンを設定
   setupDropdown({
     buttonId: 'trigger-btn',
     textId: 'trigger-selected',
     hiddenId: 'trigger-hidden',
-    optionsSelector: '.trigger-option'
+    itemSelector: '.trigger-option'
   });
 
   setupDropdown({
     buttonId: 'reward-btn',
     textId: 'reward-selected',
     hiddenId: 'reward-hidden',
-    optionsSelector: '.reward-option'
+    itemSelector: '.reward-option'
   });
 
   setupDropdown({
     buttonId: 'preparation-btn',
     textId: 'preparation-selected',
     hiddenId: 'preparation-hidden',
-    optionsSelector: '.preparation-option',
+    itemSelector: '.preparation-option',
     defaultText: '指定しない'
   });
-
 });
 </script>
+

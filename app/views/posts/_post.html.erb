@@ -14,8 +14,10 @@
   <div class="card-body">
 
     <%# card-title - カードのタイトル要素（ここではトピックのタイトル） %>
-    <h2 class="card-title text-primary"><%= post.topic.title %></h2>
-
+    <%# post.topic nil と 空文字 両方でない場合のみ表示 %>
+    <% if post.topic&.title.present? && post.topic.title != "自由記述" %>
+      <h2 class="card-title text-primary"><%= post.topic.title %></h2>
+    <% end %>
     <%# 100字までtruncateで切り取り省略表示し、全文はdaisyUIモーダルで展開 %>
     <div class="mb-4 flex flex-col gap-2">
       <span><%= simple_format(truncate(post.content, length: 100)) %></span>

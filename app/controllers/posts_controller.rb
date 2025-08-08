@@ -55,7 +55,7 @@ class PostsController < ApplicationController
   def create
     @post = Post.new(post_params)
     @post.user_id = current_user.id # ログイン中のユーザーのIDを設定
-
+    attach_default_topic!(@post)
     if @post.save
       if params[:commit] == "post_and_aiadvice"
         service = ChatgptService.new
@@ -91,5 +91,10 @@ class PostsController < ApplicationController
     # これにより、作成や更新時に使用できるパラメータを明示的に指定することで脆弱性を防ぎます。
     def post_params
       params.require(:post).permit(:content, :topic_id, :emotion, :emotion_rating)
+    end
+    # デフォルトトピックは自由記述にする。　chargptにタイトルをマストで送る必要があるため
+    def attach_default_topic!(post)
+      return if post.topic_id.present?
+      post.topic = Topic.find_or_create_by!(title: "自由記述")
     end
 end
