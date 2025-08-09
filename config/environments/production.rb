@@ -181,4 +181,7 @@ Rails.application.configure do
   config.host_authorization = {
     exclude: -> (request) { request.path == "/up" } # Rails7標準のヘルスチェックパス /up を具体的に指定して除外.route.rb参照
   }
+
+  # Link タグの preload ヘッダーを無効化（ブラウザコンソールの警告メッセージを抑制するため） ブラウザでリソースをプリロードするので影響は少ない
+  config.action_view.preload_links_header = false
 end
