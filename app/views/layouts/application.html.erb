@@ -44,16 +44,17 @@
       >
         <% flash.each do |message_type, message| %>
           <% key = message_type.to_s %>
-          <% if key == "notice" || key == "success" %>
+          <%# TODO後で消すかどうか検討: 空のフラッシュメッセージ対策として message.present? 条件を追加 %>
+          <% if (key == "notice" || key == "success") && message.present? %>
             <%# margin-top と margin-bottomに 0.5rem %>
             <div class="alert alert-success shadow-lg my-2">
               <span><%= message %></span>
             </div>
-          <% elsif key == "alert" || key == "danger" || key == "error" %>
+          <% elsif (key == "alert" || key == "danger" || key == "error") && message.present? %>
             <div class="alert alert-error shadow-lg my-2">
               <span><%= message %></span>
             </div>
-          <% else %>
+          <% elsif message.present? %>
             <div class="alert alert-info shadow-lg my-2">
               <span><%= message %></span>
             </div>
