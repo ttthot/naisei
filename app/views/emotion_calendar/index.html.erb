@@ -1,19 +1,5 @@
 <%# カレンダーの詳細表示についてはヘルパー参照 %>
 <%# 最大横幅28rem cardにより中央寄せは自動 %>
-
-<%# TODO後で消す: デバッグ用フラッシュ内容表示コード %>
-<!-- デバッグ用：フラッシュの内容を表示 -->
-<% if flash.any? %>
-  <div class="card bg-base-100 shadow-lg w-full max-w-md mx-auto m-4">
-    <div class="card-body">
-      <h2 class="card-title">デバッグ情報</h2>
-      <% flash.each do |key, value| %>
-        <p>フラッシュキー: <%= key %>, 値: "<%= value %>" (空？: <%= value.blank? %>)</p>
-      <% end %>
-    </div>
-  </div>
-<% end %>
-
 <div class="card bg-base-100 shadow-lg w-full max-w-md mx-auto m-4">
   <div class="card-body flex flex-col items-center">
 

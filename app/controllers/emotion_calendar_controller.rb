@@ -4,9 +4,6 @@ class EmotionCalendarController < ApplicationController
   # サイドバー設置レイアウトファイル変更
   layout "sidebar_layout"
   def index
-    # TODO後で消す: デバッグ用フラッシュ内容確認コード
-    Rails.logger.debug "Current flash content: #{flash.inspect}"
-    
     # データ一覧を取得
     @posts = current_user.posts
     # 日付で投稿をマッピングするハッシュを初期化
