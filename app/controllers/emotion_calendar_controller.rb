@@ -21,8 +21,10 @@ class EmotionCalendarController < ApplicationController
     end
     # 投稿ない日のことも考えて、すべての日のマス欄を作成
     @calendar_dates = []
-    start_date = Date.new(Date.today.year, 1, 1)
-    today = Date.today
+    start_date = Date.new(Time.zone.today.year, 1, 1)
+    # サーバー標準時間から日本時間に変換
+    # config.time_zone = 'Tokyo'　にて設定済み
+    today = Time.zone.today
     (start_date..today).each do |date|
       @calendar_dates << date
     end
