@@ -1,4 +1,3 @@
-// TODO後で理解
 // 1. ブラウザがHTMLをパース
 //  javascript_importmap_tagsによるモジュール読み込み
 

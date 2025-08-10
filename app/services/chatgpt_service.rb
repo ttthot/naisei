@@ -8,7 +8,7 @@ class ChatgptService
   def initialize
     @client = OpenAI::Client.new(
       access_token: ENV["OPENAI_API_KEY"],
-      # TODO 本番環境時はオフにする
+      # 本番環境時はオフにする
       # エラーをフログに保存
       # log_errors: true
     )
@@ -27,7 +27,7 @@ class ChatgptService
       もし歪みがあれば、現実的な捉え方や別の視点を提案する
       150文字程度で簡潔に応答する
       認知の歪みがあれば共感は関係つにして歪みの指摘を優先する
-      返答は一回で終了すること、つまり深掘りは不要
+      返答は一回で完結すること、つまり深掘りは不要
     PROMPT
 
     response = @client.chat(

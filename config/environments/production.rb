@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Rubyの標準ライブラリではない、Railsの一部であるActive Supportの機能を読み込みます。
 # これにより、1.day.ago や 3.hours.from_now のような、時間を直感的に扱えるメソッドがIntegerクラスに追加されます。
 require "active_support/core_ext/integer/time"
@@ -166,7 +168,6 @@ Rails.application.configure do
 
 
   ##########################
-  #### TODO: ".xxx.elb.amazonaws.com" はALBのデフォルトDNS名の一部,実際のALBのDNS名に合わせてください。
   config.hosts << ".ap-northeast-1.elb.amazonaws.com" # ALBのDNSサフィックスを許可ホストに追加
   ######################################
   # "127.0.0.1" (localhost) からのアクセスを許可リストに追加します。heathチェックや内部APIのアクセスを許可等

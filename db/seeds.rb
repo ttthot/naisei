@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file should ensure the existence of records required to run the application in every environment (production,
 # development, test). The code here should be idempotent so that it can be executed at any point in every environment.
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
@@ -86,7 +88,6 @@ end
 user = User.find_by!(email: "test@gmail.com")
 Post.where(user_id: user.id).destroy_all
 
-topic_id = 1
 
 sample_contents = [
   "今日もがんばった。小さな目標だったけど達成できてよかった。",
@@ -120,6 +121,7 @@ sample_contents = [
   "予期せぬ良い知らせがあった。嬉しいサプライズに心が弾んで一日中気分が良かった。",
   "自分の成長を実感できた。以前の自分と比べて確実に変化していることを感じる。"
 ]
+topic_id = 1
 
 start_date = Date.today - 199  # ← 終点：今日、起点：199日前
 end_date = Date.today
