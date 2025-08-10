@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Rubyの標準ライブラリではない、Railsの一部であるActive Supportの機能を読み込みます。
 # これにより、1.day.ago や 3.hours.from_now のような、時間を直感的に扱えるメソッドがIntegerクラスに追加されます。
 require "active_support/core_ext/integer/time"
