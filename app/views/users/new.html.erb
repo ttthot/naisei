@@ -2,6 +2,12 @@
 
 <div class="max-w-md mx-auto py-12">
   <div class="card card-border bg-base-100 shadow-2xl rounded-2xl mt-6">
+    <figure>
+      <%= image_tag "naisei_hero.png",
+      alt: "Naisei - ストレス解消サービス",
+      # object-,,　はみ出し補正
+      class: "w-full object-cover" %>
+    </figure>
     <div class="card-body p-8">
       <h2 class="text-2xl font-bold mb-8 text-center font-sans tracking-wide">アカウント登録</h2>
       <%= form_with(model: @user) do |f| %>

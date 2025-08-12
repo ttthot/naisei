@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html data-theme="lemonade" lang="ja">
   <head>
-    <title><%= content_for?(:title) ? yield(:title) : "Naisei" %></title>
+    <title>Naisei</title>
+    <%= favicon_link_tag("favicon.png") %>
 
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -11,7 +12,9 @@
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+    <%= javascript_include_tag "application",
+    "data-turbo-track": "reload",
+    type: "module" %>
     <style>
        body {
       font-family: 'Zen Maru Gothic', 'Avenir', 'Hiragino Sans', 'Meiryo', sans-serif;
@@ -19,8 +22,11 @@
       letter-spacing: 0.03em;  /* 文字間隔を少し広げる */
     }
     </style>
-    <%#  Google Fonts  %>
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700&display=swap" rel="stylesheet">
+    <%#  Google Fonts %>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700&display=swap"
+      rel="stylesheet"
+    >
     <%# ハート,カレンダーなどのアイコン %>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
@@ -30,104 +36,107 @@
   <body class="bg-base-100 text-base-content font-sans">
 
     <%# --- 左メニューバーつまり　daisyUI Drawer構造 --- %>
-<div class="drawer lg:drawer-open min-h-screen">
-  <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+    <div class="drawer lg:drawer-open min-h-screen">
+      <input id="my-drawer" type="checkbox" class="drawer-toggle"/>
+      <!-- サイドバー（左側） -->
+      <div class="drawer-side">
+        <label for="my-drawer" class="drawer-overlay"></label>
+        <aside class="w-64 min-h-full bg-base-200 flex flex-col">
+          <!-- ロゴ＋アプリ名 -->
+          <div class="flex items-center gap-1 px-4 py-4 border-b border-base-300">
+            <%= image_tag "icon.png", class: "w-8 h-8 block" %>
 
-  <!-- サイドバー（左側） -->
-<div class="drawer-side">
-  <label for="my-drawer" class="drawer-overlay"></label>
-  <aside class="w-64 min-h-full bg-base-200 flex flex-col">
-    <!-- ロゴ＋アプリ名 -->
-    <div class="flex items-center gap-2 px-6 py-4 border-b border-base-300">
-      <span class="text-3xl text-primary">
-        <i class="fa-solid fa-face-smile"></i>
-      </span>
-      <span class="font-bold text-xl tracking-tight">Naisei</span>
-    </div>
-
-    <!-- メニューリスト (daisyUI menu) -->
-    <ul class="menu flex-1 px-4 py-4 gap-4">
-      <li>
-      <%= link_to new_post_path,
+            <span class="font-bold text-xl tracking-tight">Naisei</span>
+          </div>
+          <!-- メニューリスト (daisyUI menu) -->
+          <ul class="menu flex-1 px-4 py-4 gap-4">
+            <li>
+              <%= link_to new_post_path,
         class: "btn btn-ghost w-full justify-start gap-2 text-sm font-normal bg-base-200 hover:bg-base-300 shadow" do %>
-        <i class="fa-solid fa-plus text-sm"></i>
-        <span>新規投稿</span>
-      <% end %>
-      </li>
-      <li>
-      <%= link_to posts_path, class: ("active" if current_page?(posts_path)) do %>
-        <i class="fa-solid fa-list-ul"></i>
-        <span>投稿一覧</span>
-      <% end %>
-      </li>
-      <li>
-        <%= link_to emotion_calendar_index_path(anchor: "calendar") do %>
-          <i class="fa-solid fa-calendar-days"></i>
-          <span>感情カレンダー</span>
-        <% end %>
-      </li>
-      <li>
-        <%= link_to settings_path do %>
-          <i class="fa-solid fa-gear"></i>
-          <span>設定</span>
-        <% end %>
-      </li>
-      <li class="mt-auto">
-        <%#通常getリリクエスのみだが、turbo @hotwired/turbo-rails のjsがクリック時にDELETEリクエストとしてサーバーに送信 %>
-        <%= link_to logout_path, data: { turbo_method: :delete } do %>
-          <i class="fa-solid fa-right-from-bracket"></i>
-          <span>ログアウト</span>
-        <% end %>
-      </li>
-    </ul>
-    <!-- サイドバーフッター -->
-    <footer class="p-4 text-xs text-base-content/60 text-center border-t border-base-300">
-      &copy; 2025 Naisei
-    </footer>
-  </aside>
-</div>
-
-
-  <!-- メインコンテンツ（右側） -->
-  <div class="drawer-content flex flex-col min-h-screen bg-base-100">
+                <i class="fa-solid fa-plus text-sm"></i>
+                <span>新規投稿</span>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to posts_path, class: ("active" if current_page?(posts_path)) do %>
+                <i class="fa-solid fa-list-ul"></i>
+                <span>投稿一覧</span>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to emotion_calendar_index_path(anchor: "calendar") do %>
+                <i class="fa-solid fa-calendar-days"></i>
+                <span>感情カレンダー</span>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to settings_path do %>
+                <i class="fa-solid fa-gear"></i>
+                <span>設定</span>
+              <% end %>
+            </li>
+            <li class="mt-auto">
+              <%#通常getリリクエスのみだが、turbo @hotwired/turbo-rails のjsがクリック時にDELETEリクエストとしてサーバーに送信 %>
+              <%= link_to logout_path, data: { turbo_method: :delete } do %>
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>ログアウト</span>
+              <% end %>
+            </li>
+          </ul>
+          <!-- サイドバーフッター -->
+          <footer
+            class="
+              p-4 text-xs text-base-content/60 text-center border-t border-base-300
+            "
+          >
+            &copy; 2025 Naisei
+          </footer>
+        </aside>
+      </div>
+      <!-- メインコンテンツ（右側） -->
+      <div class="drawer-content flex flex-col min-h-screen bg-base-100">
         <%# フラッシュメッセージ %>
-<% unless content_for?(:suppress_flash) %>
-  <% if flash.any? %>
-    <div
-      <%# left1/2で画面半分スタートかつ、自身の幅の半分左ずらす %>
-      class="
-         w-full max-w-2xl mx-auto mt-6 px-4
-      "
-    >
-      <% flash.each do |message_type, message| %>
-        <% key = message_type.to_s %>
-        <%# TODO後で消すかどうか検討: 空のフラッシュメッセージ対策として message.present? 条件を追加 %>
-        <% if (key == "notice" || key == "success") && message.present? %>
-          <%# margin-top と margin-bottomに 0.5rem %>
-          <div class="alert alert-success shadow-lg my-2">
-            <span><%= message %></span>
-          </div>
-        <% elsif (key == "alert" || key == "danger" || key == "error") && message.present? %>
-          <div class="alert alert-error shadow-lg my-2">
-            <span><%= message %></span>
-          </div>
-        <% elsif message.present? %>
-          <%# その他の種類のフラッシュメッセージ %>
-          <div class="alert alert-info shadow-lg my-2">
-            <span><%= message %></span>
-          </div>
+        <% unless content_for?(:suppress_flash) %>
+          <% if flash.any? %>
+            <div
+              <%# left1/2で画面半分スタートかつ、自身の幅の半分左ずらす %>
+              class="w-full max-w-2xl mx-auto mt-6 px-4"
+            >
+              <% flash.each do |message_type, message| %>
+                <% key = message_type.to_s %>
+                <%# TODO後で消すかどうか検討: 空のフラッシュメッセージ対策として message.present? 条件を追加 %>
+                <% if (key == "notice" || key == "success") && message.present? %>
+                  <%# margin-top と margin-bottomに 0.5rem %>
+                  <div class="alert alert-success shadow-lg my-2">
+                    <span><%= message %></span>
+                  </div>
+                <% elsif (key == "alert" || key == "danger" || key == "error") && message.present? %>
+                  <div class="alert alert-error shadow-lg my-2">
+                    <span><%= message %></span>
+                  </div>
+                <% elsif message.present? %>
+                  <%# その他の種類のフラッシュメッセージ %>
+                  <div class="alert alert-info shadow-lg my-2">
+                    <span><%= message %></span>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
         <% end %>
-      <% end %>
+        <!-- モバイル用メニューボタン -->
+        <label
+          for="my-drawer"
+          class="
+            btn btn-square btn-outline btn-ghost drawer-button lg:hidden mt-0 w-12 h-12 flex
+            items-center justify-center
+          "
+        >
+          <i class="fa-solid fa-bars text-xl"></i>
+        </label>
+        <%= yield %>
+      </div>
     </div>
-  <% end %>
-<% end %>
-    <!-- モバイル用メニューボタン -->
-    <label for="my-drawer" class="btn btn-square btn-outline btn-ghost drawer-button lg:hidden mt-0 w-12 h-12 flex items-center justify-center">
-      <i class="fa-solid fa-bars text-xl"></i>
-    </label>
-    <%= yield %>
-  </div>
-</div>
 
     <%# --- Drawerここまで --- %>
   </body>
