@@ -1,9 +1,10 @@
 name: Rails CI # ワークフローの名前
 on:
   push:
-    branches: [main] # mainブランチにpushされた時に実行
+  # TODO一旦コメントアウト
+  # branches: [main] # mainブランチにpushされた時に実行
   pull_request:
-    branches: [main] # mainブランチへのプルリクエスト時に実行
+    # branches: [main] # mainブランチへのプルリクエスト時に実行
 
 jobs:
   test: # ジョブ名
@@ -55,6 +56,7 @@ jobs:
 
       - name: 簡単なテストを実行
         env:
+          DB_NAME_TEST: myapp_test
           DATABASE_URL: mysql2://root:password@localhost:3306/myapp_test # DB接続設定
           RAILS_ENV: test # test環境
         run: |
