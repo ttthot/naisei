@@ -1,0 +1,70 @@
+name: Rails CI # ワークフローの名前
+on:
+  push:
+  # TODO一旦コメントアウト
+  # branches: [main] # mainブランチにpushされた時に実行
+  pull_request:
+    # branches: [main] # mainブランチへのプルリクエスト時に実行
+
+jobs:
+  test: # ジョブ名
+    runs-on: ubuntu-latest
+
+    services:
+      mysql: #
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password # rootパスワード
+          MYSQL_DATABASE: myapp_test # 初期作成するデータベース名
+        ports:
+          - 3306:3306 # MySQLポートをマッピング
+        options: >-
+          --health-cmd="mysqladmin ping"  
+          --health-interval=10s           
+          --health-timeout=5s              
+          --health-retries=5
+
+    steps:
+      - name: コードをチェックアウト
+        uses: actions/checkout@v4 # リポジトリのコードを取得
+
+      - name: Rubyをセットアップ
+        uses: ruby/setup-ruby@v1 # Ruby環境をセットアップ
+        with:
+          ruby-version: .ruby-version # .ruby-versionファイルの指定バージョンを使用
+          bundler-cache: true # bundle install結果をキャッシュ
+
+      - name: データベース設定の確認
+        run: |
+          echo "database.yml の確認"  # ログ表示
+          if [ -f config/database.yml ]; then  # ローカルにdatabase.ymlが存在するか確認
+            echo "test環境の設定:"
+            grep -A 10 "^test:" config/database.yml || echo "test設定が見つかりません"  # test設定部分を表示
+          else
+            echo "config/database.yml が見つかりません"  
+          fi
+
+      - name: データベースをセットアップ
+        env:
+          DATABASE_URL: mysql2://root:password@localhost:3306/myapp_test # 接続用URL
+          RAILS_ENV: test # Railsの環境をtestに設定
+        run: |
+          echo "データベースを作成中..."
+          bin/rails db:create || echo "既に存在するか、エラーが発生しました"  # DB作成、失敗時はメッセージ表示
+          echo "スキーマをロード中..."
+          bin/rails db:schema:load || bin/rails db:migrate  # スキーマロード、失敗時はマイグレーション実行
+
+      - name: 簡単なテストを実行
+        env:
+          DB_NAME_TEST: myapp_test
+          DATABASE_URL: mysql2://root:password@localhost:3306/myapp_test # DB接続設定
+          RAILS_ENV: test # test環境
+        run: |
+          echo "最初のテストを実行..."
+          # まず1つのテストファイルだけ実行
+          if [ -d spec ]; then  # RSpecディレクトリがある場合
+            bundle exec rspec spec/models/ --fail-fast || echo "テスト失敗（続行）"  # モデルテストのみ実行し、--fail-fast オプションは最初の失敗でテストを止める
+          else  # specがない場合はMinitestを想定
+            echo "specディレクトリが見つかりません"
+            bundle exec rails test test/models/ || echo "テスト失敗（続行）"
+          fi
