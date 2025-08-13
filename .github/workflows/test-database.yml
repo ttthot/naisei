@@ -1,6 +1,6 @@
 # .github/workflows/test-database.yml
 name: Test Database Connection
-on: push
+# on: push
 jobs:
   test-mysql:
     runs-on: ubuntu-latest

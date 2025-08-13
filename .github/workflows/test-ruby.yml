@@ -1,5 +1,5 @@
 name: Test Ruby Setup
-on: push
+# on: push
 
 jobs:
   test-ruby:
