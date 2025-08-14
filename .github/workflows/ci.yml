@@ -1,8 +1,8 @@
 name: Rails CI # ワークフローの名前
 on:
   push:
-    # TODO一旦コメントアウト
-    branches: [main] # mainブランチにpushされた時に実行
+    # TODO ブランチを指定すること、そうしないとどのブランチからでもプッシュされたるので
+    # branches: [main] # mainブランチにpushされた時に実行
   pull_request:
     branches: [main] # mainブランチへのプルリクエスト時に実行
 
@@ -42,7 +42,7 @@ jobs:
           bundler-cache: true # bundle install結果をキャッシュ
 
       - name: データベース設定の確認
-        run: | # YAML の | は「この下の複数行を“改行つきの1つの文字列”にする
+        run: | # YAML の | は「この下の複数行を"改行つきの1つの文字列"にする
           echo "database.yml の確認"  # ログ表示
           if [ -f config/database.yml ]; then  # ローカルにdatabase.ymlが存在するか確認
             echo "test環境の設定:"
@@ -71,3 +71,49 @@ jobs:
             echo "specディレクトリが見つかりません"
             bundle exec rails test || echo "テスト失敗（続行）"
           fi
+
+  build-and-push: #ジョブ名
+    needs: test # test ジョブが成功した後にのみ実行
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' # pull Rでは作動しない
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1 # 東京リージョン
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2 # コマンドでログインしていたのものの代替
+        
+      - name: Guard RAILS_MASTER_KEY
+        run: |
+          if [ -z "${{ secrets.RAILS_MASTER_KEY }}" ]; then
+            echo "ERROR: RAILS_MASTER_KEY is not set." >&2
+            exit 1
+          fi
+      - name: Print image URIs (debug)
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          echo "$ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG"
+          echo "$ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:latest"
+
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }} #gitコミットのハッシュ値をタグとして使用
+        run: |
+       # webを先にビルド・プッシュ 内部処理はrailsのファイルをnginxがコピーしているため先にpushが必要
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml build web
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml push web
+          
+          # その後、残りのサービス
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml build
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml push
