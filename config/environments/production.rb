@@ -154,29 +154,18 @@ Rails.application.configure do
   # DNSリバインディング攻撃やその他の `Host` ヘッダー攻撃からの保護を有効にします。
   # アプリケーションが応答すべき正当なホスト名を配列で指定します。
   config.hosts = [
-    "naisei.info"    # example.com からのリクエストを許可
-    # /.*\.example\.com/ # www.example.com のようなサブドメインからのリクエストを許可
+    "naisei.info",    # example.com からのリクエストを許可
+    ".ap-northeast-1.elb.amazonaws.com", # ALBのDNSサフィックスを許可ホストに追加
+    "127.0.0.1",      # "127.0.0.1" (localhost) からのアクセスを許可リストに追加します。heathチェックや内部APIのアクセスを許可等
+    "localhost",      # dcockercomposeなどでの開発環境や、ローカルホストからのアクセスを許可するための設定
+    "www.naisei.info" # 本番環境のホスト名
   ]
-
 
   # デフォルトのヘルスチェックエンドポイント (/up) に対するDNSリバインディング保護をスキップします。(コメントアウトされています)
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 
   # AWS Application Load Balancer (ALB) 経由のアクセスを許可するための設定です。
   # `config.hosts` は、Railsのセキュリティ機能で、許可されたホスト(Hostヘッダーの値)を指定するためのものです。
-  # ここでは、ap-northeast-1リージョンのALBのDNS名 (のパターン) からのアクセスを許可リストに追加しています。
-
-
-  ##########################
-  config.hosts << ".ap-northeast-1.elb.amazonaws.com" # ALBのDNSサフィックスを許可ホストに追加
-  ######################################
-  # "127.0.0.1" (localhost) からのアクセスを許可リストに追加します。heathチェックや内部APIのアクセスを許可等
-  config.hosts << "127.0.0.1"
-  # dcockercomposeなどでの開発環境や、ローカルホストからのアクセスを許可するための設定
-  config.hosts << "localhost"
-  # 本番環境のホスト名
-  config.hosts << "naisei.info"
-  config.hosts << "www.naisei.info"
 
   # ホスト認証の除外設定です。
   config.host_authorization = {
