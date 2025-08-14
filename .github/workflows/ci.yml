@@ -90,7 +90,7 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2 # コマンドでログインしていたのものの代替
-        
+
       - name: Guard RAILS_MASTER_KEY
         run: |
           if [ -z "${{ secrets.RAILS_MASTER_KEY }}" ]; then
@@ -110,10 +110,10 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }} #gitコミットのハッシュ値をタグとして使用
         run: |
-       # webを先にビルド・プッシュ 内部処理はrailsのファイルをnginxがコピーしているため先にpushが必要
+          # webを先にビルド・プッシュ 内部処理はrailsのファイルをnginxがコピーしているため先にpushが必要
           docker compose -f docker-compose.yml -f docker-compose.prod.yml build web
           docker compose -f docker-compose.yml -f docker-compose.prod.yml push web
-          
+
           # その後、残りのサービス
           docker compose -f docker-compose.yml -f docker-compose.prod.yml build
           docker compose -f docker-compose.yml -f docker-compose.prod.yml push
