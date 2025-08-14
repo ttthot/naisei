@@ -6,7 +6,7 @@ concurrency:
   cancel-in-progress: false
 
 on:
-  push: # branches: [main] # mainブランチにpushされた時に実行 TODO
+  push: 
     branches: [main, feature/advance-ci-action]  
   pull_request:
     branches: [main] # mainブランチへのプルリクエスト時に実行
