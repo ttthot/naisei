@@ -1,8 +1,14 @@
 name: Rails CI # ワークフローの名前
+
+# 並列実行ではなく 直列実行　連続pushを防止
+concurrency:
+  group: ecr-${{ github.ref }}
+  cancel-in-progress: false
+
 on:
+  # TODO ブランチを指定すること、そうしないとどのブランチからでもプッシュされたるので
+  # branches: [main] # mainブランチにpushされた時に実行
   push:
-    # TODO ブランチを指定すること、そうしないとどのブランチからでもプッシュされたるので
-    # branches: [main] # mainブランチにpushされた時に実行
   pull_request:
     branches: [main] # mainブランチへのプルリクエスト時に実行
 
@@ -52,14 +58,14 @@ jobs:
           fi
 
       - name: データベースをセットアップ
-        # envを削除
-        # socket接続になっていたので環境変数を上部で定義して、database.ymlに読み取らせる、またtcp接続
         run: |
-          # db:prepareは db:create db:schema:load 
-          bin/rails db:prepare
+          echo "データベースを作成中..."
+          bin/rails db:create || echo "既に存在するか、エラーが発生しました" # DB作成、失敗時はメッセージ表示
 
-      - name: 簡単なテストを実行
-        # env:　削除
+          echo "スキーマをロード中..."
+          bin/rails db:schema:load || bin/rails db:migrate # スキーマロード、失敗時はマイグレーション実行
+          # db:prepareは db:create db:schema:load を実行
+          # bin/rails db:prepare
         run: |
           echo "最初のテストを実行..."
           # まず1つのテストファイルだけ実行
