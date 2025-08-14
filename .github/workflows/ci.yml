@@ -148,16 +148,27 @@ jobs:
         id: svc
         run: |
           ARN=$(aws ecs describe-services \
-            --cluster "${{ secrets.ECS_CLUSTER }}" \
-            --services "${{ secrets.ECS_SERVICE }}" \
-            --query 'services[0].taskDefinition' --output text)
+        --cluster "${{ secrets.ECS_CLUSTER }}" \
+        --services "${{ secrets.ECS_SERVICE }}" \
+        --query 'services[0].taskDefinition' --output text)
           echo "arn=$ARN" >> "$GITHUB_OUTPUT"
 
       - name: Download task definition
         run: |
           aws ecs describe-task-definition \
-            --task-definition "${{ steps.svc.outputs.arn }}" \
-            --query taskDefinition > task-definition.json
+        --task-definition "${{ steps.svc.outputs.arn }}" \
+        --query taskDefinition > task-definition.json
+
+      - name: Compose images (short)
+        id: img
+        run: |
+          set -eu
+          REG="${{ steps.login-ecr.outputs.registry }}"
+          RAILS_REPO="${{ secrets.ECR_REPOSITORY }}"
+          NGINX_REPO="${{ secrets.ECR_REPOSITORY_NGINX }}"
+          [ -n "$REG" ] && [ -n "$RAILS_REPO" ] && [ -n "$NGINX_REPO" ] || { echo "ECR 設定が空"; exit 1; }
+          echo "rails=$REG/$RAILS_REPO:${{ github.sha }}"  >> "$GITHUB_OUTPUT"
+          echo "nginx=$REG/$NGINX_REPO:${{ github.sha }}"  >> "$GITHUB_OUTPUT"
 
       # rails コンテナを SHA に置換
       - name: Render taskdef (rails)
@@ -165,8 +176,8 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: task-definition.json
-          container-name: rails # タスク定義内の実名
-          image: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}
+          container-name: rails
+          image: ${{ steps.img.outputs.rails }}
 
       # nginx コンテナも同じ SHA に置換
       - name: Render taskdef (nginx)
@@ -174,8 +185,8 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: ${{ steps.taskdef-rails.outputs.task-definition }}
-          container-name: nginx # タスク定義内の実名
-          image: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NGINX }}:${{ github.sha }}
+          container-name: nginx
+          image: ${{ steps.img.outputs.nginx }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
