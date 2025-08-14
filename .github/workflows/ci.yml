@@ -6,10 +6,10 @@ concurrency:
   cancel-in-progress: false
 
 on:
-  push: 
-    branches: [main, feature/advance-ci-action]  
+  push:
+    branches: [main, feature/advance-ci-action]
   pull_request:
-    branches: [main] # mainブランチへのプルリクエスト時に実行
+    branches: [main]
 
 jobs:
   test: # ジョブ名
@@ -65,7 +65,6 @@ jobs:
           bin/rails db:schema:load || bin/rails db:migrate # スキーマロード、失敗時はマイグレーション実行
           # db:prepareは db:create db:schema:load を実行
           # bin/rails db:prepare
-        run: |
           echo "最初のテストを実行..."
           # まず1つのテストファイルだけ実行
           if [ -d spec ]; then  # RSpecディレクトリがある場合
