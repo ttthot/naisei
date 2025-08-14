@@ -53,8 +53,7 @@ jobs:
 
       - name: データベースをセットアップ
         env:
-          DATABASE_URL: mysql2://root:password@localhost:3306/myapp_test # 接続用URL
-          RAILS_ENV: test # Railsの環境をtestに設定
+        # socket接続になっていたので環境変数を上部で定義して、database.ymlに読み取らせる、またtcp接続
         run: |
           echo "データベースを作成中..."
           bin/rails db:create || echo "既に存在するか、エラーが発生しました"  # DB作成、失敗時はメッセージ表示
