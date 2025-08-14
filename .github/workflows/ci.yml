@@ -42,7 +42,7 @@ jobs:
           bundler-cache: true # bundle install結果をキャッシュ
 
       - name: データベース設定の確認
-        run: |
+        run: | # YAML の | は「この下の複数行を“改行つきの1つの文字列”にする
           echo "database.yml の確認"  # ログ表示
           if [ -f config/database.yml ]; then  # ローカルにdatabase.ymlが存在するか確認
             echo "test環境の設定:"
@@ -61,10 +61,7 @@ jobs:
           bin/rails db:schema:load || bin/rails db:migrate  # スキーマロード、失敗時はマイグレーション実行
 
       - name: 簡単なテストを実行
-        env:
-          DB_NAME_TEST: myapp_test
-          DATABASE_URL: mysql2://root:password@localhost:3306/myapp_test # DB接続設定
-          RAILS_ENV: test # test環境
+        # env:　削除
         run: |
           echo "最初のテストを実行..."
           # まず1つのテストファイルだけ実行
