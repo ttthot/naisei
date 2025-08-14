@@ -6,9 +6,7 @@ concurrency:
   cancel-in-progress: false
 
 on:
-  # TODO ブランチを指定すること、そうしないとどのブランチからでもプッシュされたるので
-  # branches: [main] # mainブランチにpushされた時に実行
-  push:
+  push: # branches: [main] # mainブランチにpushされた時に実行 TODO
   pull_request:
     branches: [main] # mainブランチへのプルリクエスト時に実行
 
