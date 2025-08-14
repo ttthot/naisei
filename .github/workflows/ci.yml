@@ -10,6 +10,13 @@ jobs:
   test: # ジョブ名
     runs-on: ubuntu-latest
 
+    env: # このジョブ内のすべてのステップで有効
+      DB_USERNAME: root
+      DB_PASSWORD: password
+      DB_HOST: 127.0.0.1
+      DB_NAME_TEST: myapp_test
+      RAILS_ENV: test
+
     services: # ジョブ開始時にbgで動作し続ける、stepsはその後に順次実行
       mysql: #
         image: mysql:8.0
