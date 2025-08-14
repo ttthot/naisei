@@ -52,7 +52,7 @@ jobs:
           fi
 
       - name: データベースをセットアップ
-        env:
+        # envを削除
         # socket接続になっていたので環境変数を上部で定義して、database.ymlに読み取らせる、またtcp接続
         run: |
           echo "データベースを作成中..."
