@@ -107,15 +107,11 @@ jobs:
           echo "$ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:$TAG"
           echo "$ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_NGINX }}:$TAG"
 
-      - name: Set up Docker Buildx #  x86_64、ARM64マルチビルドを可能
-        uses: docker/setup-buildx-action@v2
-
       - name: Build and push Docker image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           TAG: ${{ github.sha }} #gitコミットのハッシュ値をタグとして使用
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-          DOCKER_DEFAULT_PLATFORM: linux/arm64 # ubuntu-latest（x86_64）がデフォルトなので
         run: |
           set -euo pipefail  # エラー時に即座に終了
           : "${TAG:?TAG is empty}"
@@ -131,7 +127,7 @@ jobs:
 
   deploy:
     needs: build-and-push
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-arm64
     environment: production
 
     steps:
