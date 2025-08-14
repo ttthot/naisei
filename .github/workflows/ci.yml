@@ -26,7 +26,7 @@ jobs:
         ports:
           - 3306:3306 # MySQLポートをマッピング
         options: >-
-          --health-cmd="mysqladmin ping"  
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -ppassword --silent" 
           --health-interval=10s           
           --health-timeout=5s              
           --health-retries=5
@@ -55,10 +55,8 @@ jobs:
         # envを削除
         # socket接続になっていたので環境変数を上部で定義して、database.ymlに読み取らせる、またtcp接続
         run: |
-          echo "データベースを作成中..."
-          bin/rails db:create || echo "既に存在するか、エラーが発生しました"  # DB作成、失敗時はメッセージ表示
-          echo "スキーマをロード中..."
-          bin/rails db:schema:load || bin/rails db:migrate  # スキーマロード、失敗時はマイグレーション実行
+          # db:prepareは db:create db:schema:load 
+          bin/rails db:prepare
 
       - name: 簡単なテストを実行
         # env:　削除
@@ -102,24 +100,83 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           TAG: ${{ github.sha }}
         run: |
-          echo "$ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG"
-          echo "$ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:latest"
+          echo "$ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:$TAG"
+          echo "$ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_NGINX }}:$TAG"
 
       - name: Build and push Docker image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           TAG: ${{ github.sha }} #gitコミットのハッシュ値をタグとして使用
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-
         run: |
-          # 存在なしなら即終了
-          : '${TAG:?}'
-          : '${RAILS_MASTER_KEY:?empty}'
+          set -euo pipefail  # エラー時に即座に終了
+          : "${TAG:?TAG is empty}"
+          : "${RAILS_MASTER_KEY:?RAILS_MASTER_KEY is empty}"
 
           # webを先にビルド・プッシュ 内部処理はrailsのファイルをnginxがコピーしているため先にpushが必要
           docker compose -f docker-compose.yml -f docker-compose.prod.yml build web
           docker compose -f docker-compose.yml -f docker-compose.prod.yml push web
 
-          # その後、残りのサービス
-          docker compose -f docker-compose.yml -f docker-compose.prod.yml build
-          docker compose -f docker-compose.yml -f docker-compose.prod.yml push
+          # その後nginx
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml build nginx
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml push  nginx
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
+
+      - name: Login to Amazon ECR # outputs.registry を image で使うため（push はしない）
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Resolve task definition ARN from service
+        id: svc
+        run: |
+          ARN=$(aws ecs describe-services \
+            --cluster "${{ secrets.ECS_CLUSTER }}" \
+            --services "${{ secrets.ECS_SERVICE }}" \
+            --query 'services[0].taskDefinition' --output text)
+          echo "arn=$ARN" >> "$GITHUB_OUTPUT"
+
+      - name: Download task definition
+        run: |
+          aws ecs describe-task-definition \
+            --task-definition "${{ steps.svc.outputs.arn }}" \
+            --query taskDefinition > task-definition.json
+
+      # rails コンテナを SHA に置換
+      - name: Render taskdef (rails)
+        id: taskdef-rails
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: rails # タスク定義内の実名
+          image: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}
+
+      # nginx コンテナも同じ SHA に置換
+      - name: Render taskdef (nginx)
+        id: taskdef-nginx
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ steps.taskdef-rails.outputs.task-definition }}
+          container-name: nginx # タスク定義内の実名
+          image: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NGINX }}:${{ github.sha }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.taskdef-nginx.outputs.task-definition }}
+          service: ${{ secrets.ECS_SERVICE }}
+          cluster: ${{ secrets.ECS_CLUSTER }}
+          wait-for-service-stability: true
