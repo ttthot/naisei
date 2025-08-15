@@ -79,6 +79,8 @@
 - **フロントエンド**: HTML5（ERB）, hotwired/turbo-rails ^8.0.13, Tailwind CSS ^4.1.11, daisyUI ^5.0.35
 - **バックエンド**: Ruby 3.4.2, Ruby on Rails 7.1.5.1
 - **インフラ**: AWS(ECR, ECS, RDS, ACM, Route53, Secrets Manager等)、ネットワーク基礎
+- **CI/CD**: GitHub Actions、Docker、ECS自動デプロイ
+- **DevOps/SRE**: ECSタスク定義管理、アーキテクチャ不一致問題解決、症状ベース障害解析
 - **API**: Messaging API(LINE), OpenAI API
 - **その他**: MySQL 8.4, Git 2.39.5, Linux, Docker 28.2.2, Docker Compose v2.37.1-desktop.1
 
