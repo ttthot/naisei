@@ -76,7 +76,7 @@ jobs:
 
   build-and-push: #ジョブ名
     needs: test # test ジョブが成功した後にのみ実行
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-arm64
     if: github.ref == 'refs/heads/main' # pull Rでは作動しない
 
     steps:
@@ -127,7 +127,7 @@ jobs:
 
   deploy:
     needs: build-and-push
-    runs-on: ubuntu-latest-arm64
+    runs-on: ubuntu-latest
     environment: production
 
     steps:
