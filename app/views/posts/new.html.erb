@@ -88,7 +88,7 @@
           </div>
         </div>
 
-        <%# お題表示はユーザー設定が設定をオンにしているかつとランダムお題が存在%>
+        <%# お題表示はユーザー設定が設定をオンにしているかつとランダムお題が存在 %>
         <%# titleはnull制約なしなのでなくても問題なし %>
         <% if current_user&.show_topic_title? && @random_topic&.title.present? %>
           <div class="card bg-base-200 w-full mb-4 mt-4">
@@ -110,7 +110,15 @@
           <label class="form-control w-full">
             <%= form.text_area :content,
                            class: "textarea textarea-bordered h-100 w-full",
-                           placeholder: "ここにあなたの気持ちを300字以内で入力してみましょう",
+                           placeholder:
+                             (
+                               if current_user&.show_topic_title? &&
+                                    @random_topic&.title.present?
+                                 "ここにあなたの気持ちを300字以内で入力してみましょう"
+                               else
+                                 "今日の出来事をできるだけ詳しく書いてください。\n\nその出来事に浸り、その経験について抱いたあらゆる感情や考えを自由に表現してください。\n\n書く際は、句読点や文法を気にせず、ただ心を解き放ち、その経験についてできる限り詳しく書いてください。"
+                               end
+                             ),
                            id: "emotion_content" %>
           </label>
         </div>
